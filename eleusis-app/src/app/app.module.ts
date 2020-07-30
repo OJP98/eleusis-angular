@@ -1,18 +1,29 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+// MODULOS
+import { MaterialModule } from './material.module';
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+// COMPONENTES
+import { AppComponent } from './app.component';
+import { ClientTestingComponent } from './components/client-testing/client-testing.component';
+import { LobbyComponent } from './components/lobby/lobby.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+		AppComponent,
+		ClientTestingComponent,
+		LobbyComponent,
+		NotFoundComponent,
   ],
   imports: [
     BrowserModule,
+		MaterialModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+		BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,5 +1,18 @@
+<!-- Toolbar -->
+<mat-toolbar color="primary">
+    <span>Eleusis Game</span>
+    <span class="spacer"></span>
+    <button routerLink="lobby" mat-icon-button aria-label="Main lobby" routerLinkActive="activo">
+		<mat-icon>graphic_eq</mat-icon>
+	</button>
+    <button routerLink="client" mat-icon-button aria-label="Redes testing" routerLinkActive="activo">
+		<mat-icon>share</mat-icon>
+	</button>
+</mat-toolbar>
+
 <div class="content" role="main">
-    <h1>Eleusis Angular App</h1>
+
+    <router-outlet></router-outlet>
 
     <!-- Footer -->
     <footer>
@@ -13,5 +26,3 @@
 	</svg>
 
 </div>
-
-<router-outlet></router-outlet>

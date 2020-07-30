@@ -7,6 +7,14 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.spacer {
+    flex: 1 1 auto;
+}
+
+button.activo {
+    color: rgb(189, 189, 189);
+}
+
 svg#clouds {
     position: fixed;
     bottom: -160px;
