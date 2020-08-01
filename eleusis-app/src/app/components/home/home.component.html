@@ -1,0 +1,15 @@
+<h1 style="text-align: center;">Welcome!</h1>
+
+<div class="home-screen">
+    <mat-form-field style="width: 20rem;">
+        <mat-label>Your name</mat-label>
+        <input matInput type="text" [(ngModel)]="playerName">
+        <button mat-button *ngIf="playerName" matSuffix mat-icon-button aria-label="Clear" (click)="playerName=''">
+			<mat-icon>close</mat-icon>
+		</button>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary">Join Lobby</button>
+    <br>
+    <button mat-raised-button color="primary">Host Lobby</button>
+</div>

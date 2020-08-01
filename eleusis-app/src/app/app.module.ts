@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { ClientTestingComponent } from './components/client-testing/client-testing.component';
 import { LobbyComponent } from './components/lobby/lobby.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 		ClientTestingComponent,
 		LobbyComponent,
 		NotFoundComponent,
+		HomeComponent,
   ],
   imports: [
     BrowserModule,
