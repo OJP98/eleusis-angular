@@ -3,12 +3,11 @@ import Deck
 from Player import Player
 
 def verifyFirstCard(rule_info,card):
-    
     rule_p1 = rule_info[0]
     rule_p2 = rule_info[1]
     rule_p3 = rule_info[2]
 
-    #En esta parte se valida los colores
+    #En esta parte se valida los patrones de colores
     if rule_p1 == "0":
         card = card[len(card)-1]
         #Verifica que la carta tiene uno de los colores permitidos
@@ -27,6 +26,38 @@ def verifyFirstCard(rule_info,card):
                 return False
             else:
                 #Verifica que este dentro de las permitidas, si lo esta devuelve un True
+                return True
+            
+    #En esta parte se valida los patrones de numeros
+    else:
+        if rule_p2 == "0":
+            multiplos=[]
+            for i in range(13):
+                multiplos.append(int(rule_p3)*(i+1))
+            if int(card) in multiplos:
+                return True
+            else:
+                return False
+        elif rule_p2 == "1":
+            #Se verifica que el numero sea mayor al indicado
+            print ("Ingresa a mayor que ", card, " la que recibe ", rule_p3," la que compara")
+            if int(card) >= int(rule_p3):
+                return True
+            else:
+                return False
+        elif rule_p2 == "2":
+            print ("Ingresa a menor que ", card, " la que recibe ", rule_p3," la que compara")
+            #Se verifica que el numero sea menor al indicado
+            if int(card) <= int(rule_p3):
+                return True
+            else:
+                return False
+        else:
+            print ("Ingresa a prohibido ", card, " la que recibe ", rule_p3," la que compara")
+            #El numero es el prohibido
+            if card == rule_p3:
+                return False
+            else:
                 return True
 
             
@@ -58,6 +89,41 @@ def verify_Card(rule_info,last_card,card):
                 return False
             else:
                 #Si esta en el orden correcto devuelve False
+                return True
+            
+    #En esta parte se valida los patrones de numeros
+    else:
+        card = card[:len(card)-1]
+        if rule_p2 == "0":
+            multiplos=[]
+            for i in range(13):
+                multiplos.append(int(rule_p3)*(i+1))
+            if int(card) in multiplos:
+                return True
+            else:
+                return False
+        elif rule_p2 == "1":
+           #Se verifica que el numero sea mayor al indicado
+            print ("Ingresa a mayor que ", card, " la que recibe ", rule_p3," la que compara")
+            if int(card) >= int(rule_p3):
+                return True
+            else:
+                return False
+        elif rule_p2 == "2":
+            print ("Ingresa a menor que ", card, " la que recibe ", rule_p3," la que compara")
+            #Se verifica que el numero sea menor al indicado
+            if int(card) <= int(rule_p3):
+                return True
+            else:
+                return False
+        else:
+            print ("Ingresa a prohibido ", card, " la que recibe ", rule_p3," la que compara")
+            #El numero es el prohibido
+            if int(card) == int(rule_p3):
+                #No debe ser igual al numero prohibido
+                return False
+            else:
+                #No debe ser igual al numero prohibido
                 return True
 
 def main():
@@ -109,7 +175,7 @@ def main():
 
     else:
         rule.append(1)
-        answer = input("Elija una de reglas existentes con numeros: \n1. multiplos del numero que usted elija\n2. mayor al numero que usted elija\n3. menor al numero que usted desee\n")
+        answer = input("Elija una de reglas existentes con numeros: \n1. multiplos del numero que usted elija\n2. mayor al numero que usted elija\n3. menor al numero que usted desee\n4. prohibir un numero\n")
         if (answer==1):
             number_rule = input("Ingrese el numero que desee menor o igual a 13: ")
             rule.append("0")
@@ -118,9 +184,13 @@ def main():
             number_rule = input("Ingrese el numero que desee menor o igual a 13: ")
             rule.append("1")
             rule.append(number_rule)
-        else:
+        elif (answer ==3):
             number_rule = input("Ingrese el numero que desee menor o igual a 13:")
             rule.append("2")
+            rule.append(number_rule)
+        else:
+            number_rule = input("Ingrese el numero que desea prohibir")
+            rule.append("3")
             rule.append(number_rule)
 
     #Se empieza el juego
@@ -136,11 +206,17 @@ def main():
             card = deck[index]
             card_letter = card[len(card)-1]
             first_card_validity = verifyFirstCard(rule,card_letter)
-            deck.pop(index)
+        else:
+            index = random.randint(0,len(deck)-1)
+            card = deck[index]
+            card_number = card[:len(card)-1]
+            first_card_validity = verifyFirstCard(rule,card_number)
+            
+    deck.pop(index)
     board.append(card)
     print ("La primera carta es : " + card)
     
-    print("                                JUGADOR 1, TU TURNO")
+    print("\n                                JUGADOR 1, TU TURNO")
 
     #Entra en un ciclo, hasta que uno de los jugadores terminen sus cartas o descubran la regla seguiran jugando
     rule_discovered = False
@@ -234,11 +310,6 @@ def main():
 
         prophet_turn2 = 1 
             
-                        
-            
-            
-        
-        
         
 if __name__ == '__main__':
     main()
