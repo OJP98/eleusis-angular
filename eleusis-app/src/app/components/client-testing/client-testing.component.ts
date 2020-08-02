@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ClientService } from '../../services/client.service'
 
 @Component({
   selector: 'app-client-testing',
@@ -7,7 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ClientTestingComponent implements OnInit {
 
-  constructor() { }
+  public isConnected: boolean;
+  public clientIp: string;
+  public inputDePrueba: string;
+
+  constructor(
+    private _clientServie: ClientService,
+  ) {
+    this.isConnected = false;
+  }
+
+  public ValidarConexion(parametro: string): void {
+    this.clientIp = this._clientServie.GetClientIp();
+    console.log(this.clientIp);
+    console.log(parametro);
+  }
 
   ngOnInit(): void {
   }

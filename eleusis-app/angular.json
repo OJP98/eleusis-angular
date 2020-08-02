@@ -127,5 +127,8 @@
       }
     }
   },
-  "defaultProject": "eleusis-app"
+  "defaultProject": "eleusis-app",
+  "cli": {
+    "analytics": "dc12443e-d4bc-4bcd-bdca-2d1f27a476bd"
+  }
 }
