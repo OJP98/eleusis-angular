@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { MaterialModule } from './material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 // COMPONENTES
 import { AppComponent } from './app.component';
@@ -26,6 +27,7 @@ import { HomeComponent } from './components/home/home.component';
 		MaterialModule,
     AppRoutingModule,
 		BrowserAnimationsModule,
+		FlexLayoutModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
