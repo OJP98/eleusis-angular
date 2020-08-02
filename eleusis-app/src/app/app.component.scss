@@ -1,36 +1,31 @@
 :host {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    font-size: 14px;
-    color: #333;
-    box-sizing: border-box;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	font-size: 14px;
+	color: #333;
+	box-sizing: border-box;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 .spacer {
-    flex: 1 1 auto;
+	flex: 1 1 auto;
 }
 
 button.activo {
-    color: rgb(189, 189, 189);
+	color: rgb(189, 189, 189);
 }
 
 svg#clouds {
-    position: fixed;
-    bottom: -160px;
-    left: -230px;
-    z-index: -10;
-    width: 1920px;
+	position: fixed;
+	bottom: -160px;
+	left: -230px;
+	z-index: -10;
+	width: 1920px;
 }
 
 footer {
-    margin-top: 8px;
-    display: flex;
-    align-items: center;
-    line-height: 20px;
-}
-
-footer a {
-    display: flex;
-    align-items: center;
+	margin-top: 8px;
+	display: flex;
+	align-items: center;
+	line-height: 20px;
 }

@@ -8,13 +8,14 @@ import { HomeComponent } from './components/home/home.component'
 const routes: Routes = [
 	{ path: 'home', component: HomeComponent },
 	{ path: 'client', component: ClientTestingComponent },
+	{ path: ':lobbyId', component: LobbyComponent },
 	{ path: '', redirectTo: '/home', pathMatch: 'full' },
-	{ path: '**',  component: NotFoundComponent }
+	{ path: '**', component: NotFoundComponent }
 
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+	imports: [RouterModule.forRoot(routes)],
+	exports: [RouterModule]
 })
 export class AppRoutingModule { }

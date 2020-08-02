@@ -1,1 +1,15 @@
-<p>lobby works!</p>
+<h1 style="text-align: center;">Lobby #{{lobbyId}}</h1>
+
+<div style="margin: 1rem 7rem">
+	<div *ngIf="!gameStarted">
+		<p>Waiting for players to join... currently {{table.Players.length}}/8</p>
+		<button mat-raised-button color="primary" (click)="AddFakePlayer()">ADD PLAYER</button>
+		<button mat-raised-button color="accent" (click)="StartNewGame()" [disabled]="table.Players.length < 3">START
+			GAME</button>
+	</div>
+
+	<div *ngIf="gameStarted">
+		<p>Connected players: {{table.Players.length}}</p>
+		<p>Game started, check console to check current table.</p>
+	</div>
+</div>
