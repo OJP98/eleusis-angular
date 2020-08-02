@@ -3,6 +3,7 @@ import { Table } from '../interfaces/table';
 import { Card } from '../interfaces/card';
 import { Player } from '../interfaces/player';
 import { Observable, Subject } from 'rxjs';
+import { PlayerService } from './player.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,9 @@ export class GameService {
   private playedCards: Card[];
   private players: Player[];
 
-  constructor() {
+  constructor(
+    private playerService: PlayerService,
+  ) {
     this.fullDeck = this.GenerateFullDeck();
     this.table = this.CreateTestTable();
     this.playedCards = [];
@@ -27,21 +30,14 @@ export class GameService {
 
   public CreateTestTable(): Table {
 
-    const hostPlayer = {
-      Id: 1,
-      Score: 0,
-      isDealer: true,
-      Name: 'Dealer Player',
-      Deck: [],
-      isConnected: true
-    }
-
+    const hostPlayer = this.playerService.CurrentPlayer;
     return {
       Deck: this.fullDeck,
       PlayedCards: [],
       Players: [hostPlayer],
       DealerId: hostPlayer.Id,
-      PlayerTurnId: 2
+      HostId: hostPlayer.Id,
+      PlayerTurnId: 2,
     }
   }
 
