@@ -247,9 +247,9 @@ var players_Array = new Array;
 for (var i = 0; i < prohphets_number+1; i++){
     if (i<prohphets_number){
         var player_deck = new Array;
-        for (var j = 0; j < 12; j++){
-            var index: number;
-            index = Math.floor(Math.random()*(deck.length)+1);
+        for (var j = 0; j < 3; j++){
+            var index;
+            index = Math.floor(Math.random()*(deck.length));
             player_deck.push(deck[index]);
             if (index > -1) {
                 deck.splice(index, 1);
@@ -311,17 +311,17 @@ else{
 
 console.log ("                                 INICIA EL JUEGO");
 
-let first_card_validity = false;
+var first_card_validity = false;
 
 while (!(first_card_validity)) {
     if (rule[0] == 0){
-        index = Math.floor(Math.random()*(deck.length)+1);
+        index = Math.floor(Math.random()*(deck.length));
         var card = deck[index]
         var card_letter = card.charAt(card.length-1);
         first_card_validity = verify_First(rule,card_letter)
     } 
     else{
-        index = Math.floor(Math.random()*(deck.length)+1);
+        index = Math.floor(Math.random()*(deck.length));
         var card = deck[index];
         var card_number = card.slice(0, card.length-1);
         first_card_validity = verify_First(rule,card_number);
@@ -335,22 +335,26 @@ if (index > -1) {
     deck.splice(index, 1);
 }
 var rule_discovered: boolean = false;
+var cards_in_hand: boolean = true;
 
-while (!((rule_discovered))){
+while (!(rule_discovered) && cards_in_hand){
 
     if (players_Array[player_turn-1].getRole() == "god"){
         if (player_turn == players_Array.length){
-            player_turn = 1;
+            player_turn = 0;
         }
         else{
             player_turn ++;
         }
-    }else{
+    }
+    else{
         var cards_player = players_Array[player_turn-1].getCards();
         answer = prompt(" TU TURNO JUGADOR "+ player_turn
                         +"\n" + printEstadoJuego(board,no_world) 
                         + "\nSus cartas son: " + cards_player
-                        +"\nDesea...\n1. Colocar una carta \n2. Decir que no tiene carta para poner\n");
+                        +"\nDesea...\n1. Colocar una carta \n2. Decir que no tiene carta para poner\n3. Adivinar");
+        
+        //Si decide colocar una carta
         if (answer == "1"){
             var valid_card: boolean= false;
             while (!(valid_card)){
@@ -368,38 +372,116 @@ while (!((rule_discovered))){
                     prompt("Elija una carta que tenga, eligio " + answer);
                 }
             }  
-                       
-        }
 
-        //Verifica si la carta que selecciono el jugador es correcta    
-        prompt(cards_player[index]);       
-        if (verify_Card(rule,board[board.length-1],cards_player[index])){
-            prompt("Correcto");
-            board.push(cards_player[index]);
-            if (index > -1) {
-                cards_player.splice(index, 1);
+            //Verifica si la carta que selecciono el jugador es correcta    
+            prompt(cards_player[index]);       
+            if (verify_Card(rule,board[board.length-1],cards_player[index])){
+                prompt("Correcto");
+                board.push(cards_player[index]);
+                if (index > -1) {
+                    cards_player.splice(index, 1);
+                }
+                players_Array[player_turn-1].setCards(cards_player);
+                if (cards_player.length==0){
+                    cards_in_hand = false;
+                }
             }
-            cards_player.pop(i)
-            players_Array[player_turn-1].setCards(cards_player)
-        }
-           
-        else{
-            no_world.push((board[board.length-1] + " y "+ cards_player[index]+ " no siguen la regla\n"))
-            if (index > -1) {
-                cards_player.splice(index, 1);
+            //Si es incorrecta se va al no world
+            else{
+                no_world.push((board[board.length-1] + " y "+ cards_player[index]+ " no siguen la regla\n"));
+                if (index > -1) {
+                    cards_player.splice(index, 1);
+                }
+                cards_player.push(deck[Math.floor(Math.random()*(deck.length))]);
+                players_Array[player_turn-1].setCards(cards_player);
+                prompt("No puedes jugar esa carta, se va al no mundo");
             }
-            cards_player.push(deck[Math.floor(Math.random()*(deck.length)+1)]);
-            players_Array[player_turn-1].setCards(cards_player);
-            prompt("No puedes jugar esa carta, se va al no mundo")
         }
+        //Si decide que no tiene carta para jugar
+        else if (answer == "2"){
+            var no_card_playable:boolean = false;
+            
+            //Recorre todo el array de cartas del jugador para ver si alguna cumple con la regla
+            for (let element of cards_player){
+                prompt("prueba 1");
+                //Si al menos una cumple, se le da una carta más al jugador y se cambia el valor de no_card_playable
+                if (verify_Card(rule,board[board.length-1],element)){
+                    prompt("prueba 1");
+                    prompt("Tiene una carta que sí cumple la regla, por fallar se le dará otra");
+                    cards_player.push(deck[Math.floor(Math.random()*(deck.length))]);
+                    players_Array[player_turn-1].setCards(cards_player);
+                    no_card_playable = true;
+                    break;
+                }
+            }
 
-        player_turn++;
-        answer = "";
-        index = -1;
-        
+            //Si realmente no tiene una carta que pueda jugar, se le quita una carta al azar
+            if (!(no_card_playable)){
+                prompt("Entro correctamente a no tiene carta para jugar")
+                var new_hand = new Array();
+                if (cards_player.length-1 > 0){
+                    for (var new_card = 0; new_card < cards_player.length-1; new_card++){
+                        var index;
+                        index = Math.floor(Math.random()*(deck.length));
+                        new_hand.push(deck[index]);
+                        if (index > -1) {
+                            deck.splice(index, 1);
+                        }
+                    }
+                    players_Array[player_turn-1].setCards(new_hand);
+                }
+                //Si solo tiene una carta cards_in_hand se vuelve false
+                else{
+                    prompt("prueba2");
+                    cards_in_hand = false
+                }
+                
+            } 
+        }
+        /*else if (answer == "3"){
+
+
+        }   */    
+
+             
     }
 
+    //Se le da el turno al siguiente y se limpian las variables 
+    player_turn++;
+    answer = "";
+    index = -1;
+
+
+
 }
+
+if(!(cards_in_hand)){
+    console.log("El jugador " + (player_turn-1) + " ha quedado sin cartas");
+    players_Array[player_turn-2].setScore(players_Array[player_turn-2].getScore()+3);
+    for (let element of players_Array){
+        if (element.getRole()=="god"){
+            element.setScore(element.getScore()+3);
+        }
+    }
+    for (let element of players_Array){
+        console.log("El " + element.getRole() + " tiene " + element.getScore());
+    }
+}
+else{
+    console.log("El jugador " + (player_turn-1) + " ha adivinado la regla");
+    players_Array[player_turn-1].setScore(players_Array[player_turn-1].getScore()+6);
+    for (let element of players_Array){
+        if (element.getRole()=="god"){
+            element.setScore(element.getScore()+6);
+        }
+    }
+    for (let element of players_Array){
+        console.log("El " + element.getRole() + " tiene " + element.getScore());
+    }
+}
+
+
+
 
 
   
