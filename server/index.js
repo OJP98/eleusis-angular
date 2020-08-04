@@ -53,7 +53,7 @@ function NuevoMensaje(request, clientSender) {
   */
   s.clients.forEach(function each(client) {
     if (client !== clientSender) {
-      client.send(JSON.stringify({ name: request.mensaje }));
+      client.send(request);
     }
   });
 
@@ -66,7 +66,6 @@ function interpreteacionRequest(request, client) {
   console.log(`Servidor recibe ${newRequest.option}`);
   if (newRequest.option === 1) {
     //?Request Conectar
-
     /*
     this.subject.next({
 			option: 1,
@@ -77,7 +76,7 @@ function interpreteacionRequest(request, client) {
     NuevoCliente(newRequest, client);
   } else if (newRequest.option === 2) {
     //?Request Mensaje
-    NuevoMensaje(newRequest, client);
+    NuevoMensaje(request, client);
     console.log(newRequest);
   } else {
     console.log('Otro');

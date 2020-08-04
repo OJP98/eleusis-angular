@@ -5,20 +5,12 @@ import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 	providedIn: 'root',
 })
 export class ClientService {
-	private clientIp: string;
 	private subject: WebSocketSubject<any>;
 
 	constructor() {
-		this.clientIp = '127.0.0.1';
 		this.subject = webSocket({
 			url: 'ws://localhost:8080',
 		});
-
-		this.subject.subscribe(
-			(msg) => console.log('message received: ' + msg.name), // Called whenever there is a message from the server.
-			(err) => console.log(err), // Called if at any point WebSocket API signals some kind of error.
-			() => console.log('complete') // Called when connection is closed (for whatever reason).
-		);
 	}
 	/*
 	ngOninit(): void {
@@ -30,6 +22,10 @@ export class ClientService {
 	}
 */
 
+	/**
+	 * Envia un request al servidor para
+	 * conectarse a una sala.
+	 */
 	public Conectar(): void {
 		this.subject.next({
 			option: 1,
@@ -38,20 +34,35 @@ export class ClientService {
 		});
 	}
 
-	public EnviarMensaje(mensaje: string): void {
+	/**
+	 * Se escucha constantemente al servidor.
+	 */
+	public Listen(mensajeEntrante: any): void {
+		this.subject.subscribe(
+			(msg) => this.ex(), // Called whenever there is a message from the server.
+			(err) => console.log(err), // Called if at any point WebSocket API signals some kind of error.
+			() => console.log('complete') // Called when connection is closed (for whatever reason).
+		);
+	}
+
+	/**
+	 * ex
+	 */
+	public ex() {
+		console.log('Si funciona esta M');
+	}
+
+	/**
+	 * Envia un mensaje a todos los jugadores
+	 * de tu sala actual.
+	 */
+	public EnviarMensaje(mensajeNuevo: string): void {
 		this.subject.next({
 			option: 2,
 			sala: 5001,
 			user: 'BigJ',
 			id: 0,
-			mensaje: mensaje,
+			mensaje: mensajeNuevo,
 		});
-	}
-
-	/**
-	 * Devuelve la ip de cliente
-	 */
-	public GetClientIp(): string {
-		return this.clientIp;
 	}
 }

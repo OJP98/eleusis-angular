@@ -12,12 +12,22 @@ export class ClientTestingComponent implements OnInit {
 	public inputDePrueba: string;
 
 	constructor(private _clientServie: ClientService) {
-		this.isConnected = false;
 		this._clientServie.Conectar();
+		this._clientServie.Listen(this.MensajeEntrante);
 	}
 
-	public ValidarConexion(parametro: string): void {
+	/**
+	 * EnviarMensajeNuevo
+	 */
+	public EnviarMensajeNuevo(parametro: string): void {
 		this._clientServie.EnviarMensaje(parametro);
+	}
+
+	/**
+	 * MensajeEntrante
+	 */
+	public MensajeEntrante(): void {
+		console.log('Entra un mensaje al componente');
 	}
 
 	ngOnInit(): void {}
