@@ -2,6 +2,7 @@ var server = require('ws').Server;
 var s = new server({ port: 8080 });
 
 var salas = {
+  /*
   5001: {
     Players: [0],
     Deck: [],
@@ -11,6 +12,7 @@ var salas = {
     Dios: null,
     Turno: null,
   },
+  */
 };
 
 function NuevoCliente(request, client) {
@@ -28,15 +30,34 @@ function NuevoCliente(request, client) {
       Turno: null,
     };
 
-    console.log('No existe la sala');
+    console.log('Se crea una sala');
   } else {
     /*
       Si existe la sala
     */
 
     salas[request.sala].Players.push(client);
-    console.log('Si existe la sala');
+    console.log('Se une a una sala');
   }
+}
+
+function NuevoMensaje(request, clientSender) {
+  /*
+  this.subject.next({
+			option: 2,
+			sala: 5001,
+			user: 'BigJ',
+			id: 0,
+			mensaje: mensaje,
+		});
+  */
+  s.clients.forEach(function each(client) {
+    if (client !== clientSender) {
+      client.send(JSON.stringify({ name: request.mensaje }));
+    }
+  });
+
+  //console.log(salas[request.sala].Players);
 }
 
 function interpreteacionRequest(request, client) {
@@ -55,20 +76,18 @@ function interpreteacionRequest(request, client) {
     */
     NuevoCliente(newRequest, client);
   } else if (newRequest.option === 2) {
-    //*Request Mensaje
+    //?Request Mensaje
+    NuevoMensaje(newRequest, client);
+    console.log(newRequest);
   } else {
     console.log('Otro');
   }
-  console.log(salas);
+  //console.log(salas);
 }
 
 s.on('connection', function (ws) {
   ws.on('message', function (message) {
     interpreteacionRequest(message, ws);
-    const mensaje = {
-      name: 'Mensaje del servidor',
-    };
-    ws.send(JSON.stringify(mensaje));
   });
 
   ws.on('close', function (message) {
@@ -76,22 +95,4 @@ s.on('connection', function (ws) {
   });
 
   console.log('cliente conectado ');
-  s.clients.forEach(function each(client) {
-    const mensaje = {
-      name: 'Jose',
-    };
-    client.send(JSON.stringify(mensaje));
-  });
 });
-
-/*
-wss.on('connection', function connection(ws) {
-  ws.on('message', function incoming(data) {
-    wss.clients.forEach(function each(client) {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(data);
-      }
-    });
-  });
-});
-*/

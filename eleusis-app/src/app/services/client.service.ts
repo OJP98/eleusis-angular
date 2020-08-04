@@ -29,15 +29,29 @@ export class ClientService {
 		);
 	}
 */
-	/**
-	 * Devuelve la ip de cliente
-	 */
-	public GetClientIp(): string {
+
+	public Conectar(): void {
 		this.subject.next({
 			option: 1,
 			sala: 5001,
 			user: 'BigJ',
 		});
+	}
+
+	public EnviarMensaje(mensaje: string): void {
+		this.subject.next({
+			option: 2,
+			sala: 5001,
+			user: 'BigJ',
+			id: 0,
+			mensaje: mensaje,
+		});
+	}
+
+	/**
+	 * Devuelve la ip de cliente
+	 */
+	public GetClientIp(): string {
 		return this.clientIp;
 	}
 }

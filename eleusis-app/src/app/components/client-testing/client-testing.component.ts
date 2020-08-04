@@ -13,12 +13,11 @@ export class ClientTestingComponent implements OnInit {
 
 	constructor(private _clientServie: ClientService) {
 		this.isConnected = false;
+		this._clientServie.Conectar();
 	}
 
 	public ValidarConexion(parametro: string): void {
-		this.clientIp = this._clientServie.GetClientIp();
-		console.log(this.clientIp);
-		console.log(parametro);
+		this._clientServie.EnviarMensaje(parametro);
 	}
 
 	ngOnInit(): void {}
