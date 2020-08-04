@@ -33,7 +33,11 @@ export class ClientService {
 	 * Devuelve la ip de cliente
 	 */
 	public GetClientIp(): string {
-		this.subject.next({ message: 'Mensaje del cliente' });
+		this.subject.next({
+			option: 1,
+			sala: 5001,
+			user: 'BigJ',
+		});
 		return this.clientIp;
 	}
 }
