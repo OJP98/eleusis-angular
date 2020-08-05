@@ -13,21 +13,23 @@ import { ClientTestingComponent } from './components/client-testing/client-testi
 import { LobbyComponent } from './components/lobby/lobby.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { HomeComponent } from './components/home/home.component';
+import { ChatWindowComponent } from './components/chat-window/chat-window.component';
 
 @NgModule({
   declarations: [
-		AppComponent,
-		ClientTestingComponent,
-		LobbyComponent,
-		NotFoundComponent,
-		HomeComponent,
+    AppComponent,
+    ClientTestingComponent,
+    LobbyComponent,
+    NotFoundComponent,
+    HomeComponent,
+    ChatWindowComponent,
   ],
   imports: [
     BrowserModule,
-		MaterialModule,
+    MaterialModule,
     AppRoutingModule,
-		BrowserAnimationsModule,
-		FlexLayoutModule,
+    BrowserAnimationsModule,
+    FlexLayoutModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

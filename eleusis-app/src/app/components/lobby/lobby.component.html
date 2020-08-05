@@ -1,43 +1,33 @@
 <mat-drawer-container class="drawer-style">
-    <mat-drawer mode="side" position="end" opened style="width: 20%;">
-        <h2>CHAT</h2>
-        <div>
-            <ul>Message list...</ul>
-        </div>
-        <div>
-            <mat-form-field>
-                <mat-label>Ingrese un mensaje</mat-label>
-                <textarea matInput></textarea>
-            </mat-form-field>
-            <button>SEND</button>
-        </div>
+	<mat-drawer mode="side" position="end" opened style="width: 20%;">
+		<app-chat-window></app-chat-window>
+	</mat-drawer>
+	<mat-drawer-content>
+		<h1 style="text-align: center;">Lobby #{{lobbyId}}</h1>
 
-    </mat-drawer>
-    <mat-drawer-content>
-        <h1 style="text-align: center;">Lobby #{{lobbyId}}</h1>
+		<div style="margin: 1rem 7rem">
+			<div *ngIf="!gameStarted">
+				<!-- LISTA DE JUGADORES -->
+				<mat-list role="list">
+					<div mat-subheader>Waiting for players to join... currently {{table.Players.length}}/8</div>
+					<mat-list-item role="listitem" *ngFor="let player of table.Players">
+						<mat-icon mat-list-icon *ngIf="!player.isDealer">person</mat-icon>
+						<mat-icon mat-list-icon *ngIf="player.isDealer">star</mat-icon>
+						<div mat-line>{{player.Name}}</div>
+					</mat-list-item>
+				</mat-list>
+				<!-- APARTADO DE BOTONES -->
+				<div fxLayout="row" fxLayoutAlign="center center">
+					<button mat-raised-button color="primary" (click)="AddFakePlayer()">ADD PLAYER</button>
+					<button mat-raised-button color="accent" (click)="StartNewGame()"
+						[disabled]="table.Players.length < 3 || myPlayer.isHost">START GAME</button>
+				</div>
+			</div>
 
-        <div style="margin: 1rem 7rem">
-            <div *ngIf="!gameStarted">
-                <!-- LISTA DE JUGADORES -->
-                <mat-list role="list">
-                    <div mat-subheader>Waiting for players to join... currently {{table.Players.length}}/8</div>
-                    <mat-list-item role="listitem" *ngFor="let player of table.Players">
-                        <mat-icon mat-list-icon *ngIf="!player.isDealer">person</mat-icon>
-                        <mat-icon mat-list-icon *ngIf="player.isDealer">star</mat-icon>
-                        <div mat-line>{{player.Name}}</div>
-                    </mat-list-item>
-                </mat-list>
-                <!-- APARTADO DE BOTONES -->
-                <div fxLayout="row" fxLayoutAlign="center center">
-                    <button mat-raised-button color="primary" (click)="AddFakePlayer()">ADD PLAYER</button>
-                    <button mat-raised-button color="accent" (click)="StartNewGame()" [disabled]="table.Players.length < 3 || myPlayer.isHost">START GAME</button>
-                </div>
-            </div>
-
-            <div *ngIf="gameStarted">
-                <p>Connected players: {{table.Players.length}}</p>
-                <p>Game started, check console to check current table.</p>
-            </div>
-        </div>
-    </mat-drawer-content>
+			<div *ngIf="gameStarted">
+				<p>Connected players: {{table.Players.length}}</p>
+				<p>Game started, check console to check current table.</p>
+			</div>
+		</div>
+	</mat-drawer-content>
 </mat-drawer-container>

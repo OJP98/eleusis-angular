@@ -1,0 +1,18 @@
+.action-space {
+	margin: 1em;
+
+	button {
+		margin-bottom: 1em;
+	}
+}
+
+.message-list {
+	overflow-y: auto;
+
+	div {
+		overflow-x: hidden !important;
+		white-space: pre-wrap !important;
+		word-break: break-word !important;
+		// display: inherit;
+	}
+}

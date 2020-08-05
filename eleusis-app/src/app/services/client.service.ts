@@ -1,6 +1,8 @@
 import { Injectable, OnInit } from '@angular/core';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { Subject, Observable } from 'rxjs';
+import { Message } from '../interfaces/message';
+import { PropertyRead } from '@angular/compiler';
 
 @Injectable({
 	providedIn: 'root',
@@ -8,6 +10,7 @@ import { Subject, Observable } from 'rxjs';
 export class ClientService {
 	private subject: WebSocketSubject<any>;
 	private mensajeSubject$ = new Subject<JSON>();
+	private colaDeMensajesSubject$ = new Subject<Message>();
 
 	constructor() {
 		this.subject = webSocket({
@@ -52,10 +55,23 @@ export class ClientService {
 	 */
 	public ex(mensaje: JSON): void {
 		this.mensajeSubject$.next(mensaje);
+
+		const props: any = mensaje;
+		const nuevoMensaje: Message = {
+			Name: props.user,
+			Message: props.mensaje,
+			PlayerId: props.id,
+		}
+
+		this.colaDeMensajesSubject$.next(nuevoMensaje);
 	}
 
 	public get MensajeSubject(): Observable<JSON> {
 		return this.mensajeSubject$.asObservable();
+	}
+
+	public get ColaDeMensajesSubject(): Observable<Message> {
+		return this.colaDeMensajesSubject$.asObservable();
 	}
 
 	/**
