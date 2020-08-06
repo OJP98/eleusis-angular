@@ -1,1 +1,23 @@
-<p>card works!</p>
+<div fxflexfill>
+	<div class="cards-space">
+		<mat-card class="example-card" style="margin: 0.5em;" *ngFor="let carta of [1,2,3,4,5,1,2,3,4,5]">
+			<mat-card-header fxLayout="column" fxLayoutAlign="start start">
+				<div style="margin-bottom: 1em;">
+					<mat-icon matSuffix style="color: red;">favorite</mat-icon>
+					<p style="line-height: 0.6em;">&nbsp;2</p>
+				</div>
+			</mat-card-header>
+			<mat-card-content fxLayout="row" fxLayoutAlign="start center">
+				<button disableRipple mat-icon-button color="warn" style="size: 1em; padding-left: 2em;">
+					<mat-icon style="font-size: 4em;">favorite</mat-icon>
+				</button>
+			</mat-card-content>
+			<mat-card-header fxLayout="column" fxLayoutAlign="end end">
+				<div>
+					<p>&nbsp;2</p>
+					<mat-icon matSuffix style="color: red;">favorite</mat-icon>
+				</div>
+			</mat-card-header>
+		</mat-card>
+	</div>
+</div>
