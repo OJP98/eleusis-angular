@@ -31,18 +31,18 @@ export class ClientService {
 	 * Envia un request al servidor para
 	 * conectarse a una sala.
 	 */
-	public Conectar(): void {
+	public Conectar(salaNum: Number, userName: string): void {
 		this.subject.next({
 			option: 1,
-			sala: 5001,
-			user: 'BigJ',
+			sala: salaNum,
+			user: userName,
 		});
 	}
 
 	/**
 	 * Se escucha constantemente al servidor.
 	 */
-	public Listen(mensajeEntrante: any): void {
+	public Listen(): void {
 		this.subject.subscribe(
 			(msg) => this.ex(msg), // Called whenever there is a message from the server.
 			(err) => console.log(err), // Called if at any point WebSocket API signals some kind of error.
@@ -61,7 +61,7 @@ export class ClientService {
 			Name: props.user,
 			Message: props.mensaje,
 			PlayerId: props.id,
-		}
+		};
 
 		this.colaDeMensajesSubject$.next(nuevoMensaje);
 	}

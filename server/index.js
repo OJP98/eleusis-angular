@@ -16,7 +16,7 @@ var salas = {
 };
 
 function NuevoCliente(request, client) {
-  if (salas[request.sala] == undefined) {
+  if (request.sala == undefined) {
     /*
       no existe la sala, entonces se crea una
     */
@@ -31,6 +31,22 @@ function NuevoCliente(request, client) {
     };
 
     console.log('Se crea una sala');
+
+    while (true) {
+      const nuevaSala = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
+      if (salas[nuevaSala] == undefined) {
+        //No existe esa sala
+        console.log(nuevaSala);
+        client.send(
+          JSON.stringify({
+            option: 1,
+            sala: 0,
+            user: 'Hola crack',
+          })
+        );
+        break;
+      }
+    }
   } else {
     /*
       Si existe la sala
@@ -39,6 +55,7 @@ function NuevoCliente(request, client) {
     salas[request.sala].Players.push(client);
     console.log('Se une a una sala');
   }
+  console.log(request);
 }
 
 function NuevoMensaje(request, clientSender) {

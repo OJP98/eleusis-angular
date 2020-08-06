@@ -8,7 +8,6 @@ import { Observable, Subscription } from 'rxjs';
 	styleUrls: ['./client-testing.component.scss'],
 })
 export class ClientTestingComponent implements OnInit, OnDestroy {
-
 	private mensajeObservable$: Observable<JSON>;
 	private suscripcionMensaje: Subscription;
 
@@ -18,8 +17,8 @@ export class ClientTestingComponent implements OnInit, OnDestroy {
 	public mensajeDelSocket: JSON;
 
 	constructor(private _clientService: ClientService) {
-		this._clientService.Conectar();
-		this._clientService.Listen(this.MensajeEntrante);
+		this._clientService.Conectar(0, 'BigJ');
+		this._clientService.Listen();
 	}
 
 	/**
@@ -38,10 +37,12 @@ export class ClientTestingComponent implements OnInit, OnDestroy {
 
 	public SusbscribeToMessgage(): void {
 		this.mensajeObservable$ = this._clientService.MensajeSubject;
-		this.suscripcionMensaje = this.mensajeObservable$.subscribe(nuevoMensaje => {
-			this.mensajeDelSocket = nuevoMensaje;
-			console.log('TENEMOS UN NUEVO MENSAJE', nuevoMensaje);
-		});
+		this.suscripcionMensaje = this.mensajeObservable$.subscribe(
+			(nuevoMensaje) => {
+				this.mensajeDelSocket = nuevoMensaje;
+				console.log('TENEMOS UN NUEVO MENSAJE', nuevoMensaje);
+			}
+		);
 	}
 
 	ngOnInit(): void {

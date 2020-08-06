@@ -1,63 +1,88 @@
 <h1 style="text-align: center;">Welcome to Eleusis Game App!</h1>
 
 <div class="content">
-
-    <!-- Campo para el nombre -->
-    <mat-form-field style="width: 30%;">
-        <mat-label>Your name</mat-label>
-        <input matInput type="text" maxlength="24" [formControl]="nameControl" required>
-        <button mat-button *ngIf="playerName" matSuffix mat-icon-button aria-label="Clear" (click)="playerName=''">
+	<!-- Campo para el nombre -->
+	<mat-form-field style="width: 30%;">
+		<mat-label>Your name</mat-label>
+		<input
+			[(ngModel)]="playerName"
+			matInput
+			type="text"
+			maxlength="24"
+			[formControl]="nameControl"
+			required
+		/>
+		<button
+			mat-button
+			*ngIf="playerName"
+			matSuffix
+			mat-icon-button
+			aria-label="Clear"
+			(click)="playerName = ''"
+		>
 			<mat-icon>close</mat-icon>
 		</button>
-    </mat-form-field>
+	</mat-form-field>
 
-    <br>
+	<br />
 
-    <!-- ACORDIONES -->
-    <div class="accordions">
-        <!-- ACORDION PARA UNIRSE A LOBBY  -->
-        <mat-accordion class="headers-alignment">
-            <mat-expansion-panel>
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        Join Lobby
-                    </mat-panel-title>
-                    <mat-panel-description>
-                        You must have a lobby code
-                        <mat-icon>groups</mat-icon>
-                    </mat-panel-description>
-                </mat-expansion-panel-header>
+	<!-- ACORDIONES -->
+	<div class="accordions">
+		<!-- ACORDION PARA UNIRSE A LOBBY  -->
+		<mat-accordion class="headers-alignment">
+			<mat-expansion-panel>
+				<mat-expansion-panel-header>
+					<mat-panel-title>
+						Join Lobby
+					</mat-panel-title>
+					<mat-panel-description>
+						You must have a lobby code
+						<mat-icon>groups</mat-icon>
+					</mat-panel-description>
+				</mat-expansion-panel-header>
 
-                <div fxLayout="row" fxLayoutAlign="space-evenly center">
-                    <mat-form-field>
-                        <mat-label>Lobby Code</mat-label>
-                        <input matInput maxlength="4" [formControl]="codeControl" required>
-                        <mat-hint>Enter the 4 digit code</mat-hint>
-                    </mat-form-field>
-                    <button mat-raised-button color="primary" [disabled]="formGroup.invalid">JOIN LOBBY</button>
-                </div>
-            </mat-expansion-panel>
-        </mat-accordion>
+				<div fxLayout="row" fxLayoutAlign="space-evenly center">
+					<mat-form-field>
+						<mat-label>Lobby Code</mat-label>
+						<input
+							matInput
+							maxlength="4"
+							[formControl]="codeControl"
+							required
+						/>
+						<mat-hint>Enter the 4 digit code</mat-hint>
+					</mat-form-field>
+					<button
+						mat-raised-button
+						color="primary"
+						[disabled]="formGroup.invalid"
+					>
+						JOIN LOBBY
+					</button>
+				</div>
+			</mat-expansion-panel>
+		</mat-accordion>
 
-        <br>
-        <!-- ACORDION PARA CREAR UN LOBBY  -->
-        <mat-accordion class="headers-alignment">
-            <mat-expansion-panel>
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        Host Lobby
-                    </mat-panel-title>
-                    <mat-panel-description>
-                        Create a lobby and invite friends
-                        <mat-icon>videogame_asset</mat-icon>
-                    </mat-panel-description>
-                </mat-expansion-panel-header>
+		<br />
+		<!-- ACORDION PARA CREAR UN LOBBY  -->
+		<mat-accordion class="headers-alignment">
+			<mat-expansion-panel>
+				<mat-expansion-panel-header>
+					<mat-panel-title>
+						Host Lobby
+					</mat-panel-title>
+					<mat-panel-description>
+						Create a lobby and invite friends
+						<mat-icon>videogame_asset</mat-icon>
+					</mat-panel-description>
+				</mat-expansion-panel-header>
 
-                <div fxLayout="row" fxLayoutAlign="space-evenly center">
-                    <button mat-raised-button color="primary" (click)="CreateNewRoom()">CREATE
-						LOBBY</button>
-                </div>
-            </mat-expansion-panel>
-        </mat-accordion>
-    </div>
+				<div fxLayout="row" fxLayoutAlign="space-evenly center">
+					<button mat-raised-button color="primary" (click)="CreateNewRoom()">
+						CREATE LOBBY
+					</button>
+				</div>
+			</mat-expansion-panel>
+		</mat-accordion>
+	</div>
 </div>
