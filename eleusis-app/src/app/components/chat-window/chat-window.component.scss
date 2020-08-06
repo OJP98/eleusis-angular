@@ -9,6 +9,9 @@
 .message-list {
 	overflow-y: auto;
 
+	display: flex;
+	flex-direction: column-reverse;
+
 	div {
 		overflow-x: hidden !important;
 		white-space: pre-wrap !important;

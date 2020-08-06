@@ -31,6 +31,7 @@ export class GameService {
   public CreateTestTable(): Table {
 
     const hostPlayer = this.playerService.CurrentPlayer;
+    this.players = [hostPlayer];
     return {
       Deck: this.fullDeck,
       PlayedCards: [],
@@ -55,7 +56,8 @@ export class GameService {
     }
 
     this.table.Players.push(fakePlayer);
-    this.tableSubject$.next(this.table);
+    this.players.push(fakePlayer);
+    // this.tableSubject$.next(this.table);
   }
 
   public GenerateFullDeck(): Card[] {
@@ -121,6 +123,31 @@ export class GameService {
 
   public AddNewPlayer(newPlayer: Player) {
     this.players.push(newPlayer);
+  }
+
+  public get PlayerMoving(): Player {
+    return this.players.find(player => player.Id === this.table.PlayerTurnId);
+  }
+
+  public NextPlayer(): void {
+    const currentPlayer: Player = this.PlayerMoving;
+
+    for (let i = 0; i < this.players.length; i++) {
+      const selected = this.players[i];
+
+      if (selected === currentPlayer && !selected.isDealer) {
+
+        if (i !== this.players.length - 1) {
+          this.table.PlayerTurnId = this.players[i + 1].Id;
+
+        } else if (!this.players[0].isDealer) {
+          this.table.PlayerTurnId = this.players[0].Id;
+
+        } else {
+          this.table.PlayerTurnId = this.players[1].Id;
+        }
+      }
+    }
   }
 
   public get GetTable() {

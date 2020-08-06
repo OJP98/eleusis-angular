@@ -5,7 +5,10 @@
 	<mat-drawer-content>
 		<h1 style="text-align: center;">Lobby #{{lobbyId}}</h1>
 
+		<!-- CONTENIDO PRINCIPAL -->
 		<div style="margin: 1rem 7rem">
+
+			<!-- SI EL JUEGO AÚN NO HA COMENZADO -->
 			<div *ngIf="!gameStarted">
 				<!-- LISTA DE JUGADORES -->
 				<mat-list role="list">
@@ -22,11 +25,29 @@
 					<button mat-raised-button color="accent" (click)="StartNewGame()"
 						[disabled]="table.Players.length < 3 || myPlayer.isHost">START GAME</button>
 				</div>
+				<br>
+				<div>
+					<app-card></app-card>
+				</div>
 			</div>
 
+			<!-- SI EL JUEGO YA COMENZÓ -->
 			<div *ngIf="gameStarted">
-				<p>Connected players: {{table.Players.length}}</p>
-				<p>Game started, check console to check current table.</p>
+				<!-- LISTA DE JUGADORES CONECTADOS -->
+				<div>
+					<mat-list fxLayout="row" fxLayoutAlign="center center">
+						<mat-list-item *ngFor="let player of table.Players" fxLayout="row" fxLayoutAlign="space-evenly center">
+							<mat-icon mat-list-icon *ngIf="player.isDealer" style="color: rgb(224, 55, 55);">star</mat-icon>
+							<mat-icon mat-list-icon *ngIf="table.PlayerTurnId === player.Id" style="color: rgb(40, 214, 69);">forward
+							</mat-icon>
+							<div mat-line [ngStyle]="{'font-weight': (table.PlayerTurnId === player.Id) ? '700' : '400'}">
+								{{player.Name}}</div>
+						</mat-list-item>
+					</mat-list>
+					<br>
+					<button mat-raised-button color="primary" (click)="NextPlayer()">NEXT PLAYER</button>
+				</div>
+
 			</div>
 		</div>
 	</mat-drawer-content>

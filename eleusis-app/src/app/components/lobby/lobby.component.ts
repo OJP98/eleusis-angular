@@ -39,14 +39,19 @@ export class LobbyComponent implements OnInit, OnDestroy {
     console.log(this.table.Players);
   }
 
+  private ManageTableObservable(): void {
+    this.tableObservable$ = this.gameService.getTableSubjet$();
+    this.tableSuscription = this.tableObservable$.subscribe(changedTable => this.table = changedTable);
+  }
+
+
   public StartNewGame(): void {
     this.gameStarted = true;
     console.log(this.table);
   }
 
-  private ManageTableObservable(): void {
-    this.tableObservable$ = this.gameService.getTableSubjet$();
-    this.tableSuscription = this.tableObservable$.subscribe(changedTable => this.table = changedTable);
+  public NextPlayer(): void {
+    this.gameService.NextPlayer();
   }
 
   ngOnInit(): void {

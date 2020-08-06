@@ -30,7 +30,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
     this.messagesObservable$ = this.clientService.ColaDeMensajesSubject;
     this.messageSuscription = this.messagesObservable$.subscribe(newMessage => {
       this.messageList.push(newMessage);
-    })
+    });
   }
 
   public SendMessage(message: string): void {
@@ -50,7 +50,6 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
       this.messageList.push(newMessage);
       this.inputField = '';
     }
-
   }
 
   ngOnInit(): void {

@@ -14,6 +14,7 @@ import { LobbyComponent } from './components/lobby/lobby.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { HomeComponent } from './components/home/home.component';
 import { ChatWindowComponent } from './components/chat-window/chat-window.component';
+import { CardComponent } from './components/card/card.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { ChatWindowComponent } from './components/chat-window/chat-window.compon
     NotFoundComponent,
     HomeComponent,
     ChatWindowComponent,
+    CardComponent,
   ],
   imports: [
     BrowserModule,
