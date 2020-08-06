@@ -38,5 +38,12 @@ export class HomeComponent implements OnInit {
 		this._router.navigate([lobbyId]);
 	}
 
+	public JoinRoom(): void {
+		// TODO: Obtener sala(s) disponibles
+		this._clientService.Conectar(this.lobbyCode, this.playerName);
+		const lobbyId = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
+		this._router.navigate([lobbyId]);
+	}
+
 	ngOnInit(): void {}
 }

@@ -31,7 +31,7 @@ export class ClientService {
 	 * Envia un request al servidor para
 	 * conectarse a una sala.
 	 */
-	public Conectar(salaNum: Number, userName: string): void {
+	public Conectar(salaNum: number, userName: string): void {
 		this.subject.next({
 			option: 1,
 			sala: salaNum,
@@ -44,26 +44,34 @@ export class ClientService {
 	 */
 	public Listen(): void {
 		this.subject.subscribe(
-			(msg) => this.ex(msg), // Called whenever there is a message from the server.
+			(msg) => this.InterpretarRequest(msg), // Called whenever there is a message from the server.
 			(err) => console.log(err), // Called if at any point WebSocket API signals some kind of error.
 			() => console.log('complete') // Called when connection is closed (for whatever reason).
 		);
 	}
 
 	/**
-	 * ex
+	 * Interpreta el request mandado por el servidor
 	 */
-	public ex(mensaje: JSON): void {
-		this.mensajeSubject$.next(mensaje);
-
+	public InterpretarRequest(mensaje: JSON): void {
 		const props: any = mensaje;
-		const nuevoMensaje: Message = {
-			Name: props.user,
-			Message: props.mensaje,
-			PlayerId: props.id,
-		};
+		if (props.option === 1) {
+			//Servidor manda Conectar
+			console.log(mensaje);
+		}
 
-		this.colaDeMensajesSubject$.next(nuevoMensaje);
+		if (props.option === 2) {
+			//Servidor manda Mensaje
+			this.mensajeSubject$.next(mensaje);
+
+			const nuevoMensaje: Message = {
+				Name: props.user,
+				Message: props.mensaje,
+				PlayerId: props.id,
+			};
+
+			this.colaDeMensajesSubject$.next(nuevoMensaje);
+		}
 	}
 
 	public get MensajeSubject(): Observable<JSON> {

@@ -45,6 +45,7 @@
 					<mat-form-field>
 						<mat-label>Lobby Code</mat-label>
 						<input
+							[(ngModel)]="lobbyCode"
 							matInput
 							maxlength="4"
 							[formControl]="codeControl"
@@ -56,6 +57,7 @@
 						mat-raised-button
 						color="primary"
 						[disabled]="formGroup.invalid"
+						(click)="JoinRoom()"
 					>
 						JOIN LOBBY
 					</button>
