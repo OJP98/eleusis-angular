@@ -60,6 +60,20 @@ function NuevoCliente(request, client) {
       Si existe la sala
     */
 
+    client.send(
+      JSON.stringify({
+        option: 1,
+        sala: request.sala,
+        Deck: 'Card[]',
+        PlayedCards: 'Card[]',
+        Players: 'Player[]',
+        DealerId: 'number',
+        PlayerTurnId: 'number',
+        HostId: 'number',
+        Rounds: 'number',
+      })
+    );
+
     salas[request.sala].Players.push(client);
     console.log('Se une a una sala');
   }
@@ -78,13 +92,22 @@ function NuevoMensaje(request, clientSender) {
 			mensaje: mensaje,
 		});
   */
-  s.clients.forEach(function each(client) {
+  console.log(JSON.parse(request).sala);
+  console.log(salas[JSON.parse(request).sala]);
+
+  salas[JSON.parse(request).sala].Players.forEach(function each(client) {
     if (client !== clientSender) {
       client.send(request);
     }
   });
 
-  //console.log(salas[request.sala].Players);
+  /*
+  s.clients.forEach(function each(client) {
+    if (client !== clientSender) {
+      client.send(request);
+    }
+  });
+  */
 }
 
 function interpreteacionRequest(request, client) {
