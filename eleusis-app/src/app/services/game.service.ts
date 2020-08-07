@@ -13,8 +13,8 @@ export class GameService {
   /* LOS SIGUIENTES SON VALORES DE TESTING SOLAMENTE */
   currPlayerId = 1;
 
-  private table: Table;
-  private tableSubject$ = new Subject<Table>();
+  private table: Table | null;
+	private tableSubject$ = new Subject<Table>();
 
   private fullDeck: Card[];
   private playedCards: Card[];
@@ -24,22 +24,35 @@ export class GameService {
     private playerService: PlayerService,
   ) {
     this.fullDeck = this.GenerateFullDeck();
-    this.table = this.CreateTestTable();
     this.playedCards = [];
   }
 
-  public CreateTestTable(): Table {
+  public CreateNewTable(isNew: boolean, newTable: any): Table {
 
-    const hostPlayer = this.playerService.CurrentPlayer;
-    this.players = [hostPlayer];
-    return {
-      Deck: this.fullDeck,
-      PlayedCards: [],
-      Players: [hostPlayer],
-      DealerId: hostPlayer.Id,
-      HostId: hostPlayer.Id,
-      PlayerTurnId: 2,
-    }
+		if (isNew) {
+			const hostPlayer = this.playerService.CurrentPlayer;
+			this.players = [hostPlayer];
+			this.table = {
+				Deck: this.fullDeck,
+				PlayedCards: [],
+				Players: [hostPlayer],
+				DealerId: hostPlayer.Id,
+				HostId: hostPlayer.Id,
+				PlayerTurnId: 2,
+			}
+		} else {
+			this.table = {
+				Deck: this.fullDeck,
+				PlayedCards: [],
+				Players: newTable.Players,
+				DealerId: newTable.DealerId,
+				HostId: newTable.HostId,
+				PlayerTurnId: newTable.PlayerTurnId,
+			}
+		}
+
+		return this.GetTable;
+
   }
 
   public AddFakePlayer(): void {
@@ -152,7 +165,7 @@ export class GameService {
 
   public get GetTable() {
     return this.table;
-  }
+	}
 
   public getTableSubjet$(): Observable<Table> {
     return this.tableSubject$.asObservable();

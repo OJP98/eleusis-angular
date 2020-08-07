@@ -12,7 +12,8 @@ export class PlayerService {
   private isDealer: boolean;
   private isHost: boolean;
   private isConnected: boolean;
-  private player: Player;
+	private player: Player;
+	private lobbyId: number;
 
   public name: string;
   public deck: Card[];
@@ -38,5 +39,13 @@ export class PlayerService {
 
   public get CurrentPlayer(): Player {
     return this.player;
-  }
+	}
+
+	public SetLobbyId(newId: number) {
+		this.lobbyId = newId;
+	}
+
+	public get LobbyId(): number {
+		return this.lobbyId;
+	}
 }

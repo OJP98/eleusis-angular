@@ -26,7 +26,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
     private playerServcie: PlayerService,
     private route: ActivatedRoute,
   ) {
-    this.myPlayer = this.playerServcie.CurrentPlayer;
+		this.myPlayer = this.playerServcie.CurrentPlayer;
     this.gameStarted = false;
   }
 
@@ -43,7 +43,6 @@ export class LobbyComponent implements OnInit, OnDestroy {
     this.tableObservable$ = this.gameService.getTableSubjet$();
     this.tableSuscription = this.tableObservable$.subscribe(changedTable => this.table = changedTable);
   }
-
 
   public StartNewGame(): void {
     this.gameStarted = true;

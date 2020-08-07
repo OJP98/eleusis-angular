@@ -25,7 +25,7 @@ export class ClientTestingComponent implements OnInit, OnDestroy {
 	 * EnviarMensajeNuevo
 	 */
 	public EnviarMensajeNuevo(parametro: string): void {
-		this._clientService.EnviarMensaje(parametro);
+		// this._clientService.EnviarMensaje(parametro);
 	}
 
 	/**

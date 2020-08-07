@@ -6,7 +6,7 @@ export interface Table {
 	PlayedCards: Card[];
 	Players: Player[];
 	DealerId: number;
-	PlayerTurnId: number;
 	HostId: number;
+	PlayerTurnId?: number;
 	Rounds?: number;
 }

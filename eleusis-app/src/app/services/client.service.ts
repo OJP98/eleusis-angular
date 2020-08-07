@@ -11,6 +11,7 @@ export class ClientService {
 	private subject: WebSocketSubject<any>;
 	private mensajeSubject$ = new Subject<JSON>();
 	private colaDeMensajesSubject$ = new Subject<Message>();
+	private newResopnseSubject$ = new Subject<any>();
 
 	constructor() {
 		this.subject = webSocket({
@@ -56,12 +57,13 @@ export class ClientService {
 	public InterpretarRequest(mensaje: JSON): void {
 		const props: any = mensaje;
 		if (props.option === 1) {
-			//Servidor manda Conectar
-			console.log(mensaje);
+			// Servidor manda Conectar
+			console.log('INTERACCION CON SOCKET!', mensaje);
+			this.newResopnseSubject$.next(mensaje);
 		}
 
 		if (props.option === 2) {
-			//Servidor manda Mensaje
+			// Servidor manda Mensaje
 			this.mensajeSubject$.next(mensaje);
 
 			const nuevoMensaje: Message = {
@@ -82,17 +84,21 @@ export class ClientService {
 		return this.colaDeMensajesSubject$.asObservable();
 	}
 
+	public get NewResponseSubject(): Observable<any> {
+		return this.newResopnseSubject$.asObservable();
+	}
+
 	/**
 	 * Envia un mensaje a todos los jugadores
 	 * de tu sala actual.
 	 */
-	public EnviarMensaje(mensajeNuevo: string): void {
+	public EnviarMensaje(mensajeNuevo: Message, sala: number): void {
 		this.subject.next({
 			option: 2,
-			sala: 5001,
-			user: 'BigJ',
-			id: 0,
-			mensaje: mensajeNuevo,
+			sala,
+			user: mensajeNuevo.Name,
+			id: mensajeNuevo.PlayerId,
+			mensaje: mensajeNuevo.Message,
 		});
 	}
 }

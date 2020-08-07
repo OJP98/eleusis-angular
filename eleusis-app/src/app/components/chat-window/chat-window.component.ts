@@ -4,6 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 import { ClientService } from 'src/app/services/client.service';
 import { PlayerService } from 'src/app/services/player.service';
 import { Player } from 'src/app/interfaces/player';
+import { GameService } from 'src/app/services/game.service';
 
 @Component({
   selector: 'app-chat-window',
@@ -35,16 +36,15 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
 
   public SendMessage(message: string): void {
 
-    // Enviar mensaje con client service
-    this.clientService.EnviarMensaje(message);
-
-    if (this.inputField.replace(/\s/g, '').length) {
-      // Crear objeto tipo mensaje
+		if (this.inputField.replace(/\s/g, '').length) {
+			// Crear objeto tipo mensaje
       const newMessage: Message = {
-        Name: this.player.Name,
+				Name: this.player.Name,
         PlayerId: this.player.Id,
         Message: message,
       }
+			// Enviar mensaje con client service
+			this.clientService.EnviarMensaje(newMessage, this.playerService.LobbyId);
 
       // Pushear mensaje a la lista
       this.messageList.push(newMessage);
