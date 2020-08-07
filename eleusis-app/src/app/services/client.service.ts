@@ -56,13 +56,15 @@ export class ClientService {
 	 */
 	public InterpretarRequest(mensaje: JSON): void {
 		const props: any = mensaje;
-		if (props.option === 1) {
+
+		if (props.option === 0) {
+			// Servidor manda Error
+			console.log(mensaje);
+		} else if (props.option === 1) {
 			// Servidor manda Conectar
 			console.log('INTERACCION CON SOCKET!', mensaje);
 			this.newResopnseSubject$.next(mensaje);
-		}
-
-		if (props.option === 2) {
+		} else if (props.option === 2) {
 			// Servidor manda Mensaje
 			this.mensajeSubject$.next(mensaje);
 

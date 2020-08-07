@@ -32,8 +32,6 @@ function NuevoCliente(request, client) {
           JSON.stringify({
             option: 1,
             sala: nuevaSala,
-            Deck: 'Card[]',
-            PlayedCards: 'Card[]',
             Players: 'Player[]',
             DealerId: 'number',
             PlayerTurnId: 'number',
@@ -59,23 +57,31 @@ function NuevoCliente(request, client) {
     /*
       Si existe la sala
     */
+    console.log(salas[request.sala]);
 
-    client.send(
-      JSON.stringify({
-        option: 1,
-        sala: request.sala,
-        Deck: 'Card[]',
-        PlayedCards: 'Card[]',
-        Players: 'Player[]',
-        DealerId: 'number',
-        PlayerTurnId: 'number',
-        HostId: 'number',
-        Rounds: 'number',
-      })
-    );
+    if (salas[request.sala] == undefined) {
+      client.send(
+        JSON.stringify({
+          option: 0,
+          mensaje: `La sala ${request.sala} no existe`,
+        })
+      );
+    } else {
+      client.send(
+        JSON.stringify({
+          option: 1,
+          sala: request.sala,
+          Players: 'Player[]',
+          DealerId: 'number',
+          PlayerTurnId: 'number',
+          HostId: 'number',
+          Rounds: 'number',
+        })
+      );
 
-    salas[request.sala].Players.push(client);
-    console.log('Se une a una sala');
+      salas[request.sala].Players.push(client);
+      console.log('Se une a una sala');
+    }
   }
   console.log(request);
   console.log('');
