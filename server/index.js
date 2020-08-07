@@ -33,10 +33,11 @@ function NuevoCliente(request, client) {
             option: 1,
             sala: nuevaSala,
             Players: 'Player[]',
-            DealerId: 'number',
+            DealerId: 0,
             PlayerTurnId: 'number',
-            HostId: 'number',
+            HostId: 0,
             Rounds: 'number',
+            myId: 0,
           })
         );
 
@@ -60,6 +61,7 @@ function NuevoCliente(request, client) {
     console.log(salas[request.sala]);
 
     if (salas[request.sala] == undefined) {
+      // No existe la sala a la que se quiere unir
       client.send(
         JSON.stringify({
           option: 0,
@@ -67,15 +69,17 @@ function NuevoCliente(request, client) {
         })
       );
     } else {
+      // si existe la sala a la que  se quiere unir
       client.send(
         JSON.stringify({
           option: 1,
           sala: request.sala,
           Players: 'Player[]',
-          DealerId: 'number',
+          DealerId: 0,
           PlayerTurnId: 'number',
-          HostId: 'number',
+          HostId: 0,
           Rounds: 'number',
+          myId: salas[request.sala].Players.length,
         })
       );
 
