@@ -41,8 +41,11 @@ export class PlayerService {
     return this.player;
 	}
 
-	public SetLobbyId(newId: number) {
-		this.lobbyId = newId;
+	public SetNewLobbyData(newlobbyId: number, newPlayerId: number, playerName: string) {
+		this.lobbyId = newlobbyId;
+		this.playerId = newPlayerId;
+		this.player.Id = newPlayerId;
+		this.player.Name = playerName;
 	}
 
 	public get LobbyId(): number {

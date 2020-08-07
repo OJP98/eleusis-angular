@@ -15,6 +15,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { HomeComponent } from './components/home/home.component';
 import { ChatWindowComponent } from './components/chat-window/chat-window.component';
 import { CardComponent } from './components/card/card.component';
+import { DialogComponent } from './components/dialog/dialog.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { CardComponent } from './components/card/card.component';
     HomeComponent,
     ChatWindowComponent,
     CardComponent,
+    DialogComponent,
   ],
   imports: [
     BrowserModule,

@@ -48,7 +48,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 			// Unirse/crear una sala
 			if (newResponse.option === 1) {
 				this.gameService.CreateNewTable(this.newRoomRequested, newResponse);
-				this.playerService.SetLobbyId(newResponse.sala);
+				this.playerService.SetNewLobbyData(newResponse.sala, newResponse.myId, this.nameControl.value);
 				this.JoinRoom(newResponse.sala);
 			}
 

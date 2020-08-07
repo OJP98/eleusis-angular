@@ -1,19 +1,19 @@
 <div fxLayout="column" fxLayoutAlign="center stretch" style="height: 100%;">
-	<h2 fxFlex>CHAT</h2>
-	<mat-divider></mat-divider>
-	<mat-list class="message-list" fxFlex="90">
-		<mat-list-item *ngFor="let message of messageList.reverse()" style="height: inherit;">
-			<div mat-line [ngStyle]="{'text-align': (message.PlayerId===player.Id) ? 'end' : 'start'}">{{message.Name}}</div>
-			<div mat-line [ngStyle]="{'text-align': (message.PlayerId===player.Id) ? 'end' : 'start'}">{{message.Message}}
-			</div>
-		</mat-list-item>
-	</mat-list>
-	<mat-divider></mat-divider>
-	<div class=" action-space" fxLayout="row" fxLayoutAlign="center center" fxFlex="10">
-		<mat-form-field fxFlex="70">
-			<mat-label>Type a message...</mat-label>
-			<input matInput [(ngModel)]="inputField" (keyup.enter)="SendMessage(inputField)">
-		</mat-form-field>
-		<button mat-raised-button color="accent" (click)="SendMessage(inputField)" fxFlex>SEND</button>
-	</div>
+    <h2 fxFlex>CHAT</h2>
+    <mat-divider></mat-divider>
+    <mat-list class="message-list" fxFlex="90">
+        <mat-list-item *ngFor="let message of messageList.reverse()" style="height: inherit;">
+            <div mat-line [ngStyle]="{'text-align': (message.PlayerId === player.Id) ? 'end' : 'start'}">{{message.Name}}</div>
+            <div mat-line [ngStyle]="{'text-align': (message.PlayerId === player.Id) ? 'end' : 'start'}">{{message.Message}}
+            </div>
+        </mat-list-item>
+    </mat-list>
+    <mat-divider></mat-divider>
+    <div class=" action-space" fxLayout="row" fxLayoutAlign="center center" fxFlex="10">
+        <mat-form-field fxFlex="70">
+            <mat-label>Type a message...</mat-label>
+            <input matInput [(ngModel)]="inputField" (keyup.enter)="SendMessage(inputField)">
+        </mat-form-field>
+        <button mat-raised-button color="accent" (click)="SendMessage(inputField)" fxFlex>SEND</button>
+    </div>
 </div>
