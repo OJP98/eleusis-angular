@@ -3,8 +3,7 @@ import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { Subject, Observable } from 'rxjs';
 import { Message } from '../interfaces/message';
 import { PropertyRead } from '@angular/compiler';
-import { MatDialog } from '@angular/material/dialog';
-import { DialogComponent } from '../components/dialog/dialog.component'
+
 
 @Injectable({
 	providedIn: 'root',
@@ -15,9 +14,7 @@ export class ClientService {
 	private colaDeMensajesSubject$ = new Subject<Message>();
 	private newResopnseSubject$ = new Subject<any>();
 
-	constructor(
-		public dialog: MatDialog,
-	) {
+	constructor() {
 		this.subject = webSocket({
 			url: 'ws://localhost:8080',
 		});
@@ -63,10 +60,7 @@ export class ClientService {
 
 		if (props.option === 0) {
 			// Servidor manda Error
-			this.ShowErrorDialog({
-				content: props.mensaje,
-				title: 'Server Error'
-			})
+			this.newResopnseSubject$.next(mensaje);
 
 		} else if (props.option === 1) {
 			// Servidor manda Conectar
@@ -85,15 +79,6 @@ export class ClientService {
 
 			this.colaDeMensajesSubject$.next(nuevoMensaje);
 		}
-	}
-
-	public ShowErrorDialog(dialogData: any) {
-		this.dialog.open(DialogComponent, {
-			data: {
-				content: dialogData.content,
-				title: dialogData.title
-			}
-		})
 	}
 
 	public get MensajeSubject(): Observable<JSON> {
