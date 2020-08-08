@@ -8,8 +8,8 @@ class Player{
     cards_owned = [];
     score: number;
     
-    constructor(role,id) {
-     this.role = role;
+    constructor(id) {
+     this.role = null;
      this.cards_owned = null;
      this.score = 0;
      this.id = id;
@@ -262,6 +262,119 @@ function verify_rule_guessed(rule_info,guessed_rule){
     }
 }
 
+//Funcion para establecer la regla
+function setRule(){
+    let new_rule = new Array;
+    //Se elige la regla
+    answer = prompt("Desea poner una regla de colores 1. si 2. no\n");
+    //Preguntas para las reglas de colores
+    if (answer == "1"){
+        new_rule.push(0);
+        answer = prompt("Elija una de reglas existentes con colores: \n"
+                  +"1. Los colores que elija no estaran permitidos\n"
+                  +"2. Un orden de color que usted desea\n");
+        if (answer=="1"){
+            let color_rule = prompt("Ingrese hasta tres colores que desee prohibir\nY= yellow\nR= red\nB= blue\nG= green\n");
+            new_rule.push(0);
+            new_rule.push(color_rule.toUpperCase());
+        }
+        else{
+            let color_rule = prompt("Ingrese el orden que desee (si no usa todos los colores, no estaran permitidos)\nY= yellow\nR= red\nB= blue\nG= green\n");
+            new_rule.push(1);
+            new_rule.push(color_rule.toUpperCase());
+       }      
+    }
+    //Preguntas para las reglas de numeros
+    else{
+        new_rule.push(1);
+        answer = prompt("Elija una de reglas existentes con numeros: \n1. multiplos del numero que usted elija\n2. mayor al numero que usted elija\n3. menor al numero que usted desee\n4. prohibir un numero\n");
+        if (answer=="1"){
+            let number_rule = prompt("Ingrese el numero que desee menor o igual a 13: ");
+            new_rule.push(0);
+            new_rule.push(number_rule);
+        }
+        else if (answer == "2"){
+            let number_rule = prompt ("Ingrese el numero que desee menor o igual a 13: ");
+            new_rule.push(1);
+            new_rule.push(number_rule)
+        }
+        else if (answer =="3"){
+            let number_rule = prompt("Ingrese el numero que desee menor o igual a 13:");
+            new_rule.push(2);
+            new_rule.push(number_rule);
+        }
+        else{
+            let number_rule = prompt("Ingrese el numero que desea prohibir");
+            new_rule.push(3);
+            new_rule.push(number_rule);
+        }
+                
+    }
+    return new_rule
+}
+
+//Función para tomar el index de una carta que cumpla con la regla
+function getFirstCard(rule,deck){
+    let first_card_validity = false;
+    while (!(first_card_validity)) {
+        if (rule[0] == 0){
+            index = Math.floor(Math.random()*(deck.length));
+            var card = deck[index]
+            var card_letter = card.charAt(card.length-1);
+            first_card_validity = verify_First(rule,card_letter)
+        } 
+        else{
+            index = Math.floor(Math.random()*(deck.length));
+            var card = deck[index];
+            var card_number = card.slice(0, card.length-1);
+            first_card_validity = verify_First(rule,card_number);
+        }              
+    }
+    return index
+}
+
+//Función para verificar que la regla que adivinaron es la correcta
+function guess_rule(rule){
+    let guessed_rule = new Array;
+    guessed_rule.push(prompt("La regla es \n1. Con colores \n2. Numerica"));
+    if (guessed_rule[0] == 1){
+        guessed_rule.push(prompt("Cual de las reglas existentes es: "
+                                +"\n1. Los colores que elija no estaran permitidos\n"
+                                +"2. Un orden de color que usted desea"))
+        guessed_rule.push(prompt("Elija el color o los colores"))
+        guessed_rule[2] = guessed_rule[2].toUpperCase();
+        return verify_rule_guessed(rule,guessed_rule);
+    }
+    if (guessed_rule[0] == 2){
+        guessed_rule.push(prompt("Cual de las reglas existentes es: "
+                                        +"\n1. multiplos del numero que usted elija"
+                                        +"\n2. mayor al numero que usted elija"
+                                        +"\n3. menor al numero que usted desee"
+                                        +"\n4. prohibir un numero\n"));
+        guessed_rule.push(prompt("¿Que numero es?"));
+        return verify_rule_guessed(rule,guessed_rule);
+    } 
+}
+
+function select_card(player_info){
+    let cards_player = player_info.getCards();
+    let valid_card: boolean= false;
+    while (!(valid_card)){
+        answer = prompt(printEstadoJuego(board,no_world) 
+                        + "\nSus cartas son: " + cards_player
+                        +"\nEscriba su carta");
+        let letter_answer = answer.charAt(answer.length-1);
+        let number_answer = answer.slice(0, answer.length-1);
+        letter_answer = letter_answer.toUpperCase();
+        answer= number_answer + letter_answer;
+        if (cards_player.includes(answer)){
+            valid_card = true;
+            return cards_player.indexOf(answer);
+        }else{
+            prompt("Elija una carta que tenga, eligio " + answer);
+        }
+    } 
+}
 
 /*
 MAIN
@@ -273,26 +386,22 @@ var deck = new Array;
 var no_world = new Array;
 var players_Array = new Array;
 var answer: any;
-var first_card_validity = false;
 var rule_discovered: boolean = false;
 var cards_in_hand: boolean = true;
-var guessed_rule= new Array;
 var rule = new Array;
 var rounds: number = 0
+var first_card_index;
 
 //Se crean los jugadores
 for (var i = 0; i < prohphets_number+1; i++){
-    if (i<prohphets_number){
-        var new_Player = new Player('prophet',i+1);
-    }else{
-        var new_Player = new Player('god',i+1);
-    }
+    var new_Player = new Player(i+1);
     players_Array.push(new_Player);
-
 }
 
+//Se inicia el juego por rondas
 while (rounds<=prohphets_number){
 
+    //Se establecen los roles
     for (var i = 0; i < prohphets_number+1; i++){
         if (rounds == 0){
             if(i==prohphets_number){
@@ -308,6 +417,7 @@ while (rounds<=prohphets_number){
         }
     }
 
+    //Imprimimos los roles de cada player
     prompt("Los roles son los siguientes: \n"
             +"player "+players_Array[0].getId()+" es "+players_Array[0].getRole() +"\n"
             +"player "+players_Array[1].getId()+" es "+players_Array[1].getRole() +"\n"
@@ -317,97 +427,33 @@ while (rounds<=prohphets_number){
     let board = new Array;
     cards_in_hand = true;
 
-    //Se reparten cartas
+    //Se reparten cartas a todos menos al dios
     for (let element of players_Array){
-        let player_deck = new Array;
-        for (let j = 0; j < 3; j++){
-            index = Math.floor(Math.random()*(deck.length));
-            player_deck.push(deck[index]);
-            if (index > -1) {
-                deck.splice(index, 1);
+        if (element.getRole() != "god"){
+            let player_deck = new Array;
+            for (let j = 0; j < 3; j++){
+                index = Math.floor(Math.random()*(deck.length));
+                player_deck.push(deck[index]);
+                if (index > -1) {
+                    deck.splice(index, 1);
+                }
             }
+            element.setCards(player_deck)
         }
-        element.setCards(player_deck)
     }
-    
-    //Se elige la regla
-    answer = prompt("Desea poner una regla de colores 1. si 2. no\n");
-    //Preguntas para las reglas de colores
-    if (answer == "1"){
-        rule.push(0);
-        answer = prompt("Elija una de reglas existentes con colores: \n"
-                  +"1. Los colores que elija no estaran permitidos\n"
-                  +"2. Un orden de color que usted desea\n");
-        if (answer=="1"){
-            let color_rule = prompt("Ingrese hasta tres colores que desee prohibir\nY= yellow\nR= red\nB= blue\nG= green\n");
-            rule.push(0);
-            rule.push(color_rule.toUpperCase());
-        }
-        else{
-            let color_rule = prompt("Ingrese el orden que desee (si no usa todos los colores, no estaran permitidos)\nY= yellow\nR= red\nB= blue\nG= green\n");
-            rule.push(1);
-            rule.push(color_rule.toUpperCase());
-       }      
-    }
-    //Preguntas para las reglas de numeros
-    else{
-        rule.push(1);
-        answer = prompt("Elija una de reglas existentes con numeros: \n1. multiplos del numero que usted elija\n2. mayor al numero que usted elija\n3. menor al numero que usted desee\n4. prohibir un numero\n");
-        if (answer=="1"){
-            let number_rule = prompt("Ingrese el numero que desee menor o igual a 13: ");
-            rule.push(0);
-            rule.push(number_rule);
-        }
-        else if (answer == "2"){
-            let number_rule = prompt ("Ingrese el numero que desee menor o igual a 13: ");
-            rule.push(1);
-            rule.push(number_rule)
-        }
-        else if (answer =="3"){
-            let number_rule = prompt("Ingrese el numero que desee menor o igual a 13:");
-            rule.push(2);
-            rule.push(number_rule);
-        }
-        else{
-            let number_rule = prompt("Ingrese el numero que desea prohibir");
-            rule.push(3);
-            rule.push(number_rule);
-        }
-                
-    }
-    
+
+    rule=setRule();
+        
     prompt("                                 INICIA NUEVA RONDA");
-    
-    while (!(first_card_validity)) {
-        if (rule[0] == 0){
-            index = Math.floor(Math.random()*(deck.length));
-            var card = deck[index]
-            var card_letter = card.charAt(card.length-1);
-            first_card_validity = verify_First(rule,card_letter)
-        } 
-        else{
-            index = Math.floor(Math.random()*(deck.length));
-            var card = deck[index];
-            var card_number = card.slice(0, card.length-1);
-            first_card_validity = verify_First(rule,card_number);
-        }              
-    }
-    
+
+    first_card_index = getFirstCard(rule,deck);
+    let card = deck[first_card_index]
     board.push(card);
-    if (index > -1) {
-        deck.splice(index, 1);
+    if (first_card_index > -1) {
+        deck.splice(first_card_index, 1);
     }
     
     while (!(rule_discovered) && cards_in_hand){
-        
-        console.log(player_turn > players_Array.length);
-        console.log(player_turn);
-        console.log(players_Array.length);
-        console.log(rounds);
-        console.log(rule);
-        console.log(board);
-        console.log(no_world);
-
     
         if ( player_turn > players_Array.length){
             player_turn = 0
@@ -417,36 +463,22 @@ while (rounds<=prohphets_number){
                 prompt("Es turno del dios, nadie juega, se pasa")
             }
             else{
-                var cards_player = players_Array[player_turn-1].getCards();
+                var cards_player =  players_Array[player_turn-1].getCards();
                 answer = prompt(" TU TURNO JUGADOR "+ player_turn + " con id " + players_Array[player_turn-1].getId()+" "+player_turn+" "+players_Array[player_turn-1].getRole()  
                                 +"\n" + printEstadoJuego(board,no_world) 
                                 + "\nSus cartas son: " + cards_player
                                 +"\nDesea...\n1. Colocar una carta \n2. Decir que no tiene carta para poner\n3. Adivinar");
-                
                 //Si decide colocar una carta
                 if (answer == "1"){
-                    var valid_card: boolean= false;
-                    while (!(valid_card)){
-                        answer = prompt(printEstadoJuego(board,no_world) 
-                                        + "\nSus cartas son: " + cards_player
-                                        +"\nEscriba su carta");
-                        var letter_answer = answer.charAt(answer.length-1);
-                        var number_answer = answer.slice(0, answer.length-1);
-                        letter_answer = letter_answer.toUpperCase();
-                        answer= number_answer + letter_answer;
-                        if (cards_player.includes(answer)){
-                            index = cards_player.indexOf(answer);
-                            valid_card = true;
-                        }else{
-                            prompt("Elija una carta que tenga, eligio " + answer);
-                        }
-                    }  
+
+                    let selected_card_index = select_card(players_Array[player_turn-1]); 
+                    let selected_card = cards_player[selected_card_index];
         
                     //Verifica si la carta que selecciono el jugador es correcta       
-                    if (verify_Card(rule,board[board.length-1],cards_player[index])){
-                        board.push(cards_player[index]);
-                        if (index > -1) {
-                            cards_player.splice(index, 1);
+                    if (verify_Card(rule,board[board.length-1],selected_card)){
+                        board.push(selected_card);
+                        if (selected_card_index > -1) {
+                            cards_player.splice(selected_card_index, 1);
                         }
                         players_Array[player_turn-1].setCards(cards_player);
                         if (cards_player.length==0){
@@ -455,15 +487,16 @@ while (rounds<=prohphets_number){
                     }
                     //Si es incorrecta se va al no world
                     else{
-                        no_world.push((board[board.length-1] + " y "+ cards_player[index]+ " no siguen la regla\n"));
-                        if (index > -1) {
-                            cards_player.splice(index, 1);
+                        no_world.push((board[board.length-1] + " y "+ selected_card + " no siguen la regla\n"));
+                        if (selected_card_index > -1) {
+                            cards_player.splice(selected_card_index, 1);
                         }
                         cards_player.push(deck[Math.floor(Math.random()*(deck.length))]);
                         players_Array[player_turn-1].setCards(cards_player);
                         prompt("No puedes jugar esa carta, se va al no mundo");
                     }
                 }
+
                 //Si decide que no tiene carta para jugar
                 else if (answer == "2"){
                     var no_card_playable:boolean = false;
@@ -504,26 +537,8 @@ while (rounds<=prohphets_number){
                 }
                 //Si decide adivinar
                 else if (answer == "3"){
-                    guessed_rule.push(prompt("La regla es \n1. Con colores \n2. Numerica"));
-                    if (guessed_rule[0] == 1){
-                        guessed_rule.push(prompt("Cual de las reglas existentes es: "
-                                                +"\n1. Los colores que elija no estaran permitidos\n"
-                                                +"2. Un orden de color que usted desea"))
-                        guessed_rule.push(prompt("Elija el color o los colores"))
-                        guessed_rule[2] = guessed_rule[2].toUpperCase();
-                        rule_discovered = verify_rule_guessed(rule,guessed_rule);
-                    }
-                    if (guessed_rule[0] == 2){
-                        guessed_rule.push(prompt("Cual de las reglas existentes es: "
-                                                        +"\n1. multiplos del numero que usted elija"
-                                                        +"\n2. mayor al numero que usted elija"
-                                                        +"\n3. menor al numero que usted desee"
-                                                        +"\n4. prohibir un numero\n"));
-                        guessed_rule.push(prompt("¿Que numero es?"));
-                        rule_discovered = verify_rule_guessed(rule,guessed_rule);
-                    } 
+                    rule_discovered = guess_rule(rule);
                 } 
-                guessed_rule=[]
             }
                   
     
@@ -566,10 +581,8 @@ while (rounds<=prohphets_number){
     //Se limpian variables
     rounds++;         
     rule=[];
-    guessed_rule=[];
     rule_discovered = false;
     board=[]
     no_world=[]
-    first_card_validity=false;
     player_turn = 1
 }
