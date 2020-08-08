@@ -22,17 +22,26 @@ function NuevoCliente(request, client) {
     */
     console.log('Se crea una sala');
 
+    console.log(request);
+
     while (true) {
       const nuevaSala = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
       if (salas[nuevaSala] == undefined) {
         //No existe esa sala
         console.log(nuevaSala);
 
+        nuevoJugador = {
+          Id: 0,
+          isDealer: true,
+          Name: request.user,
+          isHost: true,
+        };
+
         client.send(
           JSON.stringify({
             option: 1,
             sala: nuevaSala,
-            Players: 'Player[]',
+            Players: [nuevoJugador],
             DealerId: 0,
             PlayerTurnId: 'number',
             HostId: 0,
@@ -42,7 +51,8 @@ function NuevoCliente(request, client) {
         );
 
         salas[nuevaSala] = {
-          Players: [client],
+          Sockets: [client],
+          Players: [nuevoJugador],
           Deck: [],
           Regla: '',
           CartasAplican: [],
@@ -70,20 +80,29 @@ function NuevoCliente(request, client) {
       );
     } else {
       // si existe la sala a la que  se quiere unir
+      nuevoJugador = {
+        Id: salas[request.sala].Sockets.length,
+        isDealer: false,
+        Name: request.user,
+        isHost: false,
+      };
+
+      salas[request.sala].Sockets.push(client);
+      salas[request.sala].Players.push(nuevoJugador);
+
       client.send(
         JSON.stringify({
           option: 1,
           sala: request.sala,
-          Players: 'Player[]',
+          Players: salas[request.sala].Players,
           DealerId: 0,
           PlayerTurnId: 'number',
           HostId: 0,
           Rounds: 'number',
-          myId: salas[request.sala].Players.length,
+          myId: salas[request.sala].Sockets.length,
         })
       );
 
-      salas[request.sala].Players.push(client);
       console.log('Se une a una sala');
     }
   }
@@ -105,7 +124,7 @@ function NuevoMensaje(request, clientSender) {
   console.log(JSON.parse(request).sala);
   console.log(salas[JSON.parse(request).sala]);
 
-  salas[JSON.parse(request).sala].Players.forEach(function each(client) {
+  salas[JSON.parse(request).sala].Sockets.forEach(function each(client) {
     if (client !== clientSender) {
       client.send(request);
     }
