@@ -103,6 +103,21 @@ function NuevoCliente(request, client) {
         })
       );
 
+      /*
+      Se notifica a todos los jugadores de 
+      la sala que entro un nuevo jugador
+      */
+      salas[request.sala].Sockets.forEach(function each(clientLoop) {
+        if (clientLoop !== client) {
+          clientLoop.send(
+            JSON.stringify({
+              option: 1,
+              Players: salas[request.sala].Players,
+            })
+          );
+        }
+      });
+
       console.log('Se une a una sala');
     }
   }
