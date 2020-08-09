@@ -44,10 +44,11 @@ export class LobbyComponent implements OnInit, OnDestroy {
     private playerServcie: PlayerService,
     private route: ActivatedRoute,
   ) {
-    this.gameStarted = false;
+    this.gameService.SubscribeToSocketResponse();
     this.myPlayer = this.playerServcie.CurrentPlayer;
     this.numericRulesArray = this.gameService.NumericRules;
     this.colorRulesArray = this.gameService.ColorRules;
+    this.gameStarted = false;
 
     this.selectedRulesForm = new FormGroup({
       numericRule: this.numericRuleControl,
@@ -58,6 +59,8 @@ export class LobbyComponent implements OnInit, OnDestroy {
       colorRuleValue: this.colorRuleValue,
       enableColorRule: this.enableColorRule,
     });
+
+    console.log(this.myPlayer);
   }
 
   private GetLobbyId(): string {

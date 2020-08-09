@@ -2,13 +2,16 @@ import { Injectable } from '@angular/core';
 import { Table } from '../interfaces/table';
 import { Card } from '../interfaces/card';
 import { Player } from '../interfaces/player';
-import { Observable, Subject } from 'rxjs';
-import { PlayerService } from './player.service';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { ClientService } from './client.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
+
+  private newResponseObservable: Observable<any>;
+  private newResponseSubscription: Subscription;
 
   /* LOS SIGUIENTES SON VALORES DE TESTING SOLAMENTE */
   currPlayerId = 1;
@@ -20,16 +23,14 @@ export class GameService {
   private colorRules: string[];
   private symbolRules: string[];
 
-  private fullDeck: Card[];
-  private playedCards: Card[];
+  private playedCards: Card[] = [];
   private players: Player[];
+  private fullDeck: Card[] = this.GenerateFullDeck();
 
   constructor(
-    private playerService: PlayerService,
+    private clientService: ClientService,
   ) {
-    this.fullDeck = this.GenerateFullDeck();
     this.setRules();
-    this.playedCards = [];
   }
 
   private setRules(): void {
@@ -46,10 +47,9 @@ export class GameService {
     ]
   }
 
-  public CreateNewTable(isNew: boolean, newTable: any): Table {
+  public CreateNewTable(isNew: boolean, newTable: any, hostPlayer?: Player): Table {
 
     if (isNew) {
-      const hostPlayer = this.playerService.CurrentPlayer;
       this.players = [hostPlayer];
       this.table = {
         Deck: this.fullDeck,
@@ -200,5 +200,16 @@ export class GameService {
 
   public getTableSubjet$(): Observable<Table> {
     return this.tableSubject$.asObservable();
+  }
+
+  public SubscribeToSocketResponse(): void {
+    this.newResponseObservable = this.clientService.NewResponseSubject;
+    this.newResponseSubscription = this.newResponseObservable.subscribe(newResponse => {
+
+      // Actualizar el objeto tipo tabla
+      if (newResponse.option === 1) {
+        this.table.Players = newResponse.Players
+      }
+    });
   }
 }

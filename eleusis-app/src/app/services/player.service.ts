@@ -10,43 +10,31 @@ export class PlayerService {
   private playerId: number;
   private score: number;
   private isDealer: boolean;
-  private isHost: boolean;
   private isConnected: boolean;
-  private player: Player;
+  private player: Player = {
+    Id: 0,
+    isDealer: false
+  };
   private lobbyId: number;
 
   public name: string;
   public deck: Card[];
 
   constructor() {
-    this.player = this.CreateFakePlayer();
-  }
-
-  public SetAsHost(hostValue: boolean) {
-    this.isHost = hostValue;
-  }
-
-  private CreateFakePlayer(): Player {
-    return {
-      Id: 1,
-      Score: 0,
-      isDealer: true,
-      Name: 'Dealer Player',
-      Deck: [],
-      isConnected: true
-    }
   }
 
   public get CurrentPlayer(): Player {
     return this.player;
   }
 
-  public SetNewLobbyData(newlobbyId: number, newPlayerId: number, playerName: string, isDealer: boolean) {
+  public SetNewLobbyData(newlobbyId: number, socketResponse: any, isDealer: boolean, name: string,) {
     this.lobbyId = newlobbyId;
-    this.playerId = newPlayerId;
-    this.player.Id = newPlayerId;
-    this.player.Name = playerName;
-    this.isDealer = isDealer;
+    this.player.Id = socketResponse.myId;
+    this.player.Name = name;
+    this.player.isDealer = isDealer;
+    this.player.Deck = [];
+    this.player.Score = 0;
+    this.player.isConnected = true;
   }
 
   public get LobbyId(): number {

@@ -2,8 +2,8 @@ import { Card } from './card';
 
 export interface Player {
 	Id: number;
-	Score: number;
 	isDealer: boolean;
+	Score?: number;
 	Name?: string;
 	Deck?: Card[];
 	isConnected?: boolean;
