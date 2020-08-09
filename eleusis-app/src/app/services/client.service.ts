@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, Subscription } from 'rxjs';
 import { Message } from '../interfaces/message';
 import { PropertyRead } from '@angular/compiler';
 
@@ -9,6 +9,7 @@ import { PropertyRead } from '@angular/compiler';
 	providedIn: 'root',
 })
 export class ClientService {
+	private socketSubscription: Subscription;
 	private subject: WebSocketSubject<any>;
 	private mensajeSubject$ = new Subject<JSON>();
 	private colaDeMensajesSubject$ = new Subject<Message>();
@@ -45,11 +46,13 @@ export class ClientService {
 	 * Se escucha constantemente al servidor.
 	 */
 	public Listen(): void {
-		this.subject.subscribe(
-			(msg) => this.InterpretarRequest(msg), // Called whenever there is a message from the server.
-			(err) => console.log(err), // Called if at any point WebSocket API signals some kind of error.
-			() => console.log('complete') // Called when connection is closed (for whatever reason).
-		);
+		if (!this.socketSubscription) {
+			this.subject.subscribe(
+				(msg) => this.InterpretarRequest(msg), // Called whenever there is a message from the server.
+				(err) => console.log(err), // Called if at any point WebSocket API signals some kind of error.
+				() => console.log('complete') // Called when connection is closed (for whatever reason).
+			);
+		}
 	}
 
 	/**
