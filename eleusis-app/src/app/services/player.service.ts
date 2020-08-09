@@ -12,8 +12,8 @@ export class PlayerService {
   private isDealer: boolean;
   private isHost: boolean;
   private isConnected: boolean;
-	private player: Player;
-	private lobbyId: number;
+  private player: Player;
+  private lobbyId: number;
 
   public name: string;
   public deck: Card[];
@@ -39,16 +39,17 @@ export class PlayerService {
 
   public get CurrentPlayer(): Player {
     return this.player;
-	}
+  }
 
-	public SetNewLobbyData(newlobbyId: number, newPlayerId: number, playerName: string) {
-		this.lobbyId = newlobbyId;
-		this.playerId = newPlayerId;
-		this.player.Id = newPlayerId;
-		this.player.Name = playerName;
-	}
+  public SetNewLobbyData(newlobbyId: number, newPlayerId: number, playerName: string, isDealer: boolean) {
+    this.lobbyId = newlobbyId;
+    this.playerId = newPlayerId;
+    this.player.Id = newPlayerId;
+    this.player.Name = playerName;
+    this.isDealer = isDealer;
+  }
 
-	public get LobbyId(): number {
-		return this.lobbyId;
-	}
+  public get LobbyId(): number {
+    return this.lobbyId;
+  }
 }

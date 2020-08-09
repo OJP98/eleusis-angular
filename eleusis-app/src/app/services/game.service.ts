@@ -14,7 +14,11 @@ export class GameService {
   currPlayerId = 1;
 
   private table: Table | null;
-	private tableSubject$ = new Subject<Table>();
+  private tableSubject$ = new Subject<Table>();
+
+  private numericRules: string[];
+  private colorRules: string[];
+  private symbolRules: string[];
 
   private fullDeck: Card[];
   private playedCards: Card[];
@@ -24,34 +28,49 @@ export class GameService {
     private playerService: PlayerService,
   ) {
     this.fullDeck = this.GenerateFullDeck();
+    this.setRules();
     this.playedCards = [];
+  }
+
+  private setRules(): void {
+    this.numericRules = [
+      `be a multiple of`,
+      `be greater than`,
+      `be less than`,
+      `contain the number`,
+    ];
+
+    this.colorRules = [
+      `can't have the color`,
+      // `should follow the order`
+    ]
   }
 
   public CreateNewTable(isNew: boolean, newTable: any): Table {
 
-		if (isNew) {
-			const hostPlayer = this.playerService.CurrentPlayer;
-			this.players = [hostPlayer];
-			this.table = {
-				Deck: this.fullDeck,
-				PlayedCards: [],
-				Players: [hostPlayer],
-				DealerId: hostPlayer.Id,
-				HostId: hostPlayer.Id,
-				PlayerTurnId: 2,
-			}
-		} else {
-			this.table = {
-				Deck: this.fullDeck,
-				PlayedCards: [],
-				Players: newTable.Players,
-				DealerId: newTable.DealerId,
-				HostId: newTable.HostId,
-				PlayerTurnId: newTable.PlayerTurnId,
-			}
-		}
+    if (isNew) {
+      const hostPlayer = this.playerService.CurrentPlayer;
+      this.players = [hostPlayer];
+      this.table = {
+        Deck: this.fullDeck,
+        PlayedCards: [],
+        Players: [hostPlayer],
+        DealerId: hostPlayer.Id,
+        HostId: hostPlayer.Id,
+        PlayerTurnId: 2,
+      }
+    } else {
+      this.table = {
+        Deck: this.fullDeck,
+        PlayedCards: [],
+        Players: newTable.Players,
+        DealerId: newTable.DealerId,
+        HostId: newTable.HostId,
+        PlayerTurnId: newTable.PlayerTurnId,
+      }
+    }
 
-		return this.GetTable;
+    return this.GetTable;
 
   }
 
@@ -165,7 +184,19 @@ export class GameService {
 
   public get GetTable() {
     return this.table;
-	}
+  }
+
+  public get NumericRules(): string[] {
+    return this.numericRules;
+  }
+
+  public get ColorRules(): string[] {
+    return this.colorRules;
+  }
+
+  public get SymbolRules(): string[] {
+    return this.symbolRules;
+  }
 
   public getTableSubjet$(): Observable<Table> {
     return this.tableSubject$.asObservable();

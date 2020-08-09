@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 		nameControl: this.nameControl,
 	});
 
-	constructor (
+	constructor(
 		private _router: Router,
 		private clientService: ClientService,
 		private gameService: GameService,
@@ -59,10 +59,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 					content: newResponse.mensaje,
 				});
 
-			// Unirse, crear una nueva sala
+				// Unirse, crear una nueva sala
 			} else if (newResponse.option === 1) {
 				this.gameService.CreateNewTable(this.newRoomRequested, newResponse);
-				this.playerService.SetNewLobbyData(newResponse.sala, newResponse.myId, this.nameControl.value);
+				this.playerService.SetNewLobbyData(newResponse.sala, newResponse.myId, this.nameControl.value, this.newRoomRequested);
 				this.JoinRoom(newResponse.sala);
 			}
 		});

@@ -6,6 +6,5 @@ export interface Player {
 	isDealer: boolean;
 	Name?: string;
 	Deck?: Card[];
-	isHost?: boolean;
 	isConnected?: boolean;
 }

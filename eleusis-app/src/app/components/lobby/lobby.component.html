@@ -10,25 +10,110 @@
 
 			<!-- SI EL JUEGO AÚN NO HA COMENZADO -->
 			<div *ngIf="!gameStarted">
-				<!-- LISTA DE JUGADORES -->
-				<mat-list role="list">
-					<div mat-subheader>Waiting for players to join... currently {{table.Players.length}}/8</div>
-					<mat-list-item role="listitem" *ngFor="let player of table.Players">
-						<mat-icon mat-list-icon *ngIf="!player.isDealer">person</mat-icon>
-						<mat-icon mat-list-icon *ngIf="player.isDealer">star</mat-icon>
-						<div mat-line>{{player.Name}}</div>
-					</mat-list-item>
-				</mat-list>
-				<!-- APARTADO DE BOTONES -->
-				<div fxLayout="row" fxLayoutAlign="center center">
-					<button mat-raised-button color="primary" (click)="AddFakePlayer()">ADD PLAYER</button>
-					<button mat-raised-button color="accent" (click)="StartNewGame()"
-						[disabled]="table.Players.length < 3 || myPlayer.isHost">START GAME</button>
+				<!-- LISTA DE JUGADORES / REGLAS -->
+				<div fxLayout="row" fxLayoutAlign="start">
+					<div fxFlex="50">
+						<mat-list role="list">
+							<div mat-subheader>Waiting for players to join... currently {{table.Players.length}}/8</div>
+							<mat-list-item role="listitem" *ngFor="let player of table.Players">
+								<mat-icon mat-list-icon *ngIf="!player.isDealer">person</mat-icon>
+								<mat-icon mat-list-icon *ngIf="player.isDealer">star</mat-icon>
+								<div mat-line>{{player.Name}}</div>
+							</mat-list-item>
+						</mat-list>
+					</div>
+
+					<!-- CAMPO PARA SELECCIONAR REGLA (SOLO EL DEALER) -->
+					<div fxLayout="column" fxFlex="50" *ngIf="myPlayer.isDealer">
+
+						<!-- FORM PARA LAS REGLAS -->
+						<form [formGroup]="selectedRulesForm">
+							<h2>Round rule(s)</h2>
+							<br>
+							<!-- REGLAS NUMERICAS -->
+							<mat-slide-toggle [formControl]="enableNumericRule" (change)="ToggleNumericRules()">
+								Numeric
+							</mat-slide-toggle>
+							<div class="rules-container" style="margin: 0 1em">
+								<p style="font-size: 1em;">Cards can't</p>
+
+								<!-- Select de reglas -->
+								<mat-form-field style="margin: 0 1em;">
+									<mat-select [formControl]="numericRuleControl">
+										<mat-option *ngFor="let rule of numericRulesArray" [value]="rule">
+											{{rule}}
+										</mat-option>
+									</mat-select>
+									<mat-error *ngIf="numericRuleControl.invalid">
+										Please select a value
+									</mat-error>
+								</mat-form-field>
+
+								<!-- Input de valor numérico -->
+								<mat-form-field>
+									<mat-label>Value</mat-label>
+									<input matInput type="number" [formControl]="numericRuleValue">
+									<mat-error *ngIf="numericRuleValue.invalid">
+										Please enter a value between 1 and 13
+									</mat-error>
+								</mat-form-field>
+							</div>
+
+							<!-- REGLAS DE COLOR -->
+							<mat-slide-toggle [formControl]="enableColorRule" (change)="ToggleColorRules()">
+								Color
+							</mat-slide-toggle>
+							<div class="rules-container" style="margin: 0 1em">
+								<p style="font-size: 1em;">Cards</p>
+
+								<!-- Select de reglas -->
+								<mat-form-field style="margin: 0 1em;">
+									<mat-select [formControl]="colorRuleControl">
+										<mat-option *ngFor="let rule of colorRulesArray" [value]="rule">
+											{{rule}}
+										</mat-option>
+									</mat-select>
+									<mat-error *ngIf="colorRuleControl.invalid">
+										Please select a value
+									</mat-error>
+								</mat-form-field>
+
+								<!-- Select de colores -->
+								<mat-form-field>
+									<mat-select [formControl]="colorRuleValue">
+										<mat-option *ngFor="let color of ['Red', 'Black']" [value]="color">
+											{{color}}
+										</mat-option>
+									</mat-select>
+									<mat-error *ngIf="colorRuleValue.invalid">
+										Please select a value
+									</mat-error>
+								</mat-form-field>
+							</div>
+
+							<br>
+						</form>
+
+						<!-- BOTON PARA ENVIAR REGLAS -->
+						<button *ngIf="enableNumericRule.value || enableColorRule.value" style="align-self: center;"
+							[disabled]="selectedRulesForm.invalid" mat-raised-button color="primary" (click)="SetRule()">SET
+							RULE(S)</button>
+					</div>
 				</div>
 				<br>
-				<div>
-					<app-card></app-card>
+				<!-- APARTADO DE BOTONES -->
+				<div *ngIf="myPlayer.isDealer" fxLayout="row" fxLayoutAlign="center center">
+					<button mat-raised-button color="primary" (click)="AddFakePlayer()">ADD PLAYER</button>
+					<button mat-raised-button color="accent" (click)="StartNewGame()"
+						[disabled]="table.Players.length < 3 || !gameReady">START
+						GAME</button>
 				</div>
+
+				<!-- SI EL JUGADOR NO ES EL DEALER... -->
+				<div *ngIf="!myPlayer.isDealer">
+					<p>Waiting for God to set the rules of the match...</p>
+				</div>
+				<br>
 			</div>
 
 			<!-- SI EL JUEGO YA COMENZÓ -->
@@ -49,6 +134,9 @@
 				</div>
 
 			</div>
+		</div>
+		<div>
+			<!-- <app-card></app-card> -->
 		</div>
 	</mat-drawer-content>
 </mat-drawer-container>
