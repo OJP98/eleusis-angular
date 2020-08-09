@@ -40,7 +40,7 @@
 								<!-- Select de reglas -->
 								<mat-form-field style="margin: 0 1em;">
 									<mat-select [formControl]="numericRuleControl">
-										<mat-option *ngFor="let rule of numericRulesArray" [value]="rule">
+										<mat-option *ngFor="let rule of numericRulesArray; let i = index" [value]="i">
 											{{rule}}
 										</mat-option>
 									</mat-select>
@@ -69,7 +69,7 @@
 								<!-- Select de reglas -->
 								<mat-form-field style="margin: 0 1em;">
 									<mat-select [formControl]="colorRuleControl">
-										<mat-option *ngFor="let rule of colorRulesArray" [value]="rule">
+										<mat-option *ngFor="let rule of colorRulesArray; let i = index" [value]="i">
 											{{rule}}
 										</mat-option>
 									</mat-select>
@@ -96,7 +96,8 @@
 
 						<!-- BOTON PARA ENVIAR REGLAS -->
 						<button *ngIf="enableNumericRule.value || enableColorRule.value" style="align-self: center;"
-							[disabled]="selectedRulesForm.invalid" mat-raised-button color="primary" (click)="SetRule()">SET
+							[disabled]="selectedRulesForm.invalid || this.gameReady" mat-raised-button color="primary"
+							(click)="SetRule()">SET
 							RULE(S)</button>
 					</div>
 				</div>

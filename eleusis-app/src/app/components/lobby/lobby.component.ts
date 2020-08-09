@@ -81,6 +81,11 @@ export class LobbyComponent implements OnInit, OnDestroy {
     if (this.enableNumericRule.value) {
       this.numericRuleControl.enable();
       this.numericRuleValue.enable();
+
+      // DESACTIVAR LOS OTROS CAMPOS
+      this.enableColorRule.setValue(false);
+      this.colorRuleControl.disable();
+      this.colorRuleValue.disable();
     } else {
       this.numericRuleControl.disable();
       this.numericRuleValue.disable();
@@ -93,6 +98,11 @@ export class LobbyComponent implements OnInit, OnDestroy {
     if (this.enableColorRule.value) {
       this.colorRuleControl.enable();
       this.colorRuleValue.enable();
+
+      // DESACTIVAR LOS OTROS CAMPOS
+      this.enableNumericRule.setValue(false);
+      this.numericRuleControl.disable();
+      this.numericRuleValue.disable();
     } else {
       this.colorRuleControl.disable();
       this.colorRuleValue.disable();
@@ -103,6 +113,22 @@ export class LobbyComponent implements OnInit, OnDestroy {
 
   public SetRule(): void {
     console.log('SEND RULES TO THE SERVER');
+
+    const rule: any = [];
+
+    if (this.enableNumericRule.value) {
+      rule.push(0);
+      rule.push(this.numericRuleControl.value);
+      rule.push(this.numericRuleValue.value);
+    } else {
+      rule.push(1);
+      rule.push(this.colorRuleControl.value);
+      rule.push(this.colorRuleValue.value);
+    }
+
+    // TODO: Send rules with socket service
+    console.log(rule);
+
     this.gameReady = true;
     this.selectedRulesForm.disable();
   }
