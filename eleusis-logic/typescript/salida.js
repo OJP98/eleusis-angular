@@ -42,21 +42,60 @@ var Player = /** @class */ (function () {
     };
     return Player;
 }());
+//Clase de carta
+var Card = /** @class */ (function () {
+    function Card(value, symbol) {
+        this.symbol = symbol;
+        if (Number(value) >= 11) {
+            if (Number(value) == 11) {
+                this.character = "J";
+            }
+            else if (Number(value) == 12) {
+                this.character = "Q";
+            }
+            else if (Number(value) == 13) {
+                this.character = "K";
+            }
+        }
+        else {
+            this.character = value;
+        }
+        this.value = Number(value);
+        this.isValid = false;
+    }
+    Card.prototype.getValue = function () {
+        return this.value;
+    };
+    Card.prototype.getSymbol = function () {
+        return this.symbol;
+    };
+    Card.prototype.setIsValid = function (isValid) {
+        this.isValid = isValid;
+    };
+    Card.prototype.toString = function () {
+        return this.character + this.symbol;
+    };
+    Card.prototype.valueAndSymbol = function () {
+        return this.value + this.symbol;
+    };
+    return Card;
+}());
 //Función para crear un deck de cartas nuevo
 function generate_deck() {
     var all_Cards = new Array();
     /*
-    Y = yellow
-    R = Red
-    G = Green
-    B = Blue
+    Spade = S
+    Heart = H
+    Club = C
+    Diamonds = D
     */
-    var colors = new Array("Y", "R", "G", "B");
+    var symbol = new Array("S", "H", "C", "D");
     var numbers = new Array("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13");
     for (var i = 0; i < 2; i++) {
-        for (var j in colors) {
+        for (var j in symbol) {
             for (var k in numbers) {
-                all_Cards.push(numbers[k] + colors[j]);
+                var new_card = new Card(numbers[k], symbol[j]);
+                all_Cards.push(new_card);
             }
         }
     }
@@ -133,10 +172,15 @@ function verify_First(rule_info, card) {
 // Regresa el estado de la mesa
 function printEstadoJuego(deck, no_world) {
     var mensaje;
-    mensaje = "El tablero esta de esta manera: " + deck + "\nLas combinaciones incorrectas han sido: \n";
+    mensaje = "El tablero esta de esta manera: ";
+    for (var _i = 0, deck_1 = deck; _i < deck_1.length; _i++) {
+        var element = deck_1[_i];
+        mensaje = mensaje + " " + element.toString() + " ";
+    }
+    mensaje = mensaje + "\nLas combinaciones incorrectas han sido: \n";
     if (!(no_world.length == 0)) {
-        for (var _i = 0, no_world_1 = no_world; _i < no_world_1.length; _i++) {
-            var element = no_world_1[_i];
+        for (var _a = 0, no_world_1 = no_world; _a < no_world_1.length; _a++) {
+            var element = no_world_1[_a];
             mensaje = mensaje + element;
         }
     }
@@ -147,11 +191,14 @@ function printEstadoJuego(deck, no_world) {
 }
 //Verifica que la carta que el jugador ingrese, este correcta
 function verify_Card(rule_info, last_card, card) {
+    //Se analiza la regla
     var rule_p1 = rule_info[0];
     var rule_p2 = rule_info[1];
     var rule_p3 = rule_info[2];
     if (rule_p1 == 0) {
+        //Se toma el último caracter de la carta para saber que tipo es 
         card = card.charAt(card.length - 1);
+        prompt(card);
         //Verifica que la carta no tenga uno de los colores prohibidos
         if (rule_p2 == 0) {
             if (rule_p3.includes(card)) {
@@ -177,7 +224,10 @@ function verify_Card(rule_info, last_card, card) {
         }
     }
     else {
+        //Se toma el número de la carta
         card = card.slice(0, card.length - 1);
+        card = Number(card);
+        prompt(card);
         if (rule_p2 == 0) {
             //Se verifica que sea multiplo
             var resultado = card % rule_p3;
@@ -241,20 +291,20 @@ function verify_rule_guessed(rule_info, guessed_rule) {
 function setRule() {
     var new_rule = new Array;
     //Se elige la regla
-    answer = prompt("Desea poner una regla de colores 1. si 2. no\n");
+    answer = prompt("Desea poner una regla de tipo de carta 1. si 2. no\n");
     //Preguntas para las reglas de colores
     if (answer == "1") {
         new_rule.push(0);
         answer = prompt("Elija una de reglas existentes con colores: \n"
-            + "1. Los colores que elija no estaran permitidos\n"
-            + "2. Un orden de color que usted desea\n");
+            + "1. Los tipos de carta que elija no estaran permitidos\n"
+            + "2. Un orden que usted desea\n");
         if (answer == "1") {
-            var color_rule = prompt("Ingrese hasta tres colores que desee prohibir\nY= yellow\nR= red\nB= blue\nG= green\n");
+            var color_rule = prompt("Ingrese hasta tres tipos de carta que desee prohibir\nS= Spade\nC= Club\nH= Heart\nD= Diamond\n");
             new_rule.push(0);
             new_rule.push(color_rule.toUpperCase());
         }
         else {
-            var color_rule = prompt("Ingrese el orden que desee (si no usa todos los colores, no estaran permitidos)\nY= yellow\nR= red\nB= blue\nG= green\n");
+            var color_rule = prompt("Ingrese el orden que desee (si no usa todos los tipos, no estaran permitidos)\nS= Spade\nC= Club\nH= Heart\nD= Diamond\n");
             new_rule.push(1);
             new_rule.push(color_rule.toUpperCase());
         }
@@ -293,13 +343,13 @@ function getFirstCard(rule, deck) {
         if (rule[0] == 0) {
             index = Math.floor(Math.random() * (deck.length));
             var card = deck[index];
-            var card_letter = card.charAt(card.length - 1);
-            first_card_validity = verify_First(rule, card_letter);
+            var card_symbol = card.getSymbol();
+            first_card_validity = verify_First(rule, card_symbol);
         }
         else {
             index = Math.floor(Math.random() * (deck.length));
             var card = deck[index];
-            var card_number = card.slice(0, card.length - 1);
+            var card_number = card.getValue();
             first_card_validity = verify_First(rule, card_number);
         }
     }
@@ -308,12 +358,12 @@ function getFirstCard(rule, deck) {
 //Función para verificar que la regla que adivinaron es la correcta
 function guess_rule(rule) {
     var guessed_rule = new Array;
-    guessed_rule.push(prompt("La regla es \n1. Con colores \n2. Numerica"));
+    guessed_rule.push(prompt("La regla es \n1. Con tipo de cartas \n2. Numerica"));
     if (guessed_rule[0] == 1) {
         guessed_rule.push(prompt("Cual de las reglas existentes es: "
-            + "\n1. Los colores que elija no estaran permitidos\n"
-            + "2. Un orden de color que usted desea"));
-        guessed_rule.push(prompt("Elija el color o los colores"));
+            + "\n1. Los tipos de cartas que elija no estaran permitidos\n"
+            + "2. Un orden que usted desea"));
+        guessed_rule.push(prompt("Elija el tipo o tipos de cartas"));
         guessed_rule[2] = guessed_rule[2].toUpperCase();
         return verify_rule_guessed(rule, guessed_rule);
     }
@@ -327,6 +377,7 @@ function guess_rule(rule) {
         return verify_rule_guessed(rule, guessed_rule);
     }
 }
+//Función para verificar que la carta que eligio la tenga en la mano
 function select_card(player_info) {
     var cards_player = player_info.getCards();
     var valid_card = false;
@@ -338,9 +389,15 @@ function select_card(player_info) {
         var number_answer = answer.slice(0, answer.length - 1);
         letter_answer = letter_answer.toUpperCase();
         answer = number_answer + letter_answer;
-        if (cards_player.includes(answer)) {
-            valid_card = true;
-            return cards_player.indexOf(answer);
+        var index_1 = void 0;
+        for (var element in cards_player) {
+            if (cards_player[element].toString() == answer) {
+                valid_card = true;
+                index_1 = element;
+            }
+        }
+        if (valid_card) {
+            return index_1;
         }
         else {
             prompt("Elija una carta que tenga, eligio " + answer);
@@ -436,7 +493,8 @@ while (rounds <= prohphets_number) {
                     var selected_card_index = select_card(players_Array[player_turn - 1]);
                     var selected_card = cards_player[selected_card_index];
                     //Verifica si la carta que selecciono el jugador es correcta       
-                    if (verify_Card(rule, board[board.length - 1], selected_card)) {
+                    if (verify_Card(rule, board[board.length - 1].valueAndSymbol(), selected_card.valueAndSymbol())) {
+                        selected_card.setIsValid(true);
                         board.push(selected_card);
                         if (selected_card_index > -1) {
                             cards_player.splice(selected_card_index, 1);
@@ -464,7 +522,7 @@ while (rounds <= prohphets_number) {
                     for (var _a = 0, cards_player_1 = cards_player; _a < cards_player_1.length; _a++) {
                         var element = cards_player_1[_a];
                         //Si al menos una cumple, se le da una carta más al jugador y se cambia el valor de no_card_playable
-                        if (verify_Card(rule, board[board.length - 1], element)) {
+                        if (verify_Card(rule, board[board.length - 1].valueAndSymbol(), element.valueAndSymbol())) {
                             prompt("Tiene una carta que sí cumple la regla, por fallar se le dará otra");
                             cards_player.push(deck[Math.floor(Math.random() * (deck.length))]);
                             players_Array[player_turn - 1].setCards(cards_player);
@@ -478,11 +536,11 @@ while (rounds <= prohphets_number) {
                         var new_hand = new Array();
                         if (cards_player.length - 1 > 0) {
                             for (var new_card = 0; new_card < cards_player.length - 1; new_card++) {
-                                var index;
-                                index = Math.floor(Math.random() * (deck.length));
-                                new_hand.push(deck[index]);
-                                if (index > -1) {
-                                    deck.splice(index, 1);
+                                var index_2 = void 0;
+                                index_2 = Math.floor(Math.random() * (deck.length));
+                                new_hand.push(deck[index_2]);
+                                if (index_2 > -1) {
+                                    deck.splice(index_2, 1);
                                 }
                             }
                             players_Array[player_turn - 1].setCards(new_hand);
