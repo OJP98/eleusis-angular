@@ -9,4 +9,6 @@ export interface Table {
 	HostId: number;
 	PlayerTurnId?: number;
 	Rounds?: number;
+	Rule?: any;
+	TableId?: number;
 }

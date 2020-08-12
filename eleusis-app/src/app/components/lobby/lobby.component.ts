@@ -112,8 +112,6 @@ export class LobbyComponent implements OnInit, OnDestroy {
   }
 
   public SetRule(): void {
-    console.log('SEND RULES TO THE SERVER');
-
     const rule: any = [];
 
     if (this.enableNumericRule.value) {
@@ -126,9 +124,8 @@ export class LobbyComponent implements OnInit, OnDestroy {
       rule.push(this.colorRuleValue.value);
     }
 
-    // TODO: Send rules with socket service
-    console.log(rule);
-
+    // Se llama al servicio para mandarle la regla al servidor
+    this.gameService.SetMatchRule(rule);
     this.gameReady = true;
     this.selectedRulesForm.disable();
   }

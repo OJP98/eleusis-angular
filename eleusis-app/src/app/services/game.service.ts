@@ -19,37 +19,32 @@ export class GameService {
   private table: Table | null;
   private tableSubject$ = new Subject<Table>();
 
-  private numericRules: string[];
-  private colorRules: string[];
+  private numericRules: string[] = [
+    `be a multiple of`,
+    `be greater than`,
+    `be less than`,
+    `contain the number`,
+  ];
+  private colorRules: string[] = [
+    `can't have the color`,
+    // `should follow the order`
+  ]
   private symbolRules: string[];
 
   private playedCards: Card[] = [];
   private players: Player[];
   private fullDeck: Card[];
+  private rule: any;
+  private tableId: number;
 
   constructor(
     private clientService: ClientService,
-  ) {
-    this.setRules();
-  }
-
-  private setRules(): void {
-    this.numericRules = [
-      `be a multiple of`,
-      `be greater than`,
-      `be less than`,
-      `contain the number`,
-    ];
-
-    this.colorRules = [
-      `can't have the color`,
-      // `should follow the order`
-    ]
-  }
+  ) { }
 
   public CreateNewTable(isNew: boolean, newTable: any, hostPlayer?: Player): Table {
 
     this.fullDeck = this.GenerateFullDeck();
+    this.tableId = newTable.sala;
 
     if (isNew) {
       this.players = [hostPlayer];
@@ -60,6 +55,7 @@ export class GameService {
         DealerId: hostPlayer.Id,
         HostId: hostPlayer.Id,
         PlayerTurnId: 2,
+        TableId: this.tableId
       }
     } else {
       this.table = {
@@ -69,11 +65,18 @@ export class GameService {
         DealerId: newTable.DealerId,
         HostId: newTable.HostId,
         PlayerTurnId: newTable.PlayerTurnId,
+        TableId: this.tableId
       }
     }
 
     return this.GetTable;
 
+  }
+
+  public SetMatchRule(rule: any) {
+    this.rule = rule;
+    this.table.Rule = rule;
+    this.clientService.DefinirRegla(this.table.TableId, this.table.Rule);
   }
 
   public AddFakePlayer(): void {
