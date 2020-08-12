@@ -67,7 +67,6 @@ export class ClientService {
 
 		} else if (props.option === 1) {
 			// Servidor manda Conectar
-			console.log('INTERACCION CON SOCKET!', mensaje);
 			this.newResopnseSubject$.next(mensaje);
 
 		} else if (props.option === 2) {

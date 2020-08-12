@@ -44,7 +44,6 @@ export class LobbyComponent implements OnInit, OnDestroy {
     private playerServcie: PlayerService,
     private route: ActivatedRoute,
   ) {
-    this.gameService.SubscribeToSocketResponse();
     this.myPlayer = this.playerServcie.CurrentPlayer;
     this.numericRulesArray = this.gameService.NumericRules;
     this.colorRulesArray = this.gameService.ColorRules;
@@ -61,6 +60,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
     });
 
     console.log(this.myPlayer);
+    this.gameService.SubscribeToSocketResponse();
   }
 
   private GetLobbyId(): string {

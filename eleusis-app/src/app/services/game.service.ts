@@ -25,7 +25,7 @@ export class GameService {
 
   private playedCards: Card[] = [];
   private players: Player[];
-  private fullDeck: Card[] = this.GenerateFullDeck();
+  private fullDeck: Card[];
 
   constructor(
     private clientService: ClientService,
@@ -48,6 +48,8 @@ export class GameService {
   }
 
   public CreateNewTable(isNew: boolean, newTable: any, hostPlayer?: Player): Table {
+
+    this.fullDeck = this.GenerateFullDeck();
 
     if (isNew) {
       this.players = [hostPlayer];
@@ -208,8 +210,13 @@ export class GameService {
 
       // Actualizar el objeto tipo tabla
       if (newResponse.option === 1) {
-        this.table.Players = newResponse.Players
+        this.table.Players = newResponse.Players;
       }
     });
+  }
+
+  public AddCard(): void {
+    this.fullDeck.reverse();
+    this.table.PlayedCards.push(this.fullDeck.pop());
   }
 }

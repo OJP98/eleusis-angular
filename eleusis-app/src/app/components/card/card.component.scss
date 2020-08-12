@@ -1,13 +1,30 @@
-.example-card {
+.card {
 	max-width: 8em;
 	width: 100%;
 	cursor: default;
+	margin: 0.5em;
+	// outline-style: i;
+	// outline-width: 1em;
+}
+
+.valid {
+	background: rgb(11, 134, 52);
+	background: linear-gradient(0deg, rgba(11, 134, 52, 1) 0%, rgba(23, 217, 153, 1) 100%);
+}
+
+.invalid {
+	background: rgb(134, 11, 11);
+	background: linear-gradient(0deg, rgba(134, 11, 11, 0.4318102240896359) 0%, rgba(217, 23, 23, 0.1741071428571429) 100%);
 }
 
 .cards-space {
 	display: flex;
 	flex-direction: row;
+	align-items: flex-start;
 	flex-flow: wrap;
+	max-height: 35em;
+	min-height: 35em;
+	overflow-y: scroll;
 }
 
 .example {
