@@ -4,7 +4,6 @@ import { Subject, Observable, Subscription } from 'rxjs';
 import { Message } from '../interfaces/message';
 import { PropertyRead } from '@angular/compiler';
 
-
 @Injectable({
 	providedIn: 'root',
 })
@@ -64,11 +63,9 @@ export class ClientService {
 		if (props.option === 0) {
 			// Servidor manda Error
 			this.newResopnseSubject$.next(mensaje);
-
 		} else if (props.option === 1) {
 			// Servidor manda Conectar
 			this.newResopnseSubject$.next(mensaje);
-
 		} else if (props.option === 2) {
 			// Servidor manda Mensaje
 			this.mensajeSubject$.next(mensaje);
@@ -106,6 +103,18 @@ export class ClientService {
 			user: mensajeNuevo.Name,
 			id: mensajeNuevo.PlayerId,
 			mensaje: mensajeNuevo.Message,
+		});
+	}
+
+	/**
+	 * Define la regla de juego de determinada
+	 * sala
+	 */
+	public DefinirRegla(sala: number, regla: any) {
+		this.subject.next({
+			option: 3,
+			sala,
+			regla,
 		});
 	}
 }
