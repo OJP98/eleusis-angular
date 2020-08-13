@@ -139,8 +139,10 @@ export class ClientService {
 	 */
 	public JugarCarta(simbolo: string, valor: number, sala: number) {
 		this.subject.next({
-			option: 10,
+			option: 5,
 			sala,
-		})
+			simbolo,
+			valor,
+		});
 	}
 }

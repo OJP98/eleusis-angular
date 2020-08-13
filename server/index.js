@@ -294,6 +294,12 @@ function IniciarJuego(request, client) {
   RepartirCartas(JSON.parse(request).sala, client);
 }
 
+function NuevaJugada(request, client) {
+  console.log(salas[JSON.parse(request).sala].Regla);
+  console.log(JSON.parse(request).simbolo);
+  console.log(JSON.parse(request).valor);
+}
+
 function interpreteacionRequest(request, client) {
   const newRequest = JSON.parse(request);
 
@@ -324,6 +330,9 @@ function interpreteacionRequest(request, client) {
     {"option":4,"sala":6027}
     */
     IniciarJuego(request, client);
+  } else if (newRequest.option === 5) {
+    //? Nueva Jugada
+    NuevaJugada(request, client);
   } else {
     console.log('Otro');
   }
