@@ -23,8 +23,11 @@ function Card(value, symbol) {
           this.character = "K";
       }
   }
-  else {
-      this.character = value;
+  else if(Number(value) == 1){
+      this.character = "A";
+  }
+  else{
+    this.character = value;
   }
   this.value = Number(value);
   this.isValid = false;
@@ -236,7 +239,7 @@ function generar_deck() {
   Club = C
   Diamonds = D
   */
-  var symbol = new Array("S", "H", "C", "D");
+  var symbol = new Array("spades", "hearts", "clubs", "diamonds");
   var numbers = new Array("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13");
   for (var i = 0; i < 2; i++) {
       for (var j in symbol) {
