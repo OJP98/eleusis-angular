@@ -294,7 +294,7 @@ function IniciarJuego(request, client) {
   RepartirCartas(JSON.parse(request).sala, client);
 }
 
-function VerificarCarta(rule,symbol_card_selected,value_card_selected){
+function VerificarCarta(secret_rule,symbol_card_selected,value_card_selected){
   //Si la regla seleccionada es por numeros entra a este if
   if (secret_rule[0] == 0){
     if(secret_rule[1] == 0){
