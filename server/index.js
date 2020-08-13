@@ -302,8 +302,17 @@ function NuevaJugada(request, client) {
   let value_card_selected = JSON.parse(request).valor;
   
   //Si la regla seleccionada es por numeros entra a este if
-  if (secret_rule[0] == 1){
-    console.log("se entró correctamente a regla de numero");
+  if (secret_rule[0] == 0){
+    if(secret_rule[1] == 0){
+      console.log("La regla es de multiplos");
+    }
+    else if (secret_rule[1] == 1){
+      if (Number(secret_rule[2]) >= value_card_selected){
+        console.log("Esta carta se puede jugar");
+      }else{
+        console.log("Esta carta no se puede jugar");
+      }
+    }
   }else{
     console.log("Se deja este espacio en caso de que se implemente reglas por tipos de cartas")
   }
