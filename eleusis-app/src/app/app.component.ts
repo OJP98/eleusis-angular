@@ -14,7 +14,7 @@ export class AppComponent {
     private domSanitizer: DomSanitizer,
   ) {
     this.matIconRegistry.addSvgIcon(
-      'cubs',
+      'clubs',
       this.domSanitizer.bypassSecurityTrustResourceUrl('assets/cubs.svg')
     );
     this.matIconRegistry.addSvgIcon(

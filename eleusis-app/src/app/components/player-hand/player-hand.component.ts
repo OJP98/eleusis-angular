@@ -24,12 +24,16 @@ export class PlayerHandComponent implements OnInit {
   }
 
   public GuessRule(): void {
-    console.log('GUES THE RULE');
+    console.log('GUESS THE RULE');
   }
 
   public ClaimNoCardsRemaining(): void {
     console.log('I GOT NO CARDS');
+  }
 
+  public PlayCard(card: Card): void {
+    console.log(card);
+    this.gameService.PlayCard(card.symbol, card.value);
   }
 
   ngOnInit(): void {

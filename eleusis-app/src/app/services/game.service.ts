@@ -4,6 +4,7 @@ import { Card } from '../interfaces/card';
 import { Player } from '../interfaces/player';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { ClientService } from './client.service';
+import { PlayerService } from './player.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class GameService {
     `contain the number`,
   ];
   private colorRules: string[] = [
-    `can't have the color`,
+    `can't have the symbol`,
     // `should follow the order`
   ]
   private symbolRules: string[];
@@ -34,24 +35,27 @@ export class GameService {
   private players: Player[];
   private fullDeck: Card[];
   private tableId: number;
+  private currentPlayer: Player;
 
   constructor(
     private clientService: ClientService,
+    private playerService: PlayerService
   ) { }
 
-  public CreateNewTable(isNew: boolean, newTable: any, hostPlayer?: Player): Table {
+  public CreateNewTable(isNew: boolean, newTable: any): Table {
 
     this.fullDeck = this.GenerateFullDeck();
     this.tableId = newTable.sala;
+    this.currentPlayer = this.playerService.CurrentPlayer;
 
     if (isNew) {
-      this.players = [hostPlayer];
+      this.players = [this.currentPlayer];
       this.table = {
         Deck: this.fullDeck,
         PlayedCards: [],
-        Players: [hostPlayer],
-        DealerId: hostPlayer.Id,
-        HostId: hostPlayer.Id,
+        Players: [this.currentPlayer],
+        DealerId: this.currentPlayer.Id,
+        HostId: this.currentPlayer.Id,
         PlayerTurnId: 2,
         TableId: this.tableId,
         MatchStarted: false,
@@ -83,22 +87,8 @@ export class GameService {
     this.table.MatchStarted = true;
   }
 
-  public AddFakePlayer(): void {
-
-    this.currPlayerId += 1;
-
-    const fakePlayer: Player = {
-      Id: this.currPlayerId,
-      Score: 0,
-      isDealer: false,
-      Name: 'Fake Player',
-      Deck: [],
-      isConnected: true,
-    }
-
-    this.table.Players.push(fakePlayer);
-    this.players.push(fakePlayer);
-    // this.tableSubject$.next(this.table);
+  public PlayCard(symbol: string, value: number): void {
+    this.clientService.JugarCarta(symbol, value, this.tableId);
   }
 
   public GenerateFullDeck(): Card[] {
@@ -149,9 +139,9 @@ export class GameService {
 
         // Crear objeto tipo carta
         const newCard: Card = {
-          Char: char,
-          Value: value,
-          Symbol: symbol
+          character: char,
+          value,
+          symbol
         }
 
         // Ingresarlo al array de cartas
@@ -223,13 +213,14 @@ export class GameService {
     this.newResponseObservable = this.clientService.NewResponseSubject;
     this.newResponseSubscription = this.newResponseObservable.subscribe(newResponse => {
 
-      console.log(newResponse);
 
       // Actualizar el objeto tipo tabla
       if (newResponse.option === 1) {
         this.table.Players = newResponse.Players;
+
       } else if (newResponse.option === 4) {
         this.table.MatchStarted = true;
+        this.currentPlayer.Deck = newResponse.cartas[0];
       }
     });
   }

@@ -67,11 +67,6 @@ export class LobbyComponent implements OnInit, OnDestroy {
     return this.route.snapshot.paramMap.get('lobbyId');
   }
 
-  private AddFakePlayer(): void {
-    this.gameService.AddFakePlayer();
-    console.log(this.table.Players);
-  }
-
   public ToggleNumericRules(): void {
     if (this.enableNumericRule.value) {
       this.numericRuleControl.enable();

@@ -1,6 +1,6 @@
 export interface Card {
-	Char: string,
-	Symbol: string,
-	Value: number,
+	character: string,
+	symbol: string,
+	value: number,
 	isValid?: boolean,
 }

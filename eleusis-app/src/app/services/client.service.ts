@@ -12,7 +12,7 @@ export class ClientService {
 	private subject: WebSocketSubject<any>;
 	private mensajeSubject$ = new Subject<JSON>();
 	private colaDeMensajesSubject$ = new Subject<Message>();
-	private newResopnseSubject$ = new Subject<any>();
+	private newResponseSubject$ = new Subject<any>();
 
 	constructor() {
 		this.subject = webSocket({
@@ -62,10 +62,10 @@ export class ClientService {
 
 		if (props.option === 0) {
 			// Servidor manda Error
-			this.newResopnseSubject$.next(mensaje);
+			this.newResponseSubject$.next(mensaje);
 		} else if (props.option === 1) {
 			// Servidor manda Conectar
-			this.newResopnseSubject$.next(mensaje);
+			this.newResponseSubject$.next(mensaje);
 		} else if (props.option === 2) {
 			// Servidor manda Mensaje
 			this.mensajeSubject$.next(mensaje);
@@ -79,7 +79,7 @@ export class ClientService {
 			this.colaDeMensajesSubject$.next(nuevoMensaje);
 		} else if (props.option === 4) {
 			// Servidor manda Comenzar juego
-			this.newResopnseSubject$.next(mensaje);
+			this.newResponseSubject$.next(mensaje);
 		}
 	}
 
@@ -92,7 +92,7 @@ export class ClientService {
 	}
 
 	public get NewResponseSubject(): Observable<any> {
-		return this.newResopnseSubject$.asObservable();
+		return this.newResponseSubject$.asObservable();
 	}
 
 	/**
@@ -129,5 +129,18 @@ export class ClientService {
 			option: 4,
 			sala,
 		});
+	}
+
+	/**
+	 * Envía al servidor datos necesarios para procesar una carta jugada.
+	 * @param simbolo de la carta jugada
+	 * @param valor de la carta jugada
+	 * @param sala el id de la sala del jugador
+	 */
+	public JugarCarta(simbolo: string, valor: number, sala: number) {
+		this.subject.next({
+			option: 10,
+			sala,
+		})
 	}
 }

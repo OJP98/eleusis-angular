@@ -81,7 +81,7 @@
 								<!-- Select de colores -->
 								<mat-form-field>
 									<mat-select [formControl]="colorRuleValue">
-										<mat-option *ngFor="let color of ['Red', 'Black']" [value]="color">
+										<mat-option *ngFor="let color of ['spades', 'hearts', 'cubs', 'diamonds']" [value]="color">
 											{{color}}
 										</mat-option>
 									</mat-select>
@@ -104,7 +104,6 @@
 				<br>
 				<!-- APARTADO DE BOTONES (SOLO SI EL JUGADOR ES DEALER) -->
 				<div *ngIf="myPlayer.isDealer" fxLayout="row" fxLayoutAlign="center center">
-					<button mat-raised-button color="primary" (click)="AddFakePlayer()">ADD PLAYER</button>
 					<button mat-raised-button color="accent" (click)="StartNewMatch()"
 						[disabled]="table.Players.length < 3 || !gameReady">START
 						GAME</button>
