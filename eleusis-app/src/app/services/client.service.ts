@@ -117,4 +117,14 @@ export class ClientService {
 			regla,
 		});
 	}
+
+	/**
+	 * Comienza el juego de una sala
+	 */
+	public ComenzarJuego(sala: number) {
+		this.subject.next({
+			option: 4,
+			sala,
+		});
+	}
 }
