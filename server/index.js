@@ -304,7 +304,12 @@ function NuevaJugada(request, client) {
   //Si la regla seleccionada es por numeros entra a este if
   if (secret_rule[0] == 0){
     if(secret_rule[1] == 0){
-      console.log("La regla es de multiplos");
+      let resultado = value_card_selected % Number(secret_rule[2]);
+      if(resultado != 0){
+        console.log("Esta carta se puede jugar");
+      }else{
+        console.log("Esta carta se puede jugar");
+      }
     }
     else if (secret_rule[1] == 1){
       if (Number(secret_rule[2]) >= value_card_selected){
