@@ -89,7 +89,7 @@ function NuevoCliente(request, client) {
     } else {
       // si existe la sala a la que  se quiere unir
       nuevoJugador = {
-        Id: salas[request.sala].Sockets.length,
+        Id: salas[request.sala].Sockets.length - 1,
         isDealer: false,
         Name: request.user,
         isHost: false,
@@ -107,7 +107,7 @@ function NuevoCliente(request, client) {
           PlayerTurnId: 'number',
           HostId: 0,
           Rounds: 'number',
-          myId: salas[request.sala].Sockets.length,
+          myId: salas[request.sala].Sockets.length - 1,
         })
       );
 
@@ -168,16 +168,23 @@ function SetRegla(request) {
   console.log(salas);
 }
 
-function IniciarJuego(request) {
+function RepartirCartas(sala, God) {
+  salas[sala].Sockets.forEach(function each(clientLoop) {
+    // cada iteracion es un cliente menos el Dios
+    if (clientLoop !== God) {
+      clientLoop.send(
+        JSON.stringify({
+          option: 4,
+        })
+      );
+    }
+  });
+}
+
+function IniciarJuego(request, client) {
   salas[JSON.parse(request).sala].JuegoIniciado = true;
 
-  salas[JSON.parse(request).sala].Sockets.forEach(function each(clientLoop) {
-    clientLoop.send(
-      JSON.stringify({
-        option: 4,
-      })
-    );
-  });
+  RepartirCartas(JSON.parse(request).sala, client);
 }
 
 function interpreteacionRequest(request, client) {
@@ -209,7 +216,7 @@ function interpreteacionRequest(request, client) {
     /*
     {"option":4,"sala":6027}
     */
-    IniciarJuego(request);
+    IniciarJuego(request, client);
   } else {
     console.log('Otro');
   }
