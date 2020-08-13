@@ -294,11 +294,18 @@ function IniciarJuego(request, client) {
   RepartirCartas(JSON.parse(request).sala, client);
 }
 
+
 function NuevaJugada(request, client) {
-  console.log(salas[JSON.parse(request).sala].Regla);
-  console.log(JSON.parse(request).simbolo);
-  console.log(JSON.parse(request).valor);
+  
+  let regla = salas[JSON.parse(request).sala].Regla;
+  console.log(regla);
+  let simbolo = JSON.parse(request).simbolo;
+  console.log(simbolo);
+  let valor = JSON.parse(request).valor;
+  console.log(valor);
+  
 }
+
 
 function interpreteacionRequest(request, client) {
   const newRequest = JSON.parse(request);
