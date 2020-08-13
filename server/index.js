@@ -1,6 +1,63 @@
 var server = require('ws').Server;
 var s = new server({ port: 8080 });
 
+/*
+Inicia clase Carta
+Propiedades:
+symbol = nos dice que tipo de carta, puede ser de espadas, corazones, treboles y diamantes. (estas son representados por s,h,c y d, respectivamente)
+character = numero de la carta (aca tomamos en cuenta la j, q y k)
+value = valor numerico de character
+isValid = esto nos dice si la carta sigue la regla o no
+*/
+
+function Card(value, symbol) {
+  this.symbol = symbol;
+  if (Number(value) >= 11) {
+      if (Number(value) == 11) {
+          this.character = "J";
+      }
+      else if (Number(value) == 12) {
+          this.character = "Q";
+      }
+      else if (Number(value) == 13) {
+          this.character = "K";
+      }
+  }
+  else {
+      this.character = value;
+  }
+  this.value = Number(value);
+  this.isValid = false;
+}
+
+/*
+Funciones de la clase carta
+*/
+
+//gets
+Card.prototype.getValue = function () {
+  return this.value;
+};
+Card.prototype.getSymbol = function () {
+  return this.symbol;
+};
+//set
+Card.prototype.setIsValid = function (isValid) {
+  this.isValid = isValid;
+};
+//to string (Nos devuelve character y simbolo para formar la carta)
+Card.prototype.toString = function () {
+  return this.character + this.symbol;
+};
+//valueAndSymbol nos devuelve el valor numerico y la el simbolo de la carta
+Card.prototype.valueAndSymbol = function () {
+  return this.value + this.symbol;
+};
+/*
+Termina todo lo relacionado con la clase carta
+*/
+
+
 var salas = {
   /*
   5001: {
@@ -170,14 +227,48 @@ function SetRegla(request) {
   console.log(salas);
 }
 
+//Función para crear un deck de cartas nuevo
+function generar_deck() {
+  var all_Cards = new Array();
+  /*
+  Spade = S
+  Heart = H
+  Club = C
+  Diamonds = D
+  */
+  var symbol = new Array("S", "H", "C", "D");
+  var numbers = new Array("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13");
+  for (var i = 0; i < 2; i++) {
+      for (var j in symbol) {
+          for (var k in numbers) {
+              var new_card = new Card(numbers[k], symbol[j]);
+              all_Cards.push(new_card);
+          }
+      }
+  }
+  return all_Cards;
+}
+
+//
 function RepartirCartas(sala, God) {
+  var deck = generar_deck()
   salas[sala].Sockets.forEach(function each(clientLoop) {
     // cada iteracion es un cliente menos el Dios
     if (clientLoop !== God) {
+      // Array para guardar las 12 cartas
+      var player_deck = new Array;
+      //Se entra a un for, donde se repartiran 12 cartas
+      for (var j = 0; j < 12; j++) {
+        var index = Math.floor(Math.random() * (deck.length));
+        player_deck.push(deck[index]);
+        if (index > -1) {
+            deck.splice(index, 1);
+        }
+      }
       clientLoop.send(
         JSON.stringify({
           option: 4,
-          cartas: ['Lista de cartas del jugador'],
+          cartas: [player_deck],
         })
       );
     }
