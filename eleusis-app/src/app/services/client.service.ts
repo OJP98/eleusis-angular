@@ -79,7 +79,7 @@ export class ClientService {
 			this.colaDeMensajesSubject$.next(nuevoMensaje);
 		} else if (props.option === 4) {
 			// Servidor manda Comenzar juego
-			console.log(mensaje);
+			this.newResopnseSubject$.next(mensaje);
 		}
 	}
 

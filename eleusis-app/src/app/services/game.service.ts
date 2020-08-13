@@ -80,6 +80,7 @@ export class GameService {
 
   public SendMatchReady(): void {
     this.clientService.ComenzarJuego(this.tableId);
+    this.table.MatchStarted = true;
   }
 
   public AddFakePlayer(): void {
@@ -198,6 +199,10 @@ export class GameService {
     return this.table.PlayedCards;
   }
 
+  public get PlayerTurnId(): number {
+    return this.table.PlayerTurnId;
+  }
+
   public get NumericRules(): string[] {
     return this.numericRules;
   }
@@ -218,9 +223,13 @@ export class GameService {
     this.newResponseObservable = this.clientService.NewResponseSubject;
     this.newResponseSubscription = this.newResponseObservable.subscribe(newResponse => {
 
+      console.log(newResponse);
+
       // Actualizar el objeto tipo tabla
       if (newResponse.option === 1) {
         this.table.Players = newResponse.Players;
+      } else if (newResponse.option === 4) {
+        this.table.MatchStarted = true;
       }
     });
   }

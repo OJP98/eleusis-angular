@@ -18,6 +18,7 @@ import { CardComponent } from './components/card/card.component';
 import { DialogComponent } from './components/dialog/dialog.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { PlayerHandComponent } from './components/player-hand/player-hand.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { HttpClientModule } from '@angular/common/http';
     ChatWindowComponent,
     CardComponent,
     DialogComponent,
+    PlayerHandComponent,
   ],
   imports: [
     BrowserModule,
