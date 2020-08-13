@@ -297,13 +297,16 @@ function IniciarJuego(request, client) {
 
 function NuevaJugada(request, client) {
   
-  let regla = salas[JSON.parse(request).sala].Regla;
-  console.log(regla);
-  let simbolo = JSON.parse(request).simbolo;
-  console.log(simbolo);
-  let valor = JSON.parse(request).valor;
-  console.log(valor);
+  let secret_rule = salas[JSON.parse(request).sala].Regla;
+  let symbol_card_selected = JSON.parse(request).simbolo;
+  let value_card_selected = JSON.parse(request).valor;
   
+  //Si la regla seleccionada es por numeros entra a este if
+  if (secret_rule[0] == 1){
+    console.log("se entró correctamente a regla de numero");
+  }else{
+    console.log("Se deja este espacio en caso de que se implemente reglas por tipos de cartas")
+  }
 }
 
 
