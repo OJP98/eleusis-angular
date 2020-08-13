@@ -314,7 +314,14 @@ function NuevaJugada(request, client) {
       }
     }
     else if (secret_rule[1] == 2){
-      if (Number(secret_rule[2]) >= value_card_selected){
+      if (value_card_selected >= Number(secret_rule[2])){
+        console.log("Esta carta se puede jugar");
+      }else{
+        console.log("Esta carta no se puede jugar");
+      }
+    }
+    else if (secret_rule[1] == 3){
+      if (value_card_selected != Number(secret_rule[2])){
         console.log("Esta carta se puede jugar");
       }else{
         console.log("Esta carta no se puede jugar");
