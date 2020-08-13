@@ -9,7 +9,7 @@
 		<div style="margin: 1rem 7rem">
 
 			<!-- SI EL JUEGO AÚN NO HA COMENZADO -->
-			<div *ngIf="!gameStarted">
+			<div *ngIf="!table.MatchStarted">
 				<!-- LISTA DE JUGADORES / REGLAS -->
 				<div fxLayout="row" fxLayoutAlign="start">
 					<div fxFlex="50">
@@ -96,7 +96,7 @@
 
 						<!-- BOTON PARA ENVIAR REGLAS -->
 						<button *ngIf="enableNumericRule.value || enableColorRule.value" style="align-self: center;"
-							[disabled]="selectedRulesForm.invalid || this.gameReady" mat-raised-button color="primary"
+							[disabled]="selectedRulesForm.invalid || this.gameReady" mat-raised-button color="accent"
 							(click)="SetRule()">SET
 							RULE(S)</button>
 					</div>
@@ -105,7 +105,7 @@
 				<!-- APARTADO DE BOTONES -->
 				<div *ngIf="myPlayer.isDealer" fxLayout="row" fxLayoutAlign="center center">
 					<button mat-raised-button color="primary" (click)="AddFakePlayer()">ADD PLAYER</button>
-					<button mat-raised-button color="accent" (click)="StartNewGame()"
+					<button mat-raised-button color="accent" (click)="StartNewMatch()"
 						[disabled]="table.Players.length < 3 || !gameReady">START
 						GAME</button>
 				</div>
@@ -118,13 +118,13 @@
 			</div>
 
 			<!-- SI EL JUEGO YA COMENZÓ -->
-			<div *ngIf="gameStarted">
+			<div *ngIf="table.MatchStarted">
 				<!-- LISTA DE JUGADORES CONECTADOS -->
 				<div>
 					<mat-list fxLayout="row" fxLayoutAlign="center center">
 						<mat-list-item *ngFor="let player of table.Players" fxLayout="row" fxLayoutAlign="space-evenly center">
-							<mat-icon mat-list-icon *ngIf="player.isDealer" style="color: rgb(224, 55, 55);">star</mat-icon>
-							<mat-icon mat-list-icon *ngIf="table.PlayerTurnId === player.Id" style="color: rgb(40, 214, 69);">forward
+							<mat-icon mat-list-icon *ngIf="player.isDealer" color="warn">star</mat-icon>
+							<mat-icon mat-list-icon *ngIf="table.PlayerTurnId === player.Id" color="accent">forward
 							</mat-icon>
 							<div mat-line [ngStyle]="{'font-weight': (table.PlayerTurnId === player.Id) ? '700' : '400'}">
 								{{player.Name}}</div>

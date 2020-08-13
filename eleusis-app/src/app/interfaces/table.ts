@@ -11,4 +11,5 @@ export interface Table {
 	Rounds?: number;
 	Rule?: any;
 	TableId?: number;
+	MatchStarted?: boolean;
 }

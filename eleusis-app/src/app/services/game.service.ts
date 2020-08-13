@@ -31,10 +31,8 @@ export class GameService {
   ]
   private symbolRules: string[];
 
-  private playedCards: Card[] = [];
   private players: Player[];
   private fullDeck: Card[];
-  private rule: any;
   private tableId: number;
 
   constructor(
@@ -55,7 +53,8 @@ export class GameService {
         DealerId: hostPlayer.Id,
         HostId: hostPlayer.Id,
         PlayerTurnId: 2,
-        TableId: this.tableId
+        TableId: this.tableId,
+        MatchStarted: false,
       }
     } else {
       this.table = {
@@ -65,7 +64,8 @@ export class GameService {
         DealerId: newTable.DealerId,
         HostId: newTable.HostId,
         PlayerTurnId: newTable.PlayerTurnId,
-        TableId: this.tableId
+        TableId: this.tableId,
+        MatchStarted: false,
       }
     }
 
@@ -74,9 +74,12 @@ export class GameService {
   }
 
   public SetMatchRule(rule: any) {
-    this.rule = rule;
     this.table.Rule = rule;
     this.clientService.DefinirRegla(this.table.TableId, this.table.Rule);
+  }
+
+  public SendMatchReady(): void {
+    this.clientService.ComenzarJuego(this.tableId);
   }
 
   public AddFakePlayer(): void {
@@ -187,8 +190,12 @@ export class GameService {
     }
   }
 
-  public get GetTable() {
+  public get GetTable(): Table {
     return this.table;
+  }
+
+  public get PlayedCards(): Card[] {
+    return this.table.PlayedCards;
   }
 
   public get NumericRules(): string[] {

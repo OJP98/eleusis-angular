@@ -11,31 +11,23 @@ import { GameService } from 'src/app/services/game.service';
 })
 export class CardComponent implements OnInit, OnDestroy {
 
-  private tableObservable$: Observable<Table>;
-  private tableSuscription: Subscription;
-  public table: Table;
   public playedCards: Card[];
 
   constructor(
     private gameService: GameService,
   ) {
-    this.table = gameService.GetTable;
+    this.playedCards = this.gameService.PlayedCards;
   }
 
   public AddCard(): void {
     this.gameService.AddCard();
-    console.log(this.table.PlayedCards);
-
   }
 
   ngOnInit(): void {
-    this.tableObservable$ = this.gameService.getTableSubjet$();
-    this.tableSuscription = this.tableObservable$.subscribe(changedTable => {
-      this.table = changedTable;
-    });
+
   }
+
   ngOnDestroy(): void {
-    this.tableSuscription.unsubscribe();
   }
 
 }

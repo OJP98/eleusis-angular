@@ -21,7 +21,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
 
   public table: Table;
   public lobbyId: string;
-  public gameStarted: boolean;
+  public matchStarted: boolean;
   public numericRulesArray: string[];
   public colorRulesArray: string[];
 
@@ -47,7 +47,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
     this.myPlayer = this.playerServcie.CurrentPlayer;
     this.numericRulesArray = this.gameService.NumericRules;
     this.colorRulesArray = this.gameService.ColorRules;
-    this.gameStarted = false;
+    this.matchStarted = false;
 
     this.selectedRulesForm = new FormGroup({
       numericRule: this.numericRuleControl,
@@ -70,11 +70,6 @@ export class LobbyComponent implements OnInit, OnDestroy {
   private AddFakePlayer(): void {
     this.gameService.AddFakePlayer();
     console.log(this.table.Players);
-  }
-
-  private ManageTableObservable(): void {
-    this.tableObservable$ = this.gameService.getTableSubjet$();
-    this.tableSuscription = this.tableObservable$.subscribe(changedTable => this.table = changedTable);
   }
 
   public ToggleNumericRules(): void {
@@ -130,9 +125,8 @@ export class LobbyComponent implements OnInit, OnDestroy {
     this.selectedRulesForm.disable();
   }
 
-  public StartNewGame(): void {
-    this.gameStarted = true;
-    console.log(this.table);
+  public StartNewMatch(): void {
+    this.gameService.SendMatchReady();
   }
 
   public NextPlayer(): void {
@@ -141,12 +135,10 @@ export class LobbyComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.lobbyId = this.GetLobbyId();
-    this.ManageTableObservable();
     this.table = this.gameService.GetTable;
   }
 
   ngOnDestroy(): void {
-    this.tableSuscription.unsubscribe();
   }
 
 }
