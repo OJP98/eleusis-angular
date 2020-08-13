@@ -313,6 +313,13 @@ function NuevaJugada(request, client) {
         console.log("Esta carta no se puede jugar");
       }
     }
+    else if (secret_rule[1] == 2){
+      if (Number(secret_rule[2]) >= value_card_selected){
+        console.log("Esta carta se puede jugar");
+      }else{
+        console.log("Esta carta no se puede jugar");
+      }
+    }
   }else{
     console.log("Se deja este espacio en caso de que se implemente reglas por tipos de cartas")
   }
