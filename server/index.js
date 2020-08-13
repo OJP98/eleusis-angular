@@ -294,13 +294,7 @@ function IniciarJuego(request, client) {
   RepartirCartas(JSON.parse(request).sala, client);
 }
 
-
-function NuevaJugada(request, client) {
-  
-  let secret_rule = salas[JSON.parse(request).sala].Regla;
-  let symbol_card_selected = JSON.parse(request).simbolo;
-  let value_card_selected = JSON.parse(request).valor;
-  
+function VerificarCarta(rule,symbol_card_selected,value_card_selected){
   //Si la regla seleccionada es por numeros entra a este if
   if (secret_rule[0] == 0){
     if(secret_rule[1] == 0){
@@ -308,7 +302,7 @@ function NuevaJugada(request, client) {
       if(resultado != 0){
         console.log("Esta carta se puede jugar");
       }else{
-        console.log("Esta carta se puede jugar");
+        console.log("Esta carta no se puede jugar");
       }
     }
     else if (secret_rule[1] == 1){
@@ -335,6 +329,15 @@ function NuevaJugada(request, client) {
   }else{
     console.log("Se deja este espacio en caso de que se implemente reglas por tipos de cartas")
   }
+}
+
+
+function NuevaJugada(request, client) {
+  
+  let secret_rule = salas[JSON.parse(request).sala].Regla;
+  let symbol_card_selected = JSON.parse(request).simbolo;
+  let value_card_selected = JSON.parse(request).valor;
+  VerificarCarta(secret_rule, symbol_card_selected, value_card_selected);
 }
 
 
