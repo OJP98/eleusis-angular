@@ -78,6 +78,14 @@ function NuevoCliente(request, client) {
           mensaje: `La sala ${request.sala} no existe`,
         })
       );
+    } else if (salas[request.sala].JuegoIniciado === true) {
+      // Ya comenzo el juego
+      client.send(
+        JSON.stringify({
+          option: 0,
+          mensaje: `La sala ${request.sala} ya comenzó el juego`,
+        })
+      );
     } else {
       // si existe la sala a la que  se quiere unir
       nuevoJugador = {
@@ -160,6 +168,18 @@ function SetRegla(request) {
   console.log(salas);
 }
 
+function IniciarJuego(request) {
+  salas[JSON.parse(request).sala].JuegoIniciado = true;
+
+  salas[JSON.parse(request).sala].Sockets.forEach(function each(clientLoop) {
+    clientLoop.send(
+      JSON.stringify({
+        option: 4,
+      })
+    );
+  });
+}
+
 function interpreteacionRequest(request, client) {
   const newRequest = JSON.parse(request);
 
@@ -184,6 +204,12 @@ function interpreteacionRequest(request, client) {
     {"option":3,"sala":4175,"regla":[1,0,"Red"]}
     */
     SetRegla(request);
+  } else if (newRequest.option === 4) {
+    //?Request inicia el juego
+    /*
+    {"option":4,"sala":6027}
+    */
+    IniciarJuego(request);
   } else {
     console.log('Otro');
   }
