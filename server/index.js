@@ -297,8 +297,10 @@ function IniciarJuego(request, client) {
 function VerificarCarta(secret_rule,symbol_card_selected,value_card_selected){
   //Si la regla seleccionada es por numeros entra a este if
   if (secret_rule[0] == 0){
+    //Si la regla es de multiplos entra a este if
     if(secret_rule[1] == 0){
       let resultado = value_card_selected % Number(secret_rule[2]);
+      //Si la carta no es multiplo del numero que  el dios selecciono es jugable
       if(resultado != 0){
         console.log("Esta carta se puede jugar");
         return true;
@@ -307,7 +309,9 @@ function VerificarCarta(secret_rule,symbol_card_selected,value_card_selected){
         return false;
       }
     }
+    //Si la regla es que sea menor entra a este if
     else if (secret_rule[1] == 1){
+      //Si la carta es menor al numero que  el dios selecciono es jugable
       if (Number(secret_rule[2]) >= value_card_selected){
         console.log("Esta carta se puede jugar");
         return true;
@@ -316,7 +320,9 @@ function VerificarCarta(secret_rule,symbol_card_selected,value_card_selected){
         return false;        
       }
     }
+    //Si la regla es que sea mayor entra a este if
     else if (secret_rule[1] == 2){
+      //Si la carta no es mayor al numero que  el dios selecciono es jugable
       if (value_card_selected >= Number(secret_rule[2])){
         console.log("Esta carta se puede jugar");
         return true;
@@ -325,7 +331,9 @@ function VerificarCarta(secret_rule,symbol_card_selected,value_card_selected){
         return false;
       }
     }
+    //Si la regla es que no sea igual al numero que selecciono entra a este if
     else if (secret_rule[1] == 3){
+      // Si el numero de la carta no es el mismo a que el dios eligio es jugable
       if (value_card_selected != Number(secret_rule[2])){
         console.log("Esta carta se puede jugar");
         return true;
@@ -339,13 +347,30 @@ function VerificarCarta(secret_rule,symbol_card_selected,value_card_selected){
   }
 }
 
+/*
+function verificarMano(secret_rule,cards_in_hand){
+
+}*/
 
 function NuevaJugada(request, client) {
-  
   let secret_rule = salas[JSON.parse(request).sala].Regla;
   let symbol_card_selected = JSON.parse(request).simbolo;
   let value_card_selected = JSON.parse(request).valor;
+  let deck = salas[JSON.parse(request).sala].Deck;
   let valid_card = VerificarCarta(secret_rule, symbol_card_selected, value_card_selected);
+  if (valid_card){
+    console.log("es correcta, la carta es jugable");
+  }else{
+    let index = Math.floor(Math.random() * deck.length);
+    //new_card tiene la nueva carta que se debe envíar
+    let new_card = deck[index];
+    //Se elimina la carta nueva del deck
+    if (index > -1) {
+      deck.splice(index, 1);
+    }
+    salas[sala].Deck = deck;
+  }
+
 }
 
 
