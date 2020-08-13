@@ -154,6 +154,12 @@ function NuevoMensaje(request, clientSender) {
   */
 }
 
+function SetRegla(request) {
+  salas[JSON.parse(request).sala].Regla = JSON.parse(request).regla;
+
+  console.log(salas);
+}
+
 function interpreteacionRequest(request, client) {
   const newRequest = JSON.parse(request);
 
@@ -172,6 +178,12 @@ function interpreteacionRequest(request, client) {
     //?Request Mensaje
     NuevoMensaje(request, client);
     console.log(newRequest);
+  } else if (newRequest.option === 3) {
+    //?Request definir regla
+    /*
+    {"option":3,"sala":4175,"regla":[1,0,"Red"]}
+    */
+    SetRegla(request);
   } else {
     console.log('Otro');
   }
