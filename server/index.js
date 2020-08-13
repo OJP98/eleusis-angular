@@ -259,7 +259,7 @@ function RepartirCartas(sala, God) {
       var player_deck = new Array;
       //Se entra a un for, donde se repartiran 12 cartas
       for (var j = 0; j < 12; j++) {
-        index = Math.floor(Math.random() * (deck.length));
+        var index = Math.floor(Math.random() * (deck.length));
         player_deck.push(deck[index]);
         if (index > -1) {
             deck.splice(index, 1);
