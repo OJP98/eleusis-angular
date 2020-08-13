@@ -301,29 +301,37 @@ function VerificarCarta(secret_rule,symbol_card_selected,value_card_selected){
       let resultado = value_card_selected % Number(secret_rule[2]);
       if(resultado != 0){
         console.log("Esta carta se puede jugar");
+        return true;
       }else{
         console.log("Esta carta no se puede jugar");
+        return false;
       }
     }
     else if (secret_rule[1] == 1){
       if (Number(secret_rule[2]) >= value_card_selected){
         console.log("Esta carta se puede jugar");
+        return true;
       }else{
         console.log("Esta carta no se puede jugar");
+        return false;        
       }
     }
     else if (secret_rule[1] == 2){
       if (value_card_selected >= Number(secret_rule[2])){
         console.log("Esta carta se puede jugar");
+        return true;
       }else{
         console.log("Esta carta no se puede jugar");
+        return false;
       }
     }
     else if (secret_rule[1] == 3){
       if (value_card_selected != Number(secret_rule[2])){
         console.log("Esta carta se puede jugar");
+        return true;
       }else{
         console.log("Esta carta no se puede jugar");
+        return false;
       }
     }
   }else{
@@ -337,7 +345,7 @@ function NuevaJugada(request, client) {
   let secret_rule = salas[JSON.parse(request).sala].Regla;
   let symbol_card_selected = JSON.parse(request).simbolo;
   let value_card_selected = JSON.parse(request).valor;
-  VerificarCarta(secret_rule, symbol_card_selected, value_card_selected);
+  let valid_card = VerificarCarta(secret_rule, symbol_card_selected, value_card_selected);
 }
 
 
