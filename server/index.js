@@ -89,7 +89,7 @@ function NuevoCliente(request, client) {
     } else {
       // si existe la sala a la que  se quiere unir
       nuevoJugador = {
-        Id: salas[request.sala].Sockets.length - 1,
+        Id: salas[request.sala].Sockets.length,
         isDealer: false,
         Name: request.user,
         isHost: false,
@@ -127,6 +127,8 @@ function NuevoCliente(request, client) {
       });
 
       console.log('Se une a una sala');
+      console.log(salas[request.sala].Sockets.length - 1);
+      console.log(salas[request.sala].Players);
     }
   }
   console.log(request);
@@ -175,6 +177,7 @@ function RepartirCartas(sala, God) {
       clientLoop.send(
         JSON.stringify({
           option: 4,
+          cartas: ['Lista de cartas del jugador'],
         })
       );
     }
