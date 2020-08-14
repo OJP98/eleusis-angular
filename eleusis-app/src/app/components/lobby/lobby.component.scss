@@ -1,48 +1,53 @@
 mat-list-item {
-	height: 2rem !important;
+    height: 2rem !important;
 }
 
 .drawer-style {
-	position: absolute;
-	top: 4.6em;
-	bottom: 0;
-	left: 0;
-	right: 0;
+    position: absolute;
+    top: 4.6em;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 ::ng-deep .mat-subheader {
-	padding: 0 !important;
+    padding: 0 !important;
 }
 
 .radio-group {
-	display: flex;
-	flex-direction: column;
-	margin: 10px;
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
 }
 
 .radio-button {
-	margin: 5px;
+    margin: 5px;
 }
 
+h1,
 h2,
 h3 {
-	margin: 0 !important;
+    margin: 0 !important;
+}
+
+h1 {
+    margin-top: 0.5em !important;
 }
 
 p {
-	margin: 0 !important;
+    margin: 0 !important;
 }
 
 .rules-container {
-	display: grid;
-	justify-items: stretch !important;
-	align-items: center;
-	justify-content: stretch;
-	grid-template-columns: 20% 50% 30%
+    display: grid;
+    justify-items: stretch !important;
+    align-items: center;
+    justify-content: stretch;
+    grid-template-columns: 20% 50% 30%
 }
 
 .cards-background {
-	background: #B9B1AF;
+    background: #B9B1AF;
 }
 
 // .chat-container {

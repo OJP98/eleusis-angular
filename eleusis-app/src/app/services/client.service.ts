@@ -82,7 +82,7 @@ export class ClientService {
 			this.newResponseSubject$.next(mensaje);
 		} else if (props.option === 5) {
 			// Servidor manda Juego
-			console.log(mensaje);
+			this.newResponseSubject$.next(mensaje);
 		}
 	}
 

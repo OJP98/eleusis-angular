@@ -1,36 +1,37 @@
-<div fxLayout="row" fxLayoutAlign="space-around">
+<!-- <div fxLayout="row" fxLayoutAlign="space-between center" [ngClass]="{'disableDiv': table.PlayerTurnId === player.Id}"> -->
+<div fxLayout="row" fxLayoutAlign="space-between center">
 
-	<!-- ESPACIO DE CARTAS DEL JUGADOR -->
-	<div class="cards-space">
-		<mat-card (click)="PlayCard(carta)" class="card" style="margin-right: -6em" *ngFor="let carta of player.Deck">
-			<mat-card-header fxLayout="column" fxLayoutAlign="start start">
-				<div style="margin-bottom: 1em;">
-					<mat-icon matSuffix svgIcon="{{carta.symbol}}"></mat-icon>
-					<p style="line-height: 0.6em;">&nbsp;{{carta.character}}</p>
-				</div>
-			</mat-card-header>
-			<mat-card-content fxLayout="row" fxLayoutAlign="start center">
-				<button disableRipple mat-icon-button color="warn" style="padding-left: 3em; padding-top: 0.3em;">
+    <!-- ESPACIO DE CARTAS DEL JUGADOR -->
+    <div class="cards-space">
+        <mat-card (click)="PlayCard(carta)" class="card" *ngFor="let carta of player.Deck">
+            <mat-card-header fxLayout="column" fxLayoutAlign="start start">
+                <div style="margin-bottom: 1em;">
+                    <mat-icon matSuffix svgIcon="{{carta.symbol}}"></mat-icon>
+                    <p style="line-height: 0.6em;">&nbsp;{{carta.character}}</p>
+                </div>
+            </mat-card-header>
+            <mat-card-content fxLayout="row" fxLayoutAlign="start center">
+                <button disableRipple mat-icon-button color="warn" style="padding-left: 3em; padding-top: 0.3em;">
 					<mat-icon style="transform: scale(1.6);" svgIcon="{{carta.symbol}}"></mat-icon>
 				</button>
-			</mat-card-content>
-			<mat-card-header fxLayout="column" fxLayoutAlign="end end">
-				<div>
-					<p>&nbsp;{{carta.Char}}</p>
-					<mat-icon matSuffix svgIcon="{{carta.symbol}}"></mat-icon>
-				</div>
-			</mat-card-header>
-		</mat-card>
-	</div>
+            </mat-card-content>
+            <mat-card-header fxLayout="column" fxLayoutAlign="end end">
+                <div>
+                    <p>&nbsp;{{carta.Char}}</p>
+                    <mat-icon matSuffix svgIcon="{{carta.symbol}}"></mat-icon>
+                </div>
+            </mat-card-header>
+        </mat-card>
+    </div>
 
-	<div class="player-action-buttons" fxLayout="column" fxLayoutAlign="center center">
-		<!-- <button mat-raised-button color="accent" [disabled]="table.PlayerTurnId !== player.Id" (click)="GuessRule()"> -->
-		<button mat-raised-button color="accent" (click)="GuessRule()">
+    <div class="player-action-buttons" fxLayout="column" fxLayoutAlign="center center">
+        <!-- <button mat-raised-button color="accent" [disabled]="table.PlayerTurnId !== player.Id" (click)="GuessRule()"> -->
+        <button mat-raised-button color="accent" (click)="GuessRule()">
 			GUESS RULE
 		</button>
-		<button mat-raised-button color="accent" (click)="ClaimNoCardsRemaining()">
+        <button mat-raised-button color="accent" (click)="ClaimNoCardsRemaining()">
 			NO CARDS REMAINING
 		</button>
-	</div>
+    </div>
 
 </div>

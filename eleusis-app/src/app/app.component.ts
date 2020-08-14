@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { GameService } from './services/game.service';
 
 @Component({
   selector: 'app-root',
@@ -9,10 +10,13 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class AppComponent {
 
+  public appTitle = 'Eleusis-App'
+
   constructor(
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
   ) {
+
     this.matIconRegistry.addSvgIcon(
       'clubs',
       this.domSanitizer.bypassSecurityTrustResourceUrl('assets/cubs.svg')
@@ -30,6 +34,4 @@ export class AppComponent {
       this.domSanitizer.bypassSecurityTrustResourceUrl('assets/diamonds.svg')
     );
   }
-
-  title = 'eleusis-app';
 }

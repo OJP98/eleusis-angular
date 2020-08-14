@@ -1,23 +1,23 @@
-<div class="cards-space">
-	<mat-card class="card valid" *ngFor="let carta of playedCards">
-		<mat-card-header fxLayout="column" fxLayoutAlign="start start">
-			<div style="margin-bottom: 1em;">
-				<mat-icon matSuffix svgIcon="{{carta.symbol}}"></mat-icon>
-				<p style="line-height: 0.6em;">&nbsp;{{carta.character}}</p>
-			</div>
-		</mat-card-header>
-		<mat-card-content fxLayout="row" fxLayoutAlign="start center">
-			<button disableRipple mat-icon-button color="warn" style="padding-left: 3em; padding-top: 0.3em;">
+<div class="cards-space" #scroll>
+    <mat-card class="card valid" *ngFor="let carta of playedCards">
+        <mat-card-header fxLayout="column" fxLayoutAlign="start start">
+            <div style="margin-bottom: 1em;">
+                <mat-icon matSuffix svgIcon="{{carta.symbol}}"></mat-icon>
+                <p style="line-height: 0.6em;">&nbsp;{{carta.character}}</p>
+            </div>
+        </mat-card-header>
+        <mat-card-content fxLayout="row" fxLayoutAlign="start center">
+            <button disableRipple mat-icon-button color="warn" style="padding-left: 3em; padding-top: 0.3em;">
 				<mat-icon style="transform: scale(1.6);" svgIcon="{{carta.symbol}}"></mat-icon>
 			</button>
-		</mat-card-content>
-		<mat-card-header fxLayout="column" fxLayoutAlign="end end">
-			<div>
-				<p>&nbsp;{{carta.character}}</p>
-				<mat-icon matSuffix svgIcon="{{carta.symbol}}"></mat-icon>
-			</div>
-		</mat-card-header>
-	</mat-card>
+        </mat-card-content>
+        <mat-card-header fxLayout="column" fxLayoutAlign="end end">
+            <div>
+                <p>&nbsp;{{carta.character}}</p>
+                <mat-icon matSuffix svgIcon="{{carta.symbol}}"></mat-icon>
+            </div>
+        </mat-card-header>
+    </mat-card>
 </div>
 
 <button (click)="AddCard()">ADD CARD</button>

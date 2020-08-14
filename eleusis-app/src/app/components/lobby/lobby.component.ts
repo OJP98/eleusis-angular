@@ -124,10 +124,6 @@ export class LobbyComponent implements OnInit, OnDestroy {
     this.gameService.SendMatchReady();
   }
 
-  public NextPlayer(): void {
-    this.gameService.NextPlayer();
-  }
-
   ngOnInit(): void {
     this.lobbyId = this.GetLobbyId();
     this.table = this.gameService.GetTable;

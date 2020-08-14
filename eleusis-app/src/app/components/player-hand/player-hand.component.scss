@@ -1,27 +1,33 @@
 .card {
-	max-width: 8em;
-	width: 8em;
-	cursor: pointer;
-	margin: 0.5em;
+    max-width: 8em;
+    width: 8em;
+    cursor: pointer;
+    margin: 0.5em;
+    margin-right: -7em;
 }
 
 .cards-space {
-	display: flex;
-	flex-direction: row;
-	align-items: flex-start;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
 }
 
 ::ng-deep .mat-card-header-text {
-	margin: 0 !important;
+    margin: 0 !important;
 }
 
 p {
-	margin: 0 !important;
-	font-size: 1.35em;
+    margin: 0 !important;
+    font-size: 1.35em;
 }
 
 .player-action-buttons {
-	button {
-		margin: 0.5em 0;
-	}
+    button {
+        margin: 0.5em 0;
+    }
+}
+
+.disableDiv {
+    pointer-events: none;
+    opacity: 0.5;
 }

@@ -1,7 +1,5 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Card } from 'src/app/interfaces/card';
-import { Observable, Subscription } from 'rxjs';
-import { Table } from 'src/app/interfaces/table';
 import { GameService } from 'src/app/services/game.service';
 
 @Component({
@@ -12,6 +10,7 @@ import { GameService } from 'src/app/services/game.service';
 export class CardComponent implements OnInit, OnDestroy {
 
   public playedCards: Card[];
+  @ViewChild('scroll', { static: true }) scroll: any;
 
   constructor(
     private gameService: GameService,
@@ -21,10 +20,10 @@ export class CardComponent implements OnInit, OnDestroy {
 
   public AddCard(): void {
     this.gameService.AddCard();
+    this.scroll.nativeElement.scrollTop = this.scroll.nativeElement.scrollHeight;
   }
 
   ngOnInit(): void {
-
   }
 
   ngOnDestroy(): void {

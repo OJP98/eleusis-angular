@@ -5,6 +5,8 @@ import { Player } from '../interfaces/player';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { ClientService } from './client.service';
 import { PlayerService } from './player.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../components/dialog/dialog.component';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +41,8 @@ export class GameService {
 
   constructor(
     private clientService: ClientService,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    public dialog: MatDialog,
   ) { }
 
   public CreateNewTable(isNew: boolean, newTable: any): Table {
@@ -83,12 +86,17 @@ export class GameService {
   }
 
   public SendMatchReady(): void {
-    this.clientService.ComenzarJuego(this.tableId);
+    this.clientService.ComenzarJuego(this.table.TableId);
     this.table.MatchStarted = true;
   }
 
-  public PlayCard(symbol: string, value: number): void {
-    this.clientService.JugarCarta(symbol, value, this.tableId);
+  public PlayCard(card: Card): void {
+    this.clientService.JugarCarta(card.symbol, card.value, this.tableId);
+
+    const index = this.currentPlayer.Deck.indexOf(card);
+    if (index !== -1) {
+      this.currentPlayer.Deck.splice(index, 1);
+    }
   }
 
   public GenerateFullDeck(): Card[] {
@@ -109,7 +117,7 @@ export class GameService {
           symbol = 'hearts';
           break;
         case 2:
-          symbol = 'cubs';
+          symbol = 'clubs';
           break;
         case 3:
           symbol = 'diamonds'
@@ -150,10 +158,6 @@ export class GameService {
     }
 
     return cardArray;
-  }
-
-  public AddNewPlayer(newPlayer: Player) {
-    this.players.push(newPlayer);
   }
 
   public get PlayerMoving(): Player {
@@ -209,10 +213,18 @@ export class GameService {
     return this.tableSubject$.asObservable();
   }
 
+  private OpenDialog(title: string, content: string) {
+    this.dialog.open(DialogComponent, {
+      data: {
+        content,
+        title
+      }
+    })
+  }
+
   public SubscribeToSocketResponse(): void {
     this.newResponseObservable = this.clientService.NewResponseSubject;
     this.newResponseSubscription = this.newResponseObservable.subscribe(newResponse => {
-
 
       // Actualizar el objeto tipo tabla
       if (newResponse.option === 1) {
@@ -221,6 +233,35 @@ export class GameService {
       } else if (newResponse.option === 4) {
         this.table.MatchStarted = true;
         this.currentPlayer.Deck = newResponse.cartas[0];
+
+      } else if (newResponse.option === 5) {
+
+        let dialogTitle: string;
+        let dialogContent: string;
+
+        if (!newResponse.valido) {
+
+          // Crear objeto tipo carta
+          const newCard: Card = {
+            character: newResponse.carta.character,
+            value: newResponse.carta.value,
+            symbol: newResponse.carta.symbol
+          }
+          // Push a la mano del jugador
+          this.currentPlayer.Deck.push(newCard);
+
+          dialogTitle = 'Whoops...';
+          dialogContent = `
+          The card you played doesn't follow the rules. You received: ${newCard.character} of ${newCard.symbol}.`;
+
+        } else {
+          dialogTitle = 'Nice!';
+          dialogContent = `
+          You played a card that follows the rules.`;
+        }
+
+        this.OpenDialog(dialogTitle, dialogContent);
+
       }
     });
   }

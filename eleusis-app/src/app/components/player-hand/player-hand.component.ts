@@ -32,8 +32,7 @@ export class PlayerHandComponent implements OnInit {
   }
 
   public PlayCard(card: Card): void {
-    console.log(card);
-    this.gameService.PlayCard(card.symbol, card.value);
+    this.gameService.PlayCard(card);
   }
 
   ngOnInit(): void {
