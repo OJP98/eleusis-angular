@@ -348,9 +348,20 @@ function VerificarCarta(secret_rule,symbol_card_selected,value_card_selected){
 }
 
 /*
+Verifica que ninguna carta cumpla con regla
+*/
 function verificarMano(secret_rule,cards_in_hand){
-
-}*/
+  let no_card_playable = false;
+  for (let _a = 0, cards_player_1 = cards_in_hand; _a < cards_player_1.length; _a++) {
+    var element = cards_player_1[_a];
+    //Si al menos una cumple, se le da una carta más al jugador y se cambia el valor de no_card_playable
+    if (VerificarCarta(secret_rule, element.getSymbol(), element.getValue())) {
+        no_card_playable = true;
+        break;
+    }
+  }
+  return no_card_playable;
+}
 
 function NuevaJugada(request, client) {
   let secret_rule = salas[JSON.parse(request).sala].Regla;
