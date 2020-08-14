@@ -306,10 +306,8 @@ function VerificarCarta(
       let resultado = value_card_selected % Number(secret_rule[2]);
       //Si la carta no es multiplo del numero que  el dios selecciono es jugable
       if (resultado != 0) {
-        console.log('Esta carta se puede jugar');
         return true;
       } else {
-        console.log('Esta carta no se puede jugar');
         return false;
       }
     }
@@ -317,10 +315,8 @@ function VerificarCarta(
     else if (secret_rule[1] == 1) {
       //Si la carta es menor al numero que  el dios selecciono es jugable
       if (Number(secret_rule[2]) >= value_card_selected) {
-        console.log('Esta carta se puede jugar');
         return true;
       } else {
-        console.log('Esta carta no se puede jugar');
         return false;
       }
     }
@@ -328,10 +324,8 @@ function VerificarCarta(
     else if (secret_rule[1] == 2) {
       //Si la carta no es mayor al numero que  el dios selecciono es jugable
       if (value_card_selected >= Number(secret_rule[2])) {
-        console.log('Esta carta se puede jugar');
         return true;
       } else {
-        console.log('Esta carta no se puede jugar');
         return false;
       }
     }
@@ -339,17 +333,18 @@ function VerificarCarta(
     else if (secret_rule[1] == 3) {
       // Si el numero de la carta no es el mismo a que el dios eligio es jugable
       if (value_card_selected != Number(secret_rule[2])) {
-        console.log('Esta carta se puede jugar');
         return true;
       } else {
-        console.log('Esta carta no se puede jugar');
         return false;
       }
     }
   } else {
-    console.log(
-      'Se deja este espacio en caso de que se implemente reglas por tipos de cartas'
-    );
+    if (secret_rule[2] != symbol_card_selected){
+      return true
+    }
+    else{
+      return false
+    }
   }
 }
 
@@ -383,6 +378,7 @@ function NuevaJugada(request, client) {
     symbol_card_selected,
     value_card_selected
   );
+  
   if (valid_card) {
     console.log('es correcta, la carta es jugable');
     client.send(
@@ -392,6 +388,7 @@ function NuevaJugada(request, client) {
       })
     );
   } else {
+    console.log('es incorrecta, la carta no es jugable');
     let index = Math.floor(Math.random() * deck.length);
     //new_card tiene la nueva carta que se debe envíar
     let new_card = deck[index];
