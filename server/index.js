@@ -471,20 +471,31 @@ function verificarMano(secret_rule, cards_in_hand) {
   return no_card_playable;
 }
 
-function NoJugada(regla, cliente, cartas) {
+function ActualizarMesaSinCarta(sala) {
+  const nuevoTurno = GetNextTurno(salaActual);
+  salas[sala].Sockets.forEach(function each(client) {
+    client.send(
+      JSON.stringify({
+        option: 6,
+        turno: nuevoTurno,
+      })
+    );
+  });
+}
+
+function NoJugada(regla, cliente, cartas, sala) {
   /*
   Se debe pedir tambien el deck, se me olvido comentarte
   Que variable se llame deck
   */
-  console.log("se me olvido comentarte que debia pedir el deck")
+  console.log('se me olvido comentarte que debia pedir el deck');
 
-
-
+  let deck = salas[sala].Deck;
 
   console.log(regla);
   console.log(cartas);
   //Si tiene una carta que se puede jugar, envía una carta nueva al jugador
-  if(verificarMano(regla,cartas)){
+  if (verificarMano(regla, cartas)) {
     let index = Math.floor(Math.random() * deck.length);
     //new_card tiene la nueva carta que se debe envíar
     let new_card = deck[index];
@@ -493,18 +504,29 @@ function NoJugada(regla, cliente, cartas) {
       deck.splice(index, 1);
     }
     //acá ya deberías actualizar como quedo el deck y luego enviar la carta
-    console.log("la nueva carta es "+ new_card);
-  }
-  /* 
+    salas[sala].Deck = deck;
+
+    client.send(
+      JSON.stringify({
+        option: 7,
+        valido: false,
+        carta: new_card,
+      })
+    );
+
+    ActualizarMesaSinCarta(JSON.parse(request).sala);
+
+    console.log('la nueva carta es ' + new_card);
+  } else {
+    /* 
   de lo contrario, se crea una nueva mano al jugador con una carta menos o se 
   envía sus puntos en caso de que ya no tenga más cartas
   */
-  else{
     // si tiene mas de una carta en la mano
-    if (cartas.length-1 != 0){
+    if (cartas.length - 1 != 0) {
       //player_deck tiene las nuevas cartas que se deben envía
-      let player_deck = new Array;
-      for (var j = 0; j < cartas.length-1; j++) {
+      let player_deck = new Array();
+      for (var j = 0; j < cartas.length - 1; j++) {
         var index = Math.floor(Math.random() * deck.length);
         player_deck.push(deck[index]);
         if (index > -1) {
@@ -512,13 +534,24 @@ function NoJugada(regla, cliente, cartas) {
         }
       }
       //Aca envias la nueva mano del jugador y además actualizas el deck
-      console.log("La nueva mano del jugador es " + player_deck);
+      console.log('La nueva mano del jugador es ' + player_deck);
+
+      salas[sala].Deck = deck;
+
+      client.send(
+        JSON.stringify({
+          option: 7,
+          valido: true,
+          carta: player_deck,
+        })
+      );
+
+      ActualizarMesaSinCarta(JSON.parse(request).sala);
     }
     // si no tiene más de una carta, se envia su punteo
-    else{
-      console.log("Usted y el dios tiene tres puntos más. Se acaba la ronda");
+    else {
+      console.log('Usted y el dios tiene tres puntos más. Se acaba la ronda');
     }
-    
   }
 }
 
@@ -563,7 +596,8 @@ function interpreteacionRequest(request, client) {
     NoJugada(
       salas[JSON.parse(request).sala].Regla,
       client,
-      JSON.parse(request).cartas
+      JSON.parse(request).cartas,
+      JSON.parse(request).sala
     );
   } else {
     console.log('Otro');
