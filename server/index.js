@@ -457,7 +457,7 @@ function NuevaJugada(request, client) {
 
     ActualizarMesa(
       JSON.parse(request).sala,
-      character,
+      character_card,
       symbol_card_selected,
       value_card_selected,
       false
