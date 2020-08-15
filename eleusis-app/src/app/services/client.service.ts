@@ -3,6 +3,7 @@ import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { Subject, Observable, Subscription } from 'rxjs';
 import { Message } from '../interfaces/message';
 import { PropertyRead } from '@angular/compiler';
+import { Card } from '../interfaces/card';
 
 @Injectable({
 	providedIn: 'root',
@@ -136,16 +137,16 @@ export class ClientService {
 
 	/**
 	 * Envía al servidor datos necesarios para procesar una carta jugada.
-	 * @param simbolo de la carta jugada
-	 * @param valor de la carta jugada
+	 * @param carta la carta jugada por el usuario
 	 * @param sala el id de la sala del jugador
 	 */
-	public JugarCarta(simbolo: string, valor: number, sala: number) {
+	public JugarCarta(carta: Card, sala: number) {
 		this.subject.next({
 			option: 5,
 			sala,
-			simbolo,
-			valor,
+			simbolo: carta.symbol,
+			valor: carta.value,
+			character: carta.character
 		});
 	}
 }

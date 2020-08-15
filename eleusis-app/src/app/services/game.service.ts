@@ -91,7 +91,7 @@ export class GameService {
   }
 
   public PlayCard(card: Card): void {
-    this.clientService.JugarCarta(card.symbol, card.value, this.tableId);
+    this.clientService.JugarCarta(card, this.tableId);
 
     const index = this.currentPlayer.Deck.indexOf(card);
     if (index !== -1) {
