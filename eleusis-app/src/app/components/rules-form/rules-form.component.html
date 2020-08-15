@@ -1,0 +1,66 @@
+<!-- FORM PARA LAS REGLAS -->
+<form [formGroup]="selectedRulesForm">
+	<h4 style="margin-bottom: 1em;">Round rule(s)</h4>
+	<!-- REGLAS NUMERICAS -->
+	<mat-slide-toggle [formControl]="enableNumericRule" (change)="ToggleNumericRules()">
+		Numeric
+	</mat-slide-toggle>
+	<div class="rules-container" style="margin: 0 1em">
+		<p style="font-size: 1em;">Cards can't</p>
+
+		<!-- Select de reglas -->
+		<mat-form-field style="margin: 0 1em;">
+			<mat-select [formControl]="numericRuleControl">
+				<mat-option *ngFor="let rule of numericRulesArray; let i = index" [value]="i">
+					{{rule}}
+				</mat-option>
+			</mat-select>
+			<mat-error *ngIf="numericRuleControl.invalid">
+				Please select a value
+			</mat-error>
+		</mat-form-field>
+
+		<!-- Input de valor numérico -->
+		<mat-form-field>
+			<mat-label>Value</mat-label>
+			<input matInput type="number" [formControl]="numericRuleValue">
+			<mat-error *ngIf="numericRuleValue.invalid">
+				Please enter a value between 1 and 13
+			</mat-error>
+		</mat-form-field>
+	</div>
+
+	<!-- REGLAS DE COLOR -->
+	<mat-slide-toggle [formControl]="enableColorRule" (change)="ToggleColorRules()">
+		Color
+	</mat-slide-toggle>
+	<div class="rules-container" style="margin: 0 1em">
+		<p style="font-size: 1em;">Cards</p>
+
+		<!-- Select de reglas -->
+		<mat-form-field style="margin: 0 1em;">
+			<mat-select [formControl]="colorRuleControl">
+				<mat-option *ngFor="let rule of colorRulesArray; let i = index" [value]="i">
+					{{rule}}
+				</mat-option>
+			</mat-select>
+			<mat-error *ngIf="colorRuleControl.invalid">
+				Please select a value
+			</mat-error>
+		</mat-form-field>
+
+		<!-- Select de colores -->
+		<mat-form-field>
+			<mat-select [formControl]="colorRuleValue">
+				<mat-option *ngFor="let color of ['spades', 'hearts', 'cubs', 'diamonds']" [value]="color">
+					{{color}}
+				</mat-option>
+			</mat-select>
+			<mat-error *ngIf="colorRuleValue.invalid">
+				Please select a value
+			</mat-error>
+		</mat-form-field>
+	</div>
+
+	<br>
+</form>

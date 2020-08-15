@@ -1,7 +1,8 @@
 <h2 mat-dialog-title>{{dialogData.title | uppercase}}</h2>
 <mat-dialog-content class="mat-typography">
 
-	<p *ngIf="dialogData.content !== 'ShowInstructions'">{{dialogData.content}}</p>
+	<p *ngIf="dialogData.content !== 'ShowInstructions' && dialogData.content !== 'GuessRule'">
+		{{dialogData.content}}</p>
 
 	<div *ngIf="dialogData.content === 'ShowInstructions'">
 
@@ -77,8 +78,20 @@
 		</p>
 
 	</div>
+
+	<div *ngIf="dialogData.content === 'GuessRule'">
+		<app-rules-form></app-rules-form>
+	</div>
 </mat-dialog-content>
 
 <mat-dialog-actions align="center">
-	<button mat-raised-button color="warn" mat-dialog-close>OK</button>
+
+	<div *ngIf="dialogData.content !== 'GuessRule'; else guessButtons">
+		<button mat-raised-button color="warn" mat-dialog-close>OK</button>
+	</div>
+
+	<ng-template #guessButtons>
+		<button mat-button (click)="CancelGuess()">CANCEL</button>
+		<button mat-button mat-raised-button color="warn" (click)="SendGuess()" cdkFocusInitial>SEND</button>
+	</ng-template>
 </mat-dialog-actions>

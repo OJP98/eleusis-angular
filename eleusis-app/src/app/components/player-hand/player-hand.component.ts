@@ -4,6 +4,8 @@ import { Card } from 'src/app/interfaces/card';
 import { Player } from 'src/app/interfaces/player';
 import { GameService } from 'src/app/services/game.service';
 import { Table } from 'src/app/interfaces/table';
+import { DialogComponent } from '../dialog/dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-player-hand',
@@ -17,14 +19,20 @@ export class PlayerHandComponent implements OnInit {
 
   constructor(
     private playerService: PlayerService,
-    private gameService: GameService
+    private gameService: GameService,
+    public dialog: MatDialog,
   ) {
     this.player = this.playerService.CurrentPlayer;
     this.table = this.gameService.GetTable;
   }
 
   public GuessRule(): void {
-    console.log('GUESS THE RULE');
+    this.dialog.open(DialogComponent, {
+      data: {
+        content: 'GuessRule',
+        title: 'GUESS THE RULE'
+      }
+    })
   }
 
   public ClaimNoCardsRemaining(): void {
