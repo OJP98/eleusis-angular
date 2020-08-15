@@ -84,13 +84,25 @@ export class HomeComponent implements OnInit, OnDestroy {
 	 * Opens dialog componente with injected data
 	 * @param dialogData Data to display in the dialog
 	 */
-	private ShowErrorDialog(dialogData: any) {
+	private ShowErrorDialog(dialogData: any): void {
 		this.dialog.open(DialogComponent, {
 			data: {
 				content: dialogData.content,
 				title: dialogData.title
 			}
 		})
+	}
+
+	public ShowInstructions(): void {
+		const title = 'How to play';
+		const content = 'ShowInstructions';
+
+		this.dialog.open(DialogComponent, {
+			data: {
+				content,
+				title
+			}
+		});
 	}
 
 	/**

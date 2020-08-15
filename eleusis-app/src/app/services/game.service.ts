@@ -164,27 +164,6 @@ export class GameService {
     return this.players.find(player => player.Id === this.table.PlayerTurnId);
   }
 
-  public NextPlayer(): void {
-    const currentPlayer: Player = this.PlayerMoving;
-
-    for (let i = 0; i < this.players.length; i++) {
-      const selected = this.players[i];
-
-      if (selected === currentPlayer && !selected.isDealer) {
-
-        if (i !== this.players.length - 1) {
-          this.table.PlayerTurnId = this.players[i + 1].Id;
-
-        } else if (!this.players[0].isDealer) {
-          this.table.PlayerTurnId = this.players[0].Id;
-
-        } else {
-          this.table.PlayerTurnId = this.players[1].Id;
-        }
-      }
-    }
-  }
-
   public get GetTable(): Table {
     return this.table;
   }
