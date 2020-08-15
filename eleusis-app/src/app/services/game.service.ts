@@ -99,6 +99,10 @@ export class GameService {
     }
   }
 
+  public ClaimNoCardsRemaining(cards: Card[]): void {
+    // this.clientService.NoCartas(cards, this.currentPlayer.Id, this.tableId);
+  }
+
   public GenerateFullDeck(): Card[] {
 
     const cardArray: Card[] = [];
@@ -209,10 +213,12 @@ export class GameService {
       if (newResponse.option === 1) {
         this.table.Players = newResponse.Players;
 
+        // El juego ha comenzado. Asignar cartas a jugadores.
       } else if (newResponse.option === 4) {
         this.table.MatchStarted = true;
         this.currentPlayer.Deck = newResponse.cartas[0];
 
+        // El jugador juega una carta
       } else if (newResponse.option === 5) {
 
         let dialogTitle: string;
@@ -241,6 +247,18 @@ export class GameService {
 
         this.OpenDialog(dialogTitle, dialogContent);
 
+        // Jugadores reciben una carta jugada
+      } else if (newResponse.option === 6) {
+
+        const playedCard: Card = {
+          symbol: newResponse.carta.symbol,
+          value: newResponse.carta.value,
+          character: newResponse.carta.character,
+          isValid: newResponse.carta.isValid
+        }
+
+        this.table.PlayedCards.push(playedCard);
+        this.table.PlayerTurnId = newResponse.turno;
       }
     });
   }
