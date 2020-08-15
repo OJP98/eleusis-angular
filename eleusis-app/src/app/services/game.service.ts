@@ -100,7 +100,7 @@ export class GameService {
   }
 
   public ClaimNoCardsRemaining(cards: Card[]): void {
-    // this.clientService.NoCartas(cards, this.currentPlayer.Id, this.tableId);
+    this.clientService.NoJugada(this.tableId, cards);
   }
 
   public GenerateFullDeck(): Card[] {

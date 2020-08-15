@@ -28,7 +28,7 @@ export class PlayerHandComponent implements OnInit {
   }
 
   public ClaimNoCardsRemaining(): void {
-    console.log('I GOT NO CARDS');
+    this.gameService.ClaimNoCardsRemaining(this.player.Deck);
   }
 
   public PlayCard(card: Card): void {
