@@ -98,7 +98,7 @@ function NuevoCliente(request, client) {
             sala: nuevaSala,
             Players: [nuevoJugador],
             DealerId: 0,
-            PlayerTurnId: 'number',
+            PlayerTurnId: 1,
             HostId: 0,
             Rounds: 'number',
             myId: 0,
@@ -112,8 +112,8 @@ function NuevoCliente(request, client) {
           Regla: '',
           CartasAplican: [],
           CartasNoAplican: [],
-          Dios: null,
-          Turno: null,
+          Dios: 0,
+          Turno: 1,
         };
 
         break;
@@ -339,11 +339,10 @@ function VerificarCarta(
       }
     }
   } else {
-    if (secret_rule[2] != symbol_card_selected){
-      return true
-    }
-    else{
-      return false
+    if (secret_rule[2] != symbol_card_selected) {
+      return true;
+    } else {
+      return false;
     }
   }
 }
@@ -368,17 +367,64 @@ function verificarMano(secret_rule, cards_in_hand) {
   return no_card_playable;
 }
 
+function GetNextTurno(sala) {
+  /*
+  Players
+Dios: 0,
+          Turno: 1,
+  */
+  let turnoActual = salas[sala].Turno;
+  const cantidadJugadores = salas[sala].Players.length;
+  const idDios = salas[sala].Dios;
+
+  while (true) {
+    turnoActual = turnoActual + 1;
+
+    if (turnoActual < cantidadJugadores && turnoActual !== idDios) {
+      salas[sala].Turno = turnoActual;
+      return turnoActual;
+    }
+
+    if (turnoActual > cantidadJugadores) {
+      turnoActual = -1;
+    }
+  }
+}
+
+function ActualizarMesa(salaActual, character, symbol, value, isValid) {
+  console.log('Se actualiza la mesa');
+  console.log(character);
+  const nuevoTurno = GetNextTurno(salaActual);
+  salas[salaActual].Sockets.forEach(function each(client) {
+    client.send(
+      JSON.stringify({
+        option: 6,
+        carta: {
+          character,
+          symbol,
+          value,
+          isValid,
+        },
+        turno: nuevoTurno,
+      })
+    );
+  });
+}
+
 function NuevaJugada(request, client) {
   let secret_rule = salas[JSON.parse(request).sala].Regla;
   let symbol_card_selected = JSON.parse(request).simbolo;
   let value_card_selected = JSON.parse(request).valor;
   let deck = salas[JSON.parse(request).sala].Deck;
+  let character_card = JSON.parse(request).character;
+  console.log('Reques');
+  console.log(request);
   let valid_card = VerificarCarta(
     secret_rule,
     symbol_card_selected,
     value_card_selected
   );
-  
+
   if (valid_card) {
     console.log('es correcta, la carta es jugable');
     client.send(
@@ -386,6 +432,14 @@ function NuevaJugada(request, client) {
         option: 5,
         valido: true,
       })
+    );
+
+    ActualizarMesa(
+      JSON.parse(request).sala,
+      character_card,
+      symbol_card_selected,
+      value_card_selected,
+      true
     );
   } else {
     console.log('es incorrecta, la carta no es jugable');
@@ -399,6 +453,14 @@ function NuevaJugada(request, client) {
         valido: false,
         carta: new_card,
       })
+    );
+
+    ActualizarMesa(
+      JSON.parse(request).sala,
+      character,
+      symbol_card_selected,
+      value_card_selected,
+      false
     );
 
     //Se elimina la carta nueva del deck
@@ -441,6 +503,7 @@ function interpreteacionRequest(request, client) {
     IniciarJuego(request, client);
   } else if (newRequest.option === 5) {
     //? Nueva Jugada
+    console.log(request);
     NuevaJugada(request, client);
   } else {
     console.log('Otro');
