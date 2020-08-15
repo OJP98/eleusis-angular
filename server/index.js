@@ -471,6 +471,11 @@ function NuevaJugada(request, client) {
   }
 }
 
+function NoJugada(regla, cliente, cartas) {
+  console.log(regla);
+  console.log(cartas);
+}
+
 function interpreteacionRequest(request, client) {
   const newRequest = JSON.parse(request);
 
@@ -505,6 +510,15 @@ function interpreteacionRequest(request, client) {
     //? Nueva Jugada
     console.log(request);
     NuevaJugada(request, client);
+  } else if (newRequest.option === 7) {
+    //? Nueva Jugada
+    //"sala":"7244","cartas"
+
+    NoJugada(
+      salas[JSON.parse(request).sala].Regla,
+      client,
+      JSON.parse(request).cartas
+    );
   } else {
     console.log('Otro');
   }
