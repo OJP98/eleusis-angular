@@ -347,26 +347,6 @@ function VerificarCarta(
   }
 }
 
-/*
-Verifica que ninguna carta cumpla con regla
-*/
-function verificarMano(secret_rule, cards_in_hand) {
-  let no_card_playable = false;
-  for (
-    let _a = 0, cards_player_1 = cards_in_hand;
-    _a < cards_player_1.length;
-    _a++
-  ) {
-    var element = cards_player_1[_a];
-    //Si al menos una cumple, se le da una carta más al jugador y se cambia el valor de no_card_playable
-    if (VerificarCarta(secret_rule, element.getSymbol(), element.getValue())) {
-      no_card_playable = true;
-      break;
-    }
-  }
-  return no_card_playable;
-}
-
 function GetNextTurno(sala) {
   /*
   Players
@@ -471,6 +451,77 @@ function NuevaJugada(request, client) {
   }
 }
 
+/*
+Verifica que ninguna carta cumpla con regla
+*/
+function verificarMano(secret_rule, cards_in_hand) {
+  let no_card_playable = false;
+  for (
+    let _a = 0, cards_player_1 = cards_in_hand;
+    _a < cards_player_1.length;
+    _a++
+  ) {
+    var element = cards_player_1[_a];
+    //Si al menos una cumple, se le da una carta más al jugador y se cambia el valor de no_card_playable
+    if (VerificarCarta(secret_rule, element.getSymbol(), element.getValue())) {
+      no_card_playable = true;
+      break;
+    }
+  }
+  return no_card_playable;
+}
+
+function NoJugada(regla, cliente, cartas) {
+  /*
+  Se debe pedir tambien el deck, se me olvido comentarte
+  Que variable se llame deck
+  */
+  console.log("se me olvido comentarte que debia pedir el deck")
+
+
+
+
+  console.log(regla);
+  console.log(cartas);
+  //Si tiene una carta que se puede jugar, envía una carta nueva al jugador
+  if(verificarMano(regla,cartas)){
+    let index = Math.floor(Math.random() * deck.length);
+    //new_card tiene la nueva carta que se debe envíar
+    let new_card = deck[index];
+    //Se elimina la carta del deck
+    if (index > -1) {
+      deck.splice(index, 1);
+    }
+    //acá ya deberías actualizar como quedo el deck y luego enviar la carta
+    console.log("la nueva carta es "+ new_card);
+  }
+  /* 
+  de lo contrario, se crea una nueva mano al jugador con una carta menos o se 
+  envía sus puntos en caso de que ya no tenga más cartas
+  */
+  else{
+    // si tiene mas de una carta en la mano
+    if (cartas.length-1 != 0){
+      //player_deck tiene las nuevas cartas que se deben envía
+      let player_deck = new Array;
+      for (var j = 0; j < cartas.length-1; j++) {
+        var index = Math.floor(Math.random() * deck.length);
+        player_deck.push(deck[index]);
+        if (index > -1) {
+          deck.splice(index, 1);
+        }
+      }
+      //Aca envias la nueva mano del jugador y además actualizas el deck
+      console.log("La nueva mano del jugador es " + player_deck);
+    }
+    // si no tiene más de una carta, se envia su punteo
+    else{
+      console.log("Usted y el dios tiene tres puntos más. Se acaba la ronda");
+    }
+    
+  }
+}
+
 function interpreteacionRequest(request, client) {
   const newRequest = JSON.parse(request);
 
@@ -505,6 +556,15 @@ function interpreteacionRequest(request, client) {
     //? Nueva Jugada
     console.log(request);
     NuevaJugada(request, client);
+  } else if (newRequest.option === 7) {
+    //? Nueva Jugada
+    //"sala":"7244","cartas"
+
+    NoJugada(
+      salas[JSON.parse(request).sala].Regla,
+      client,
+      JSON.parse(request).cartas
+    );
   } else {
     console.log('Otro');
   }
