@@ -140,6 +140,17 @@ export class ClientService {
 	}
 
 	/**
+	 * El jugador declara que no tiene cartas validas
+	 */
+	public NoJugada(sala: number, cartas: Card[]) {
+		this.subject.next({
+			option: 7,
+			sala,
+			cartas,
+		});
+	}
+
+	/**
 	 * Envía al servidor datos necesarios para procesar una carta jugada.
 	 * @param carta la carta jugada por el usuario
 	 * @param sala el id de la sala del jugador
