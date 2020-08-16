@@ -121,6 +121,17 @@ export class ClientService {
 	}
 
 	/**
+	 * El jugador intenta adivinar la regla
+	 */
+	public AdivinarRegla(intentoRegla: any, sala: number): void {
+		this.subject.next({
+			option: 8,
+			sala,
+			intentoRegla,
+		});
+	}
+
+	/**
 	 * Define la regla de juego de determinada
 	 * sala
 	 */
