@@ -112,6 +112,7 @@ function NuevoCliente(request, client) {
           Regla: '',
           CartasAplican: [],
           CartasNoAplican: [],
+          CantidadCartas: [0],
           Dios: 0,
           Turno: 1,
         };
@@ -152,6 +153,7 @@ function NuevoCliente(request, client) {
 
       salas[request.sala].Sockets.push(client);
       salas[request.sala].Players.push(nuevoJugador);
+      salas[request.sala].CantidadCartas.push(0);
 
       client.send(
         JSON.stringify({
@@ -287,6 +289,14 @@ function RepartirCartas(sala, God) {
     }
   });
   salas[sala].Deck = deck;
+
+  //Se inicializan cuantas cartas tiene cada jugador
+  for (let index = 0; index < salas[sala].CantidadCartas.length; index++) {
+    if (index === salas[sala].Dios) continue;
+
+    salas[sala].CantidadCartas[index] = 12;
+  }
+  console.log(salas[sala]);
 }
 
 function IniciarJuego(request, client) {
@@ -392,14 +402,30 @@ function ActualizarMesa(salaActual, character, symbol, value, isValid) {
   });
 }
 
+function GetIndexPlayer(client, sala) {
+  for (let index = 0; index < salas[sala].Sockets.length; index++) {
+    if (client === salas[sala].Sockets[index]) {
+      console.log('Es el jugador');
+      console.log(index);
+      return index;
+    }
+  }
+}
+
+function ActualizarNumCartas(sala, index, cantidadAgregar) {
+  salas[sala].CantidadCartas[index] += cantidadAgregar;
+
+  //salas[sala].CantidadCartas[1] = 69;
+  console.log(salas[sala].CantidadCartas);
+}
+
 function NuevaJugada(request, client) {
   let secret_rule = salas[JSON.parse(request).sala].Regla;
   let symbol_card_selected = JSON.parse(request).simbolo;
   let value_card_selected = JSON.parse(request).valor;
   let deck = salas[JSON.parse(request).sala].Deck;
   let character_card = JSON.parse(request).character;
-  console.log('Reques');
-  console.log(request);
+
   let valid_card = VerificarCarta(
     secret_rule,
     symbol_card_selected,
@@ -408,6 +434,13 @@ function NuevaJugada(request, client) {
 
   if (valid_card) {
     console.log('es correcta, la carta es jugable');
+
+    ActualizarNumCartas(
+      JSON.parse(request).sala,
+      GetIndexPlayer(client, JSON.parse(request).sala),
+      -1
+    );
+
     client.send(
       JSON.stringify({
         option: 5,
@@ -521,6 +554,8 @@ function NoJugada(regla, client, cartas, sala) {
 
     salas[sala].Deck = deck;
 
+    ActualizarNumCartas(sala, GetIndexPlayer(client, sala), 1);
+
     client.send(
       JSON.stringify({
         option: 7,
@@ -552,6 +587,8 @@ function NoJugada(regla, client, cartas, sala) {
 
       salas[sala].Deck = deck;
 
+      ActualizarNumCartas(sala, GetIndexPlayer(client, sala), -1);
+
       client.send(
         JSON.stringify({
           option: 7,
@@ -564,6 +601,7 @@ function NoJugada(regla, client, cartas, sala) {
     }
     // si no tiene más de una carta, se envia su punteo
     else {
+      ActualizarNumCartas(sala, GetIndexPlayer(client, sala), -1);
       console.log('Usted y el dios tiene tres puntos más. Se acaba la ronda');
     }
   }
