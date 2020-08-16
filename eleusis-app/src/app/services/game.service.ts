@@ -256,15 +256,46 @@ export class GameService {
         // Jugadores reciben una carta jugada
       } else if (newResponse.option === 6) {
 
-        const playedCard: Card = {
-          symbol: newResponse.carta.symbol,
-          value: newResponse.carta.value,
-          character: newResponse.carta.character,
-          isValid: newResponse.carta.isValid
+        if (newResponse.carta) {
+
+          const playedCard: Card = {
+            symbol: newResponse.carta.symbol,
+            value: newResponse.carta.value,
+            character: newResponse.carta.character,
+            isValid: newResponse.carta.isValid
+          }
+
+          this.table.PlayedCards.push(playedCard);
         }
 
-        this.table.PlayedCards.push(playedCard);
         this.table.PlayerTurnId = newResponse.turno;
+
+      } else if (newResponse.option === 7) {
+
+        let dialogTitle: string;
+        let dialogContent: string;
+
+        // Sus cartas no cumplían con la regla
+        if (newResponse.valido) {
+          dialogTitle = 'Great call!';
+          dialogContent = `None of the cards you had followed the rules. You received a new hand.`;
+          this.currentPlayer.Deck = newResponse.carta;
+
+          // Una o más cartas cumplen con la regla. Jugador recibe nuevas cartas.
+        } else {
+
+          const newCard: Card = {
+            character: newResponse.carta.character,
+            value: newResponse.carta.value,
+            symbol: newResponse.carta.symbol
+          }
+          dialogTitle = 'Nope';
+          dialogContent = `You still have one or more cards that follow the rules. You received:
+          ${newCard.character} of ${newCard.symbol}.`;
+          this.currentPlayer.Deck.push(newCard);
+        }
+
+        this.OpenDialog(dialogTitle, dialogContent);
       }
     });
   }

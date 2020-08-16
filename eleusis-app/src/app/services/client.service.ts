@@ -89,6 +89,7 @@ export class ClientService {
 			this.newResponseSubject$.next(mensaje);
 		} else if (props.option === 7) {
 			// Servidor manda No Jugada
+			this.newResponseSubject$.next(mensaje);
 			console.log(mensaje);
 		}
 	}
