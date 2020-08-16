@@ -263,6 +263,24 @@ export class GameService {
         }
 
         this.OpenDialog(dialogTitle, dialogContent);
+
+      } else if (newResponse.option === 9) {
+
+        let dialogTitle: string;
+        let dialogContent: string;
+
+        if (newResponse.ganador) {
+          dialogTitle = 'YOU WIN THIS ROUND!';
+        } else {
+          dialogTitle = 'ROUND OVER';
+        }
+
+        dialogContent = `Your current score is: ${newResponse.puntos}`
+
+        this.currentPlayer.Score += newResponse.puntos;
+
+        this.OpenDialog(dialogTitle, dialogContent);
+
       }
     });
   }

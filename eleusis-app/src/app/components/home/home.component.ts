@@ -40,7 +40,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 		private gameService: GameService,
 		private playerService: PlayerService,
 		public dialog: MatDialog,
-	) { }
+	) {
+		this.clientService.Listen();
+	}
 
 	public ConnectToServer(url: string): void {
 		this.clientService.SetServer(url);
@@ -134,6 +136,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit(): void {
+		this.SubscribeToResponse();
 	}
 
 	ngOnDestroy(): void {

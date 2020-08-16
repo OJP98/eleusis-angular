@@ -17,9 +17,9 @@ export class ClientService {
 	private newResponseSubject$ = new Subject<any>();
 
 	constructor() {
-		// this.subject = webSocket({
-		// 	url: 'ws://localhost:8080',
-		// });
+		this.subject = webSocket({
+			url: 'ws://localhost:8080',
+		});
 	}
 	/*
 	ngOninit(): void {
@@ -101,6 +101,7 @@ export class ClientService {
 		} else if (props.option === 9) {
 			// Servidor manda Punteo
 			console.log(mensaje);
+			this.newResponseSubject$.next(mensaje);
 		}
 	}
 
