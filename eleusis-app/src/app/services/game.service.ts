@@ -104,8 +104,7 @@ export class GameService {
   }
 
   public SendGuessedRule(rule: any): void {
-    // this.clientService.AdivinarRegla();
-    console.log(rule);
+    this.clientService.AdivinarRegla(rule, this.tableId);
   }
 
   public GenerateFullDeck(): Card[] {
