@@ -581,6 +581,11 @@ function verificarReglaAdivinada(secret_rule, guessed_rule) {
   }
 }
 
+function AdivinarRegla(sala, intentoRegla) {
+  console.log(salas[sala].Regla);
+  console.log(intentoRegla);
+}
+
 function interpreteacionRequest(request, client) {
   const newRequest = JSON.parse(request);
 
@@ -625,6 +630,10 @@ function interpreteacionRequest(request, client) {
       JSON.parse(request).cartas,
       JSON.parse(request).sala
     );
+  } else if (newRequest.option === 8) {
+    console.log('Quiere adivinar ');
+    console.log(request);
+    AdivinarRegla(JSON.parse(request).sala, JSON.parse(request).intentoRegla);
   } else {
     console.log('Otro');
   }
