@@ -452,6 +452,18 @@ function NuevaJugada(request, client) {
   }
 }
 
+function ActualizarMesaSinCarta(sala) {
+  const nuevoTurno = GetNextTurno(sala);
+  salas[sala].Sockets.forEach(function each(client) {
+    client.send(
+      JSON.stringify({
+        option: 6,
+        turno: nuevoTurno,
+      })
+    );
+  });
+}
+
 /*
 Verifica que ninguna carta cumpla con regla
 */
@@ -463,38 +475,39 @@ function verificarMano(secret_rule, cards_in_hand) {
     _a++
   ) {
     var element = Object.values(cards_player_1[_a]);
-    if (element.length ==3){
+    if (element.length == 3) {
       var symbol_card = element[2];
       var value_card = element[1];
-    }{
+    }
+    {
       var symbol_card = element[0];
       var value_card = element[2];
     }
-    
-    
+
     //Si al menos una cumple, se le da una carta más al jugador y se cambia el valor de no_card_playable
     if (VerificarCarta(secret_rule, symbol_card, value_card)) {
       no_card_playable = true;
       break;
     }
   }
-  
+
   return no_card_playable;
 }
 
-function NoJugada(regla, cliente, cartas) {
+function NoJugada(regla, client, cartas, sala) {
   /*
   Se debe pedir tambien el deck, se me olvido comentarte
   Que variable se llame deck
   */
-  console.log("se me olvido comentarte que debia pedir el deck")
+  console.log('se me olvido comentarte que debia pedir el deck');
   console.log(regla);
   console.log(cartas);
-  console.log(verificarMano(regla,cartas));
+  console.log(verificarMano(regla, cartas));
 
-  
+  let deck = salas[sala].Deck;
+
   //Si tiene una carta que se puede jugar, envía una carta nueva al jugador
-  if(verificarMano(regla,cartas)){
+  if (verificarMano(regla, cartas)) {
     let index = Math.floor(Math.random() * deck.length);
     //new_card tiene la nueva carta que se debe envíar
     let new_card = deck[index];
@@ -503,18 +516,29 @@ function NoJugada(regla, cliente, cartas) {
       deck.splice(index, 1);
     }
     //acá ya deberías actualizar como quedo el deck y luego enviar la carta
-    console.log("la nueva carta es "+ new_card);
+
+    salas[sala].Deck = deck;
+
+    client.send(
+      JSON.stringify({
+        option: 7,
+        valido: false,
+        carta: new_card,
+      })
+    );
+    ActualizarMesaSinCarta(sala);
+
+    console.log('la nueva carta es ' + new_card);
   }
-   
-  //de lo contrario, se crea una nueva mano al jugador con una carta menos o se 
+
+  //de lo contrario, se crea una nueva mano al jugador con una carta menos o se
   //envía sus puntos en caso de que ya no tenga más cartas
-  
-  else{
+  else {
     // si tiene mas de una carta en la mano
-    if (cartas.length-1 != 0){
+    if (cartas.length - 1 != 0) {
       //player_deck tiene las nuevas cartas que se deben envía
-      let player_deck = new Array;
-      for (var j = 0; j < cartas.length-1; j++) {
+      let player_deck = new Array();
+      for (var j = 0; j < cartas.length - 1; j++) {
         var index = Math.floor(Math.random() * deck.length);
         player_deck.push(deck[index]);
         if (index > -1) {
@@ -522,21 +546,35 @@ function NoJugada(regla, cliente, cartas) {
         }
       }
       //Aca envias la nueva mano del jugador y además actualizas el deck
-      console.log("La nueva mano del jugador es " + player_deck);
+      console.log('La nueva mano del jugador es ' + player_deck);
+
+      salas[sala].Deck = deck;
+
+      client.send(
+        JSON.stringify({
+          option: 7,
+          valido: true,
+          carta: player_deck,
+        })
+      );
+
+      ActualizarMesaSinCarta(sala);
     }
     // si no tiene más de una carta, se envia su punteo
-    else{
-      console.log("Usted y el dios tiene tres puntos más. Se acaba la ronda");
+    else {
+      console.log('Usted y el dios tiene tres puntos más. Se acaba la ronda');
     }
-    
   }
 }
 
-function verificarReglaAdivinada(secret_rule,guessed_rule){
-  if (secret_rule[0] == guessed_rule[0] && secret_rule[1] == guessed_rule[1] && secret_rule[2] == guessed_rule[2]){
+function verificarReglaAdivinada(secret_rule, guessed_rule) {
+  if (
+    secret_rule[0] == guessed_rule[0] &&
+    secret_rule[1] == guessed_rule[1] &&
+    secret_rule[2] == guessed_rule[2]
+  ) {
     return true;
-  }
-  else{
+  } else {
     return false;
   }
 }
@@ -582,7 +620,8 @@ function interpreteacionRequest(request, client) {
     NoJugada(
       salas[JSON.parse(request).sala].Regla,
       client,
-      JSON.parse(request).cartas
+      JSON.parse(request).cartas,
+      JSON.parse(request).sala
     );
   } else {
     console.log('Otro');
