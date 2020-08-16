@@ -1,153 +1,151 @@
 <mat-drawer-container class="drawer-style">
-    <mat-drawer mode="side" position="end" opened style="width: 20%;">
-        <app-chat-window></app-chat-window>
-    </mat-drawer>
-    <mat-drawer-content style="max-height: 100%; overflow-y: hidden;">
-        <h2 style="text-align: center;">Lobby #{{lobbyId}}</h2>
+	<mat-drawer mode="side" position="end" opened style="width: 20%;">
+		<app-chat-window></app-chat-window>
+	</mat-drawer>
+	<mat-drawer-content style="max-height: 100%; overflow-y: hidden;">
+		<h2 style="text-align: center;">Lobby #{{lobbyId}}</h2>
 
-        <!-- CONTENIDO PRINCIPAL -->
-        <div style="margin: 0 7rem 1rem 7rem">
+		<!-- CONTENIDO PRINCIPAL -->
+		<div style="margin: 0 7rem 1rem 7rem">
 
-            <!-- SI EL JUEGO AÚN NO HA COMENZADO -->
-            <div *ngIf="!table.MatchStarted">
-                <!-- LISTA DE JUGADORES / REGLAS -->
-                <div fxLayout="row" fxLayoutAlign="start">
-                    <div fxFlex="50">
-                        <mat-list role="list">
-                            <div mat-subheader>Waiting for players to join... currently {{table.Players.length}}/8</div>
-                            <mat-list-item role="listitem" *ngFor="let player of table.Players">
-                                <mat-icon mat-list-icon *ngIf="!player.isDealer">person</mat-icon>
-                                <mat-icon mat-list-icon *ngIf="player.isDealer">star</mat-icon>
-                                <div mat-line>{{player.Name}}</div>
-                            </mat-list-item>
-                        </mat-list>
-                    </div>
+			<!-- SI EL JUEGO AÚN NO HA COMENZADO -->
+			<div *ngIf="!table.MatchStarted">
+				<!-- LISTA DE JUGADORES / REGLAS -->
+				<div fxLayout="row" fxLayoutAlign="start">
+					<div fxFlex="50">
+						<mat-list role="list">
+							<div mat-subheader>Waiting for players to join... currently {{table.Players.length}}/8</div>
+							<mat-list-item role="listitem" *ngFor="let player of table.Players">
+								<mat-icon mat-list-icon *ngIf="!player.isDealer">person</mat-icon>
+								<mat-icon mat-list-icon *ngIf="player.isDealer">star</mat-icon>
+								<div mat-line>{{player.Name}}</div>
+							</mat-list-item>
+						</mat-list>
+					</div>
 
-                    <!-- CAMPO PARA SELECCIONAR REGLA (SOLO EL DEALER) -->
-                    <div fxLayout="column" fxFlex="50" *ngIf="myPlayer.isDealer">
+					<!-- CAMPO PARA SELECCIONAR REGLA (SOLO EL DEALER) -->
+					<div fxLayout="column" fxFlex="50" *ngIf="myPlayer.isDealer">
 
-                        <!-- FORM PARA LAS REGLAS -->
-                        <form [formGroup]="selectedRulesForm">
-                            <h4 style="margin-bottom: 1em;">Round rule(s)</h4>
-                            <!-- REGLAS NUMERICAS -->
-                            <mat-slide-toggle [formControl]="enableNumericRule" (change)="ToggleNumericRules()">
-                                Numeric
-                            </mat-slide-toggle>
-                            <div class="rules-container" style="margin: 0 1em">
-                                <p style="font-size: 1em;">Cards can't</p>
+						<!-- FORM PARA LAS REGLAS -->
+						<form [formGroup]="selectedRulesForm">
+							<h4 style="margin-bottom: 1em;">Round rule(s)</h4>
+							<!-- REGLAS NUMERICAS -->
+							<mat-slide-toggle [formControl]="enableNumericRule" (change)="ToggleNumericRules()">
+								Numeric
+							</mat-slide-toggle>
+							<div class="rules-container" style="margin: 0 1em">
+								<p style="font-size: 1em;">Cards can't</p>
 
-                                <!-- Select de reglas -->
-                                <mat-form-field style="margin: 0 1em;">
-                                    <mat-select [formControl]="numericRuleControl">
-                                        <mat-option *ngFor="let rule of numericRulesArray; let i = index" [value]="i">
-                                            {{rule}}
-                                        </mat-option>
-                                    </mat-select>
-                                    <mat-error *ngIf="numericRuleControl.invalid">
-                                        Please select a value
-                                    </mat-error>
-                                </mat-form-field>
+								<!-- Select de reglas -->
+								<mat-form-field style="margin: 0 1em;">
+									<mat-select [formControl]="numericRuleControl">
+										<mat-option *ngFor="let rule of numericRulesArray; let i = index" [value]="i">
+											{{rule}}
+										</mat-option>
+									</mat-select>
+									<mat-error *ngIf="numericRuleControl.invalid">
+										Please select a value
+									</mat-error>
+								</mat-form-field>
 
-                                <!-- Input de valor numérico -->
-                                <mat-form-field>
-                                    <mat-label>Value</mat-label>
-                                    <input matInput type="number" [formControl]="numericRuleValue">
-                                    <mat-error *ngIf="numericRuleValue.invalid">
-                                        Please enter a value between 1 and 13
-                                    </mat-error>
-                                </mat-form-field>
-                            </div>
+								<!-- Input de valor numérico -->
+								<mat-form-field>
+									<mat-label>Value</mat-label>
+									<input matInput type="number" [formControl]="numericRuleValue">
+									<mat-error *ngIf="numericRuleValue.invalid">
+										Please enter a value between 1 and 13
+									</mat-error>
+								</mat-form-field>
+							</div>
 
-                            <!-- REGLAS DE COLOR -->
-                            <mat-slide-toggle [formControl]="enableColorRule" (change)="ToggleColorRules()">
-                                Color
-                            </mat-slide-toggle>
-                            <div class="rules-container" style="margin: 0 1em">
-                                <p style="font-size: 1em;">Cards</p>
+							<!-- REGLAS DE COLOR -->
+							<mat-slide-toggle [formControl]="enableColorRule" (change)="ToggleColorRules()">
+								Color
+							</mat-slide-toggle>
+							<div class="rules-container" style="margin: 0 1em">
+								<p style="font-size: 1em;">Cards</p>
 
-                                <!-- Select de reglas -->
-                                <mat-form-field style="margin: 0 1em;">
-                                    <mat-select [formControl]="colorRuleControl">
-                                        <mat-option *ngFor="let rule of colorRulesArray; let i = index" [value]="i">
-                                            {{rule}}
-                                        </mat-option>
-                                    </mat-select>
-                                    <mat-error *ngIf="colorRuleControl.invalid">
-                                        Please select a value
-                                    </mat-error>
-                                </mat-form-field>
+								<!-- Select de reglas -->
+								<mat-form-field style="margin: 0 1em;">
+									<mat-select [formControl]="colorRuleControl">
+										<mat-option *ngFor="let rule of colorRulesArray; let i = index" [value]="i">
+											{{rule}}
+										</mat-option>
+									</mat-select>
+									<mat-error *ngIf="colorRuleControl.invalid">
+										Please select a value
+									</mat-error>
+								</mat-form-field>
 
-                                <!-- Select de colores -->
-                                <mat-form-field>
-                                    <mat-select [formControl]="colorRuleValue">
-                                        <mat-option *ngFor="let color of ['spades', 'hearts', 'cubs', 'diamonds']" [value]="color">
-                                            {{color}}
-                                        </mat-option>
-                                    </mat-select>
-                                    <mat-error *ngIf="colorRuleValue.invalid">
-                                        Please select a value
-                                    </mat-error>
-                                </mat-form-field>
-                            </div>
+								<!-- Select de colores -->
+								<mat-form-field>
+									<mat-select [formControl]="colorRuleValue">
+										<mat-option *ngFor="let color of ['spades', 'hearts', 'cubs', 'diamonds']" [value]="color">
+											{{color}}
+										</mat-option>
+									</mat-select>
+									<mat-error *ngIf="colorRuleValue.invalid">
+										Please select a value
+									</mat-error>
+								</mat-form-field>
+							</div>
 
-                            <br>
-                        </form>
+							<br>
+						</form>
 
-                        <!-- BOTON PARA ENVIAR REGLAS -->
-                        <button *ngIf="enableNumericRule.value || enableColorRule.value" style="align-self: center;" [disabled]="selectedRulesForm.invalid || this.gameReady" mat-raised-button color="accent" (click)="SetRule()">SET
+						<!-- BOTON PARA ENVIAR REGLAS -->
+						<button *ngIf="enableNumericRule.value || enableColorRule.value" style="align-self: center;"
+							[disabled]="selectedRulesForm.invalid || this.gameReady" mat-raised-button color="accent"
+							(click)="SetRule()">SET
 							RULE(S)</button>
-                    </div>
-                </div>
-                <br>
-                <!-- APARTADO DE BOTONES (SOLO SI EL JUGADOR ES DEALER) -->
-                <div *ngIf="myPlayer.isDealer" fxLayout="row" fxLayoutAlign="center center">
-                    <button mat-raised-button color="accent" (click)="StartNewMatch()" [disabled]="table.Players.length < 3 || !gameReady">START
+					</div>
+				</div>
+				<br>
+				<!-- APARTADO DE BOTONES (SOLO SI EL JUGADOR ES DEALER) -->
+				<div *ngIf="myPlayer.isDealer" fxLayout="row" fxLayoutAlign="center center">
+					<button mat-raised-button color="accent" (click)="StartNewMatch()"
+						[disabled]="table.Players.length < 3 || !gameReady">START
 						GAME</button>
-                </div>
+				</div>
 
-                <!-- SI EL JUGADOR NO ES EL DEALER... -->
-                <div *ngIf="!myPlayer.isDealer">
-                    <p>Waiting for God to set the rules of the match...</p>
-                </div>
+				<!-- SI EL JUGADOR NO ES EL DEALER... -->
+				<div *ngIf="!myPlayer.isDealer">
+					<p>Waiting for God to set the rules of the match...</p>
+				</div>
 
-                <br>
+				<br>
 
-            </div>
+			</div>
 
-            <!-- SI EL JUEGO YA COMENZÓ -->
-            <div *ngIf="table.MatchStarted" fxLayout="column" fxLayoutAlign="space-between stretch">
+			<!-- SI EL JUEGO YA COMENZÓ -->
+			<div *ngIf="table.MatchStarted" fxLayout="column" fxLayoutAlign="space-between stretch">
 
-                <!-- LISTA DE JUGADORES CONECTADOS -->
-                <div>
-                    <mat-list fxLayout="row" fxLayoutAlign="center center">
-                        <mat-list-item *ngFor="let player of table.Players" fxLayout="row" fxLayoutAlign="space-evenly center">
-                            <mat-icon mat-list-icon *ngIf="player.isDealer" color="warn">star</mat-icon>
-                            <mat-icon mat-list-icon *ngIf="table.PlayerTurnId === player.Id" color="accent">forward
-                            </mat-icon>
-                            <div mat-line [ngStyle]="{'font-weight': (table.PlayerTurnId === player.Id) ? '700' : '400'}">
-                                {{player.Name}}</div>
-                        </mat-list-item>
-                    </mat-list>
-                    <br>
-                </div>
+				<!-- LISTA DE JUGADORES CONECTADOS -->
+				<div>
+					<mat-list fxLayout="row" fxLayoutAlign="center center">
+						<mat-list-item *ngFor="let player of table.Players" fxLayout="row" fxLayoutAlign="space-evenly center">
+							<mat-icon mat-list-icon *ngIf="player.isDealer" color="warn">star</mat-icon>
+							<mat-icon mat-list-icon *ngIf="table.PlayerTurnId === player.Id" color="accent">forward
+							</mat-icon>
+							<div mat-line [ngStyle]="{'font-weight': (table.PlayerTurnId === player.Id) ? '700' : '400'}">
+								{{player.Name}}</div>
+						</mat-list-item>
+					</mat-list>
+					<br>
+				</div>
 
-                <!-- PRIMER DIVIDER -->
-                <mat-divider></mat-divider>
+				<!-- ESPACIO DE CARTAS/MESA DEL JUEGO -->
+				<div class="cards-background">
+					<app-card></app-card>
+				</div>
 
-                <!-- ESPACIO DE CARTAS/MESA DEL JUEGO -->
-                <div class="cards-background">
-                    <app-card></app-card>
-                </div>
+				<div *ngIf="!myPlayer.isDealer">
+					<app-player-hand></app-player-hand>
+				</div>
+			</div>
 
-            </div>
 
-            <!-- SEGUNDO DIVIDER -->
-            <mat-divider></mat-divider>
+		</div>
 
-            <div>
-                <app-player-hand></app-player-hand>
-            </div>
-        </div>
-
-    </mat-drawer-content>
+	</mat-drawer-content>
 </mat-drawer-container>
