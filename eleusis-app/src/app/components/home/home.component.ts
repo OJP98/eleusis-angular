@@ -40,8 +40,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 		private gameService: GameService,
 		private playerService: PlayerService,
 		public dialog: MatDialog,
-	) {
+	) { }
+
+	public ConnectToServer(url: string): void {
+		this.clientService.SetServer(url);
 		this.clientService.Listen();
+		this.SubscribeToResponse();
 	}
 
 	/**
@@ -51,6 +55,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 		this.newResponseObservable = this.clientService.NewResponseSubject;
 		this.newResponseSubscription = this.newResponseObservable.subscribe(newResponse => {
 
+			console.log(newResponse);
 			// El socket dio algun error
 			if (newResponse.option === 0) {
 				// Mostrar dialogo con el respectivo error
@@ -64,6 +69,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 				this.playerService.SetNewLobbyData(newResponse.sala, newResponse, this.newRoomRequested, this.nameControl.value);
 				this.gameService.CreateNewTable(this.newRoomRequested, newResponse);
 				this.JoinRoom(newResponse.sala);
+
+			} else {
+				this.ShowErrorDialog({
+					title: 'CONNECTION ERROR',
+					content: 'Error while trying to connect to the server',
+				});
 			}
 		});
 	}
@@ -123,7 +134,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit(): void {
-		this.SubscribeToResponse();
 	}
 
 	ngOnDestroy(): void {

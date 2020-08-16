@@ -11,14 +11,15 @@ import { Card } from '../interfaces/card';
 export class ClientService {
 	private socketSubscription: Subscription;
 	private subject: WebSocketSubject<any>;
+
 	private mensajeSubject$ = new Subject<JSON>();
 	private colaDeMensajesSubject$ = new Subject<Message>();
 	private newResponseSubject$ = new Subject<any>();
 
 	constructor() {
-		this.subject = webSocket({
-			url: 'ws://localhost:8080',
-		});
+		// this.subject = webSocket({
+		// 	url: 'ws://localhost:8080',
+		// });
 	}
 	/*
 	ngOninit(): void {
@@ -42,15 +43,19 @@ export class ClientService {
 		});
 	}
 
+	public SetServer(url: string): void {
+		this.subject = webSocket({ url });
+	}
+
 	/**
 	 * Se escucha constantemente al servidor.
 	 */
 	public Listen(): void {
 		if (!this.socketSubscription) {
 			this.socketSubscription = this.subject.subscribe(
-				(msg) => this.InterpretarRequest(msg), // Called whenever there is a message from the server.
-				(err) => console.log(err), // Called if at any point WebSocket API signals some kind of error.
-				() => console.log('complete') // Called when connection is closed (for whatever reason).
+				(msg) => this.InterpretarRequest(msg),
+				(err) => this.InterpretarError(err),
+				() => console.log('complete')
 			);
 		}
 	}
@@ -93,7 +98,13 @@ export class ClientService {
 		} else if (props.option === 8) {
 			// Servidor manda Adivinar Regla
 			this.newResponseSubject$.next(mensaje);
+
 		}
+	}
+
+	public InterpretarError(error) {
+
+		this.newResponseSubject$.error(error);
 	}
 
 	public get MensajeSubject(): Observable<JSON> {
@@ -106,6 +117,10 @@ export class ClientService {
 
 	public get NewResponseSubject(): Observable<any> {
 		return this.newResponseSubject$.asObservable();
+	}
+
+	public get WebSocketSubject(): Observable<any> {
+		return this.subject.asObservable();
 	}
 
 	/**
