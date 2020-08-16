@@ -159,7 +159,7 @@ function NuevoCliente(request, client) {
           sala: request.sala,
           Players: salas[request.sala].Players,
           DealerId: 0,
-          PlayerTurnId: 'number',
+          PlayerTurnId: 1,
           HostId: 0,
           Rounds: 'number',
           myId: salas[request.sala].Sockets.length - 1,
@@ -487,7 +487,7 @@ function verificarMano(secret_rule, cards_in_hand) {
     console.log(symbol_card);
     //Si al menos una cumple, se le da una carta más al jugador y se cambia el valor de no_card_playable
     if (VerificarCarta(secret_rule, symbol_card, value_card)) {
-      console.log("Entra correctamente a esto");
+      console.log('Entra correctamente a esto');
       no_card_playable = true;
       break;
     }
