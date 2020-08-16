@@ -477,15 +477,17 @@ function verificarMano(secret_rule, cards_in_hand) {
     var element = Object.values(cards_player_1[_a]);
     if (element.length == 3) {
       var symbol_card = element[2];
-      var value_card = element[1];
+      var value_card = Number(element[1]);
     }
     {
       var symbol_card = element[0];
       var value_card = element[2];
     }
-
+    console.log(value_card);
+    console.log(symbol_card);
     //Si al menos una cumple, se le da una carta más al jugador y se cambia el valor de no_card_playable
     if (VerificarCarta(secret_rule, symbol_card, value_card)) {
+      console.log("Entra correctamente a esto");
       no_card_playable = true;
       break;
     }
