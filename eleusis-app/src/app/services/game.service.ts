@@ -107,65 +107,19 @@ export class GameService {
     this.clientService.AdivinarRegla(rule, this.tableId);
   }
 
-  public GenerateFullDeck(): Card[] {
-
-    const cardArray: Card[] = [];
-    let symbol: string;
-    let value: number;
-    let char: string;
-
-    for (let i = 0; i < 4; i++) {
-
-      // Establecer simbolo dependiendo del ciclo
-      switch (i) {
-        case 0:
-          symbol = 'spades';
-          break;
-        case 1:
-          symbol = 'hearts';
-          break;
-        case 2:
-          symbol = 'clubs';
-          break;
-        case 3:
-          symbol = 'diamonds'
-      }
-
-      for (let j = 1; j < 14; j++) {
-
-        value = j;
-
-        switch (j) {
-          case 1:
-            char = 'A';
-            break;
-          case 11:
-            char = 'J';
-            break;
-          case 12:
-            char = 'Q';
-            break;
-          case 13:
-            char = 'K';
-            break;
-          default:
-            char = j.toString();
-            break;
-        }
-
-        // Crear objeto tipo carta
-        const newCard: Card = {
-          character: char,
-          value,
-          symbol
-        }
-
-        // Ingresarlo al array de cartas
-        cardArray.push(newCard);
-      }
+  public ResetTable(): void {
+    /*
+    this.table = {
+      Deck: this.fullDeck,
+      PlayedCards: [],
+      Players: newTable.Players,
+      DealerId: newTable.DealerId,
+      HostId: newTable.HostId,
+      PlayerTurnId: newTable.PlayerTurnId,
+      TableId: this.tableId,
+      MatchStarted: false,
     }
-
-    return cardArray;
+    */
   }
 
   public get PlayerMoving(): Player {
@@ -295,12 +249,82 @@ export class GameService {
         }
 
         this.OpenDialog(dialogTitle, dialogContent);
+      } else if (newResponse.option === 8) {
+
+        let dialogTitle: string;
+        let dialogContent: string;
+
+        if (newResponse.valido) {
+          dialogTitle = 'CONGRATS!';
+          dialogContent = 'You correctly guessed the rule.'
+        } else {
+          dialogTitle = 'Incorrect';
+          dialogContent = `You didn't guessed the rule correctly. Try again, if you dare.`
+        }
+
+        this.OpenDialog(dialogTitle, dialogContent);
       }
     });
   }
 
-  public AddCard(): void {
-    this.fullDeck.reverse();
-    this.table.PlayedCards.push(this.fullDeck.pop());
+  public GenerateFullDeck(): Card[] {
+
+    const cardArray: Card[] = [];
+    let symbol: string;
+    let value: number;
+    let char: string;
+
+    for (let i = 0; i < 4; i++) {
+
+      // Establecer simbolo dependiendo del ciclo
+      switch (i) {
+        case 0:
+          symbol = 'spades';
+          break;
+        case 1:
+          symbol = 'hearts';
+          break;
+        case 2:
+          symbol = 'clubs';
+          break;
+        case 3:
+          symbol = 'diamonds'
+      }
+
+      for (let j = 1; j < 14; j++) {
+
+        value = j;
+
+        switch (j) {
+          case 1:
+            char = 'A';
+            break;
+          case 11:
+            char = 'J';
+            break;
+          case 12:
+            char = 'Q';
+            break;
+          case 13:
+            char = 'K';
+            break;
+          default:
+            char = j.toString();
+            break;
+        }
+
+        // Crear objeto tipo carta
+        const newCard: Card = {
+          character: char,
+          value,
+          symbol
+        }
+
+        // Ingresarlo al array de cartas
+        cardArray.push(newCard);
+      }
+    }
+
+    return cardArray;
   }
 }

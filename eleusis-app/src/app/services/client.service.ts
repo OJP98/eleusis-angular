@@ -90,10 +90,9 @@ export class ClientService {
 		} else if (props.option === 7) {
 			// Servidor manda No Jugada
 			this.newResponseSubject$.next(mensaje);
-			console.log(mensaje);
 		} else if (props.option === 8) {
 			// Servidor manda Adivinar Regla
-			console.log(mensaje);
+			this.newResponseSubject$.next(mensaje);
 		}
 	}
 
