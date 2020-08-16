@@ -98,12 +98,13 @@ export class ClientService {
 		} else if (props.option === 8) {
 			// Servidor manda Adivinar Regla
 			this.newResponseSubject$.next(mensaje);
-
+		} else if (props.option === 9) {
+			// Servidor manda Punteo
+			console.log(mensaje);
 		}
 	}
 
 	public InterpretarError(error) {
-
 		this.newResponseSubject$.error(error);
 	}
 

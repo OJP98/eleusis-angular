@@ -113,6 +113,7 @@ function NuevoCliente(request, client) {
           CartasAplican: [],
           CartasNoAplican: [],
           CantidadCartas: [0],
+          Puntos: [0],
           Dios: 0,
           Turno: 1,
         };
@@ -154,6 +155,7 @@ function NuevoCliente(request, client) {
       salas[request.sala].Sockets.push(client);
       salas[request.sala].Players.push(nuevoJugador);
       salas[request.sala].CantidadCartas.push(0);
+      salas[request.sala].Puntos.push(0);
 
       client.send(
         JSON.stringify({
@@ -414,9 +416,56 @@ function GetIndexPlayer(client, sala) {
 
 function ActualizarNumCartas(sala, index, cantidadAgregar) {
   salas[sala].CantidadCartas[index] += cantidadAgregar;
-
-  //salas[sala].CantidadCartas[1] = 69;
   console.log(salas[sala].CantidadCartas);
+}
+
+function ActualizarPuntos(sala, index, cantidadAgregar) {
+  salas[sala].Puntos[index] += cantidadAgregar;
+  console.log(salas[sala].Puntos);
+}
+
+function GetNumCartas(sala, index) {
+  return salas[sala].CantidadCartas[index];
+}
+
+function CalcularPuntos(sala) {
+  const DiosId = salas[sala].Dios;
+  for (let index = 0; index < salas[sala].Sockets.length; index++) {
+    if (index === DiosId) continue;
+
+    const puntosJugador = (salas[sala].Puntos[index] =
+      12 - salas[sala].CantidadCartas[index] + salas[sala].Puntos[index]);
+  }
+}
+
+function EnviarPunteo(sala) {
+  CalcularPuntos(sala);
+  console.log('entra a Enviar Punteo');
+  console.log(sala);
+  const maxPuntos = Math.max.apply(null, salas[sala].Puntos);
+  const DiosId = salas[sala].Dios;
+
+  console.log(salas[sala].Sockets[DiosId]);
+
+  salas[sala].Sockets[DiosId].send(
+    JSON.stringify({
+      option: 9,
+      puntos: maxPuntos,
+      ganador: true,
+    })
+  );
+
+  for (let index = 0; index < salas[sala].Sockets.length; index++) {
+    if (index === DiosId) continue;
+
+    salas[sala].Sockets[index].send(
+      JSON.stringify({
+        option: 9,
+        puntos: salas[sala].Puntos[index],
+        ganador: salas[sala].Puntos[index] === maxPuntos,
+      })
+    );
+  }
 }
 
 function NuevaJugada(request, client) {
@@ -440,6 +489,25 @@ function NuevaJugada(request, client) {
       GetIndexPlayer(client, JSON.parse(request).sala),
       -1
     );
+
+    if (
+      GetNumCartas(
+        JSON.parse(request).sala,
+        GetIndexPlayer(client, JSON.parse(request).sala)
+      ) === 0
+    ) {
+      //El jugador se quedo sin cartas
+      //Le damos +3 puntos
+      console.log('El jugador se quedo sin cartas');
+      ActualizarPuntos(
+        JSON.parse(request).sala,
+        GetIndexPlayer(client, JSON.parse(request).sala),
+        3
+      );
+
+      //Mandamos puntos a todos los jugadores
+      EnviarPunteo(JSON.parse(request).sala);
+    }
 
     client.send(
       JSON.stringify({
@@ -603,6 +671,9 @@ function NoJugada(regla, client, cartas, sala) {
     else {
       ActualizarNumCartas(sala, GetIndexPlayer(client, sala), -1);
       console.log('Usted y el dios tiene tres puntos más. Se acaba la ronda');
+      ActualizarPuntos(sala, GetIndexPlayer(client, sala), 3);
+      //Mandamos puntos a todos los jugadores
+      EnviarPunteo(sala);
     }
   }
 }
@@ -631,6 +702,12 @@ function AdivinarRegla(sala, intentoRegla, client) {
         valido: true,
       })
     );
+
+    ActualizarPuntos(sala, GetIndexPlayer(client, sala), 6);
+
+    //Mandamos puntos a todos los jugadores
+    EnviarPunteo(sala);
+
     console.log('Cambiar de ronda');
   } else {
     console.log('Se equivoco pero no pasa nada');
