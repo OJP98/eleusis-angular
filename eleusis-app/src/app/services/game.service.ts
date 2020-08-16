@@ -103,6 +103,11 @@ export class GameService {
     this.clientService.NoJugada(this.tableId, cards);
   }
 
+  public SendGuessedRule(rule: any): void {
+    // this.clientService.AdivinarRegla();
+    console.log(rule);
+  }
+
   public GenerateFullDeck(): Card[] {
 
     const cardArray: Card[] = [];
@@ -202,7 +207,8 @@ export class GameService {
         content,
         title
       }
-    })
+    });
+
   }
 
   public SubscribeToSocketResponse(): void {

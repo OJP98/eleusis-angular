@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { GameService } from 'src/app/services/game.service';
 
@@ -8,6 +8,10 @@ import { GameService } from 'src/app/services/game.service';
   styleUrls: ['./rules-form.component.scss']
 })
 export class RulesFormComponent implements OnInit {
+
+  @Output() formCompletedEvent = new EventEmitter<any>();
+
+  private lastValue = false;
 
   public numericRulesArray: string[] = [
     `be a multiple of`,
@@ -82,7 +86,7 @@ export class RulesFormComponent implements OnInit {
     this.selectedRulesForm.updateValueAndValidity();
   }
 
-  public SetRule(): void {
+  public SetRule(): any {
     const rule: any = [];
 
     if (this.enableNumericRule.value) {
@@ -95,12 +99,32 @@ export class RulesFormComponent implements OnInit {
       rule.push(this.colorRuleValue.value);
     }
 
-    // Se llama al servicio para mandarle la regla al servidor
-    this.gameService.SetMatchRule(rule);
-    this.selectedRulesForm.disable();
+    return (rule);
+  }
+
+  public RuleChanged(): void {
+
+    if (this.selectedRulesForm.valid && (this.enableColorRule.value || this.enableNumericRule.value)) {
+      const newRule = this.SetRule();
+      this.formCompletedEvent.emit({
+        valid: true,
+        rule: newRule,
+      });
+
+    } else {
+      this.formCompletedEvent.emit({
+        valid: false
+      })
+    }
   }
 
   ngOnInit(): void {
+    this.selectedRulesForm.valueChanges.subscribe(() =>{
+      if (this.lastValue !== this.selectedRulesForm.valid) {
+        this.lastValue = this.selectedRulesForm.valid;
+        this.RuleChanged();
+      }
+    })
   }
 
 }

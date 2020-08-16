@@ -5,7 +5,7 @@ import { Player } from 'src/app/interfaces/player';
 import { GameService } from 'src/app/services/game.service';
 import { Table } from 'src/app/interfaces/table';
 import { DialogComponent } from '../dialog/dialog.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-player-hand',
@@ -27,11 +27,18 @@ export class PlayerHandComponent implements OnInit {
   }
 
   public GuessRule(): void {
-    this.dialog.open(DialogComponent, {
+    const dialogRef = this.dialog.open(DialogComponent, {
       data: {
         content: 'GuessRule',
-        title: 'GUESS THE RULE'
+        title: 'GUESS THE RULE',
       }
+    });
+
+    dialogRef.afterClosed().subscribe(rule => {
+      if (rule) {
+        this.gameService.SendGuessedRule(rule);
+      }
+
     })
   }
 
