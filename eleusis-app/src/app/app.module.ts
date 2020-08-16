@@ -19,6 +19,7 @@ import { DialogComponent } from './components/dialog/dialog.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { PlayerHandComponent } from './components/player-hand/player-hand.component';
+import { RulesFormComponent } from './components/rules-form/rules-form.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { PlayerHandComponent } from './components/player-hand/player-hand.compon
     CardComponent,
     DialogComponent,
     PlayerHandComponent,
+    RulesFormComponent,
   ],
   imports: [
     BrowserModule,

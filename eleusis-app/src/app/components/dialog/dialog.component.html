@@ -1,84 +1,83 @@
 <h2 mat-dialog-title>{{dialogData.title | uppercase}}</h2>
 <mat-dialog-content class="mat-typography">
 
-	<p *ngIf="dialogData.content !== 'ShowInstructions'">{{dialogData.content}}</p>
+    <p *ngIf="dialogData.content !== 'ShowInstructions' && dialogData.content !== 'GuessRule'">
+        {{dialogData.content}}</p>
 
-	<div *ngIf="dialogData.content === 'ShowInstructions'">
+    <div *ngIf="dialogData.content === 'ShowInstructions'">
 
-		<b>¿Cómo jugar?</b>
+        <b>¿Cómo jugar?</b>
 
-		<p>
-			Uno de los jugadores es declarado como “Dios”, el cual deberá establecer una regla al inicio de la partida. El
-			jugador podrá elegir entre dos botones para establecer el tipo de reglas que desee que se encuentre entre las ya
-			establecidas:
-		</p>
+        <p>
+            Uno de los jugadores es declarado como “Dios”, el cual deberá establecer una regla al inicio de la partida. El jugador podrá elegir entre dos botones para establecer el tipo de reglas que desee que se encuentre entre las ya establecidas:
+        </p>
 
-		<ul>
-			<li>Regla numérica</li>
-			<li>Regla de color/tipo de carta</li>
-		</ul>
+        <ul>
+            <li>Regla numérica</li>
+            <li>Regla de color/tipo de carta</li>
+        </ul>
 
-		<p>
-			Una vez elegida el tipo de regla que el “Dios” desea, nuevamente debe de presionar el botón con la regla que
-			desee. En caso de que la regla sea numérica puede elegir entre:
-		</p>
+        <p>
+            Una vez elegida el tipo de regla que el “Dios” desea, nuevamente debe de presionar el botón con la regla que desee. En caso de que la regla sea numérica puede elegir entre:
+        </p>
 
-		<ul>
-			<li>Múltiplos de un número, al elegir este botón sólo estarán permitidas las cartas que sean múltiplos del número
-				que escoja que escoja el “Dios”.</li>
-			<li>Mayor que: al elegir este botón sólo estarán permitidas las cartas que sean mayores al número que escoja el
-				“Dios”.</li>
-			<li>Menor que: al elegir este botón sólo estarán permitidas las cartas que sean menores al número que escoja el
-				“Dios”.</li>
-			<li>Número prohibido: al elegir este botón sólo estarán permitidas las cartas que no tengan el número que escoja
-				el “Dios”.</li>
-		</ul>
+        <ul>
+            <li>Múltiplos de un número, al elegir este botón sólo estarán permitidas las cartas que sean múltiplos del número que escoja que escoja el “Dios”.</li>
+            <li>Mayor que: al elegir este botón sólo estarán permitidas las cartas que sean mayores al número que escoja el “Dios”.
+            </li>
+            <li>Menor que: al elegir este botón sólo estarán permitidas las cartas que sean menores al número que escoja el “Dios”.
+            </li>
+            <li>Número prohibido: al elegir este botón sólo estarán permitidas las cartas que no tengan el número que escoja el “Dios”.</li>
+        </ul>
 
-		<p>En caso de que la regla sea de color/tipo de carta:</p>
+        <p>En caso de que la regla sea de color/tipo de carta:</p>
 
-		<ul>
-			<li>prohibir colores/tipos de carta, al elegir este botón sólo estarán permitidas las cartas que no tengan el
-				color/tipo que escoja el “Dios”.</li>
-		</ul>
+        <ul>
+            <li>prohibir colores/tipos de carta, al elegir este botón sólo estarán permitidas las cartas que no tengan el color/tipo que escoja el “Dios”.</li>
+        </ul>
 
-		<p>
-			Al iniciar la ronda, los jugadores tendrán turnos para elegir las acciones que pueden realizar. Para esto, deberán
-			seleccionar el botón con la acción que deseen. Las acciones que pueden realizar los profetas son:
-		</p>
+        <p>
+            Al iniciar la ronda, los jugadores tendrán turnos para elegir las acciones que pueden realizar. Para esto, deberán seleccionar el botón con la acción que deseen. Las acciones que pueden realizar los profetas son:
+        </p>
 
-		<ul>
-			<li>
-				Seleccionar una carta: al seleccionar esta acción el profeta debe elegir una carta que posea en su mano. En caso
-				de que siga con la regla se pondrá al lado de la última carta del tablero. Si es incorrecta se pondrá al lado de
-				la última carta pero en una altura distinta y se le dará una carta nueva del deck al jugador.
-			</li>
-			<li>
-				Indicar que no pueden jugar ninguna de sus cartas: al seleccionar esta acción el profeta afirma que todas las
-				cartas que tiene no siguen con la regla oculta. En caso de que este en lo correcto se le dará una mano nueva con
-				cartas del deck pero se le restará una. Y en caso de que si pueda jugar alguna de sus cartas que tenga a mano,
-				se le penalizará con una carta nueva que venga del deck.
-			</li>
-			<li>
-				Intentar adivinar la regla: el profeta intenta adivinar la regla y en caso de que la logre adivinar
-				correctamente la ronda termina. En caso de que sea incorrecta, no será penalizado con una carta pero tampoco
-				tendrá la opción de jugar una carta.
-			</li>
-		</ul>
+        <ul>
+            <li>
+                Seleccionar una carta: al seleccionar esta acción el profeta debe elegir una carta que posea en su mano. En caso de que siga con la regla se pondrá al lado de la última carta del tablero. Si es incorrecta se pondrá al lado de la última carta pero en una
+                altura distinta y se le dará una carta nueva del deck al jugador.
+            </li>
+            <li>
+                Indicar que no pueden jugar ninguna de sus cartas: al seleccionar esta acción el profeta afirma que todas las cartas que tiene no siguen con la regla oculta. En caso de que este en lo correcto se le dará una mano nueva con cartas del deck pero se le restará
+                una. Y en caso de que si pueda jugar alguna de sus cartas que tenga a mano, se le penalizará con una carta nueva que venga del deck.
+            </li>
+            <li>
+                Intentar adivinar la regla: el profeta intenta adivinar la regla y en caso de que la logre adivinar correctamente la ronda termina. En caso de que sea incorrecta, no será penalizado con una carta pero tampoco tendrá la opción de jugar una carta.
+            </li>
+        </ul>
 
-		<b>
+        <b>
 			¿Quién gana?
 		</b>
 
-		<p>
-			Para ganar puntos durante la ronda, los profetas deben intentar quedarse sin cartas. Cuando uno de los jugadores
-			se quede sin cartas, la ronda termina. El profeta que logré quedarse acabarse su mano, será recompensado con tres
-			puntos. Y si el profeta logra adivinar la regla, termina la ronda y además será recompensado con 6 puntos. El
-			“Dios” toma la cantidad de puntos que gane el profeta.
-		</p>
+        <p>
+            Para ganar puntos durante la ronda, los profetas deben intentar quedarse sin cartas. Cuando uno de los jugadores se quede sin cartas, la ronda termina. El profeta que logré quedarse acabarse su mano, será recompensado con tres puntos. Y si el profeta
+            logra adivinar la regla, termina la ronda y además será recompensado con 6 puntos. El “Dios” toma la cantidad de puntos que gane el profeta.
+        </p>
 
-	</div>
+    </div>
+
+    <div *ngIf="dialogData.content === 'GuessRule'">
+        <app-rules-form (formCompletedEvent)="CheckRulesForm($event)"></app-rules-form>
+    </div>
 </mat-dialog-content>
 
 <mat-dialog-actions align="center">
-	<button mat-raised-button color="warn" mat-dialog-close>OK</button>
+
+    <div *ngIf="dialogData.content !== 'GuessRule'; else guessButtons">
+        <button mat-raised-button color="warn" mat-dialog-close>OK</button>
+    </div>
+
+    <ng-template #guessButtons>
+        <button mat-button mat-dialog-close>CANCEL</button>
+        <button mat-button mat-raised-button color="warn" [mat-dialog-close]="rule" [disabled]="!validForm">SEND</button>
+    </ng-template>
 </mat-dialog-actions>

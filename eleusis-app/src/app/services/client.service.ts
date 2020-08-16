@@ -78,17 +78,18 @@ export class ClientService {
 			};
 
 			this.colaDeMensajesSubject$.next(nuevoMensaje);
-
 		} else if (props.option === 4) {
 			// Servidor manda Comenzar juego
 			this.newResponseSubject$.next(mensaje);
-
 		} else if (props.option === 5) {
 			// Servidor manda Juego
 			this.newResponseSubject$.next(mensaje);
-
 		} else if (props.option === 6) {
+			// Servidor manda Actualiar mesa
 			this.newResponseSubject$.next(mensaje);
+		} else if (props.option === 7) {
+			// Servidor manda No Jugada
+			console.log(mensaje);
 		}
 	}
 

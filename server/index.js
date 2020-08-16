@@ -486,7 +486,7 @@ function NoJugada(regla, cliente, cartas) {
   console.log(cartas);
   console.log(verificarMano(regla,cartas));
 
-  /*
+  
   //Si tiene una carta que se puede jugar, envía una carta nueva al jugador
   if(verificarMano(regla,cartas)){
     let index = Math.floor(Math.random() * deck.length);
@@ -523,7 +523,7 @@ function NoJugada(regla, cliente, cartas) {
       console.log("Usted y el dios tiene tres puntos más. Se acaba la ronda");
     }
     
-  }*/
+  }
 }
 
 function verificarReglaAdivinada(secret_rule,guessed_rule){

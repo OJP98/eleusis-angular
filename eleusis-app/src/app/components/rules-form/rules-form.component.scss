@@ -1,0 +1,17 @@
+.rules-container {
+	display: grid;
+	justify-items: stretch !important;
+	align-items: center;
+	justify-content: stretch;
+	grid-template-columns: 20% 50% 30%
+}
+
+.radio-group {
+	display: flex;
+	flex-direction: column;
+	margin: 10px;
+}
+
+.radio-button {
+	margin: 5px;
+}
