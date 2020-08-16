@@ -584,6 +584,12 @@ function verificarReglaAdivinada(secret_rule, guessed_rule) {
 function AdivinarRegla(sala, intentoRegla) {
   console.log(salas[sala].Regla);
   console.log(intentoRegla);
+  let secret_rule = salas[sala].Regla;
+  if (verificarReglaAdivinada(secret_rule,intentoRegla)){
+    console.log("La adivino se debería enviar 6 puntos al jugador y al dios");
+  }else{
+    console.log("Se equivoco pero no pasa nada")
+  }
 }
 
 function interpreteacionRequest(request, client) {
