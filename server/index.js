@@ -277,6 +277,7 @@ function RepartirCartas(sala, God) {
           deck.splice(index, 1);
         }
       }
+      console.log(player_deck);
       clientLoop.send(
         JSON.stringify({
           option: 4,
@@ -461,13 +462,17 @@ function verificarMano(secret_rule, cards_in_hand) {
     _a < cards_player_1.length;
     _a++
   ) {
-    var element = cards_player_1[_a];
+    let element = Object.values(cards_player_1[_a]);
+    let symbol_card = element[0];
+    let value_card = element[2];
+    
     //Si al menos una cumple, se le da una carta más al jugador y se cambia el valor de no_card_playable
-    if (VerificarCarta(secret_rule, element.getSymbol(), element.getValue())) {
+    if (VerificarCarta(secret_rule, symbol_card, value_card)) {
       no_card_playable = true;
       break;
     }
   }
+  
   return no_card_playable;
 }
 
@@ -477,12 +482,11 @@ function NoJugada(regla, cliente, cartas) {
   Que variable se llame deck
   */
   console.log("se me olvido comentarte que debia pedir el deck")
-
-
-
-
   console.log(regla);
   console.log(cartas);
+  console.log(verificarMano(regla,cartas));
+
+  /*
   //Si tiene una carta que se puede jugar, envía una carta nueva al jugador
   if(verificarMano(regla,cartas)){
     let index = Math.floor(Math.random() * deck.length);
@@ -495,10 +499,10 @@ function NoJugada(regla, cliente, cartas) {
     //acá ya deberías actualizar como quedo el deck y luego enviar la carta
     console.log("la nueva carta es "+ new_card);
   }
-  /* 
-  de lo contrario, se crea una nueva mano al jugador con una carta menos o se 
-  envía sus puntos en caso de que ya no tenga más cartas
-  */
+   
+  //de lo contrario, se crea una nueva mano al jugador con una carta menos o se 
+  //envía sus puntos en caso de que ya no tenga más cartas
+  
   else{
     // si tiene mas de una carta en la mano
     if (cartas.length-1 != 0){
@@ -519,6 +523,15 @@ function NoJugada(regla, cliente, cartas) {
       console.log("Usted y el dios tiene tres puntos más. Se acaba la ronda");
     }
     
+  }*/
+}
+
+function verificarReglaAdivinada(secret_rule,guessed_rule){
+  if (secret_rule[0] == guessed_rule[0] && secret_rule[1] == guessed_rule[1] && secret_rule[2] == guessed_rule[2]){
+    return true;
+  }
+  else{
+    return false;
   }
 }
 
