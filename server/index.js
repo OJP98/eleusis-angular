@@ -581,14 +581,28 @@ function verificarReglaAdivinada(secret_rule, guessed_rule) {
   }
 }
 
-function AdivinarRegla(sala, intentoRegla) {
+function AdivinarRegla(sala, intentoRegla, client) {
   console.log(salas[sala].Regla);
   console.log(intentoRegla);
   let secret_rule = salas[sala].Regla;
-  if (verificarReglaAdivinada(secret_rule,intentoRegla)){
-    console.log("La adivino se debería enviar 6 puntos al jugador y al dios");
-  }else{
-    console.log("Se equivoco pero no pasa nada")
+  if (verificarReglaAdivinada(secret_rule, intentoRegla)) {
+    console.log('La adivino se debería enviar 6 puntos al jugador y al dios');
+    client.send(
+      JSON.stringify({
+        option: 8,
+        valido: true,
+      })
+    );
+    console.log('Cambiar de ronda');
+  } else {
+    console.log('Se equivoco pero no pasa nada');
+    client.send(
+      JSON.stringify({
+        option: 8,
+        valido: false,
+      })
+    );
+    ActualizarMesaSinCarta(sala);
   }
 }
 
@@ -639,7 +653,11 @@ function interpreteacionRequest(request, client) {
   } else if (newRequest.option === 8) {
     console.log('Quiere adivinar ');
     console.log(request);
-    AdivinarRegla(JSON.parse(request).sala, JSON.parse(request).intentoRegla);
+    AdivinarRegla(
+      JSON.parse(request).sala,
+      JSON.parse(request).intentoRegla,
+      client
+    );
   } else {
     console.log('Otro');
   }
