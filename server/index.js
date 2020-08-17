@@ -477,8 +477,6 @@ function EnviarPunteo(sala) {
   const idNuevoDios = GetNuevoDios(sala);
   salas[sala].Dios = idNuevoDios;
   for (let index = 0; index < salas[sala].Sockets.length; index++) {
-    if (index === DiosId) continue;
-
     salas[sala].Sockets[index].send(
       JSON.stringify({
         option: 9,
