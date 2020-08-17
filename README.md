@@ -23,4 +23,14 @@ Eleusis game made with Angular as Frontend and Javascript for backend with **Web
 
 3. Enter the *Server URL* details on the input and proceed to connect to the server.
 
-4. If none of your friends ha
+4. If none of your friends has made a lobby, go ahead and create one. Make sure you input your name on the corresponding field with at least 4 characters long.
+
+---
+
+## Made by:
+
+* José Cifuentes - 17509
+* Oscar Juárez - 17315
+* Raúl Monzón - 17014
+
+Students from Universidad del Valle de Guatemala
