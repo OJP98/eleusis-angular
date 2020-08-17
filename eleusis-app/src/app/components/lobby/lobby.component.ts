@@ -6,6 +6,8 @@ import { Observable, Subscription } from 'rxjs';
 import { Player } from 'src/app/interfaces/player';
 import { PlayerService } from 'src/app/services/player.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-lobby',
@@ -43,6 +45,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
     private gameService: GameService,
     private playerServcie: PlayerService,
     private route: ActivatedRoute,
+    private router: Router
   ) {
     this.myPlayer = this.playerServcie.CurrentPlayer;
     this.numericRulesArray = this.gameService.NumericRules;
@@ -122,6 +125,10 @@ export class LobbyComponent implements OnInit, OnDestroy {
 
   public StartNewMatch(): void {
     this.gameService.SendMatchReady();
+  }
+
+  public BackToHome(): void {
+    this.router.navigateByUrl('/');
   }
 
   ngOnInit(): void {

@@ -12,4 +12,5 @@ export interface Table {
 	Rule?: any;
 	TableId?: number;
 	MatchStarted?: boolean;
+	WinnerName?: string;
 }

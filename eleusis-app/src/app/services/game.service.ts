@@ -107,19 +107,56 @@ export class GameService {
     this.clientService.AdivinarRegla(rule, this.tableId);
   }
 
-  public ResetTable(): void {
-    /*
-    this.table = {
-      Deck: this.fullDeck,
-      PlayedCards: [],
-      Players: newTable.Players,
-      DealerId: newTable.DealerId,
-      HostId: newTable.HostId,
-      PlayerTurnId: newTable.PlayerTurnId,
-      TableId: this.tableId,
-      MatchStarted: false,
+  public PrepareNewRound(newDealerId: number, updatedPlayers: Player[], playerTurnId: number): void {
+
+    // Actualizar el jugador
+    if (this.currentPlayer.Id === newDealerId) {
+      this.currentPlayer.isDealer = true;
+    } else {
+      this.currentPlayer.isDealer = false;
     }
-    */
+
+    // Actualizar el estado de jugadores en la mesa
+    this.table.Players.forEach(player => {
+      if (player.Id === newDealerId) {
+        player.isDealer = true;
+      } else {
+        player.isDealer = false;
+      }
+    });
+
+    this.table.DealerId = newDealerId;
+    this.table.PlayerTurnId = playerTurnId;
+    this.table.PlayedCards = [];
+    this.table.MatchStarted = false;
+
+
+  }
+
+  public DeclareWinner(winner: boolean): void {
+
+    let dialogTitle: string;
+    let dialogContent: string;
+
+    if (winner) {
+      dialogTitle = 'WINNER WINNER CHICKEN DINNER';
+      dialogContent = `You won with a total score of: ${this.currentPlayer.Score}`;
+
+    } else {
+      dialogTitle = 'YOU LOST :(';
+      dialogContent = `Your final score: ${this.currentPlayer.Score}`;
+    }
+
+    // Actualizar el estado de jugadores en la mesa
+    this.table.Players.forEach(player => {
+      player.isDealer = false;
+    });
+
+    const max: Player = this.table.Players.reduce((prev, current) => (prev.Score > current.Score) ? prev : current);
+    this.table.WinnerName = max.Name;
+    this.table.MatchStarted = false;
+    this.table.DealerId = -1;
+
   }
 
   public get PlayerMoving(): Player {
@@ -169,7 +206,9 @@ export class GameService {
     this.newResponseSubscription = this.newResponseObservable.subscribe(newResponse => {
 
       // Actualizar el objeto tipo tabla
-      if (newResponse.option === 1) {
+      if (newResponse.option === 1 && newResponse.Players) {
+        console.log(newResponse);
+
         this.table.Players = newResponse.Players;
 
         // El juego ha comenzado. Asignar cartas a jugadores.
@@ -266,20 +305,28 @@ export class GameService {
 
       } else if (newResponse.option === 9) {
 
-        let dialogTitle: string;
-        let dialogContent: string;
-
-        if (newResponse.ganador) {
-          dialogTitle = 'YOU WIN THIS ROUND!';
-        } else {
-          dialogTitle = 'ROUND OVER';
-        }
-
-        dialogContent = `Your current score is: ${newResponse.puntos}`
-
         this.currentPlayer.Score += newResponse.puntos;
 
-        this.OpenDialog(dialogTitle, dialogContent);
+        if (newResponse.Dios < 0) {
+          this.DeclareWinner(newResponse.ganador);
+
+        } else {
+
+          let dialogTitle: string;
+          let dialogContent: string;
+
+          if (newResponse.ganador && !this.currentPlayer.isDealer) {
+            dialogTitle = 'YOU WON THIS ROUND!';
+          } else {
+            dialogTitle = 'ROUND OVER';
+          }
+
+          dialogContent = `Your current score is: ${newResponse.puntos}`
+
+          this.OpenDialog(dialogTitle, dialogContent);
+          this.PrepareNewRound(newResponse.Dios, newResponse.Players, newResponse.turno);
+        }
+
 
       }
     });

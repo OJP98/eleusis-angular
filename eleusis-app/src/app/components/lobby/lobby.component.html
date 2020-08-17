@@ -14,7 +14,7 @@
 				<div fxLayout="row" fxLayoutAlign="start">
 					<div fxFlex="50">
 						<mat-list role="list">
-							<div mat-subheader>Waiting for players to join... currently {{table.Players.length}}/8</div>
+							<div mat-subheader>Player list:</div>
 							<mat-list-item role="listitem" *ngFor="let player of table.Players">
 								<mat-icon mat-list-icon *ngIf="!player.isDealer">person</mat-icon>
 								<mat-icon mat-list-icon *ngIf="player.isDealer">star</mat-icon>
@@ -109,11 +109,16 @@
 				</div>
 
 				<!-- SI EL JUGADOR NO ES EL DEALER... -->
-				<div *ngIf="!myPlayer.isDealer">
+				<div *ngIf="!myPlayer.isDealer && table.DealerId !== -1">
 					<p>Waiting for God to set the rules of the match...</p>
 				</div>
 
 				<br>
+
+				<div *ngIf="table.DealerId < 0">
+					<p>Game ended. The winner is: {{table.WinnerName}}</p>
+					<button mat-raised-button color="accent" (click)="BackToHome()">RETURN TO MENU</button>
+				</div>
 
 			</div>
 
