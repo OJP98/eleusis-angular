@@ -114,6 +114,7 @@ function NuevoCliente(request, client) {
           CartasNoAplican: [],
           CantidadCartas: [0],
           Puntos: [0],
+          PuntosAcumulados: [0],
           Dios: 0,
           Turno: 1,
         };
@@ -156,6 +157,7 @@ function NuevoCliente(request, client) {
       salas[request.sala].Players.push(nuevoJugador);
       salas[request.sala].CantidadCartas.push(0);
       salas[request.sala].Puntos.push(0);
+      salas[request.sala].PuntosAcumulados.push(0);
 
       client.send(
         JSON.stringify({
@@ -438,6 +440,14 @@ function CalcularPuntos(sala) {
   }
 }
 
+function GetNuevoDios(sala) {
+  const nuevoDios = salas[sala].Dios + 1;
+  if (nuevoDios < salas[sala].Sockets.length) {
+    salas[sala].Dios = nuevoDios;
+    return nuevoDios;
+  } else return -1;
+}
+
 function EnviarPunteo(sala) {
   CalcularPuntos(sala);
   console.log('entra a Enviar Punteo');
@@ -446,6 +456,8 @@ function EnviarPunteo(sala) {
   const DiosId = salas[sala].Dios;
 
   console.log(salas[sala].Sockets[DiosId]);
+
+  salas[sala].Puntos[DiosId] = maxPuntos;
 
   salas[sala].Sockets[DiosId].send(
     JSON.stringify({
@@ -463,9 +475,11 @@ function EnviarPunteo(sala) {
         option: 9,
         puntos: salas[sala].Puntos[index],
         ganador: salas[sala].Puntos[index] === maxPuntos,
+        Dios: GetNuevoDios(sala),
       })
     );
   }
+  NuevaRonda(sala);
 }
 
 function NuevaJugada(request, client) {
@@ -719,6 +733,28 @@ function AdivinarRegla(sala, intentoRegla, client) {
     );
     ActualizarMesaSinCarta(sala);
   }
+}
+
+function NuevaRonda(sala) {
+  for (let index = 0; index < salas[sala].Puntos.length; index++) {
+    salas[sala].PuntosAcumulados[index] = salas[sala].Puntos[index];
+    salas[sala].Puntos[index] = 0;
+  }
+  console.log(salas[sala]);
+  //RepartirCartas(sala, salas[sala].Sockets[1]);
+
+  salas[sala].Sockets.forEach(function each(clientLoop) {
+    clientLoop.send(
+      JSON.stringify({
+        option: 1,
+        DealerId: 1,
+        PlayerTurnId: 2,
+        HostId: 0,
+        Rounds: 'number',
+        myId: 0,
+      })
+    );
+  });
 }
 
 function interpreteacionRequest(request, client) {
