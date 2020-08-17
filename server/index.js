@@ -475,6 +475,7 @@ function EnviarPunteo(sala) {
   );
 
   const idNuevoDios = GetNuevoDios(sala);
+  salas[sala].Dios = idNuevoDios;
   for (let index = 0; index < salas[sala].Sockets.length; index++) {
     if (index === DiosId) continue;
 
@@ -484,6 +485,7 @@ function EnviarPunteo(sala) {
         puntos: salas[sala].Puntos[index],
         ganador: salas[sala].Puntos[index] === maxPuntos,
         Dios: idNuevoDios,
+        Players: salas[sala].Players,
       })
     );
   }
