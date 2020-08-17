@@ -34,4 +34,8 @@ export class AppComponent {
       this.domSanitizer.bypassSecurityTrustResourceUrl('assets/diamonds.svg')
     );
   }
+
+  public GoToHome() {
+    window.location.replace(window.location.origin);
+  }
 }

@@ -1,19 +1,23 @@
 <h1 style="text-align: center;">Welcome to Eleusis Game App!</h1>
 
-<mat-form-field style="width: 30%;">
-	<mat-label>Server URL</mat-label>
-	<input matInput type="text" #serverInput required>
-	<button mat-button *ngIf="serverInput.value" matSuffix mat-icon-button aria-label="Clear"
-		(click)="serverInput.value=''">
-		<mat-icon>close</mat-icon>
-	</button>
-</mat-form-field>
-<button mat-raised-button color="accent" [disabled]="serverInput.value === ''"
-	(click)="ConnectToServer(serverInput.value)">
-	CONNECT TO SERVER
-</button>
+<div class="content" *ngIf="!connected">
 
-<div class="content">
+	<mat-form-field style="width: 30%;">
+		<mat-label>Server URL</mat-label>
+		<input matInput type="text" #serverInput required placeholder="Example: ws://localhost:8080">
+		<button mat-button *ngIf="serverInput.value" matSuffix mat-icon-button aria-label="Clear"
+			(click)="serverInput.value=''">
+			<mat-icon>close</mat-icon>
+		</button>
+	</mat-form-field>
+	<button mat-raised-button color="accent" [disabled]="serverInput.value === ''"
+		(click)="ConnectToServer(serverInput.value)">
+		CONNECT TO SERVER
+	</button>
+
+</div>
+
+<div class="content" *ngIf="connected">
 	<!-- Campo para el nombre -->
 	<mat-form-field style="width: 30%;">
 		<mat-label>Your name</mat-label>
@@ -22,6 +26,9 @@
 			(click)="nameInput.value=''">
 			<mat-icon>close</mat-icon>
 		</button>
+		<mat-error *ngIf="nameControl.invalid">
+			Name should be at least <strong>4 letters</strong> long
+		</mat-error>
 	</mat-form-field>
 
 	<br />
@@ -69,16 +76,18 @@
 				</mat-expansion-panel-header>
 
 				<div fxLayout="row" fxLayoutAlign="space-evenly center">
-					<button mat-raised-button color="accent" (click)="RequestNewRoom()">
+					<button mat-raised-button color="accent" (click)="RequestNewRoom()" [disabled]="nameControl.invalid">
 						CREATE LOBBY
 					</button>
 				</div>
 			</mat-expansion-panel>
 		</mat-accordion>
 	</div>
+</div>
 
+<div class="content">
 	<br>
-	<button mat-raised-button color="accent" (click)="ShowInstructions()">
+	<button mat-raised-button color="warn" (click)="ShowInstructions()">
 		HOW TO PLAY
 	</button>
 </div>

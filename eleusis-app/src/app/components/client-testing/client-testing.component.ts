@@ -36,7 +36,7 @@ export class ClientTestingComponent implements OnInit, OnDestroy {
 	}
 
 	public SusbscribeToMessgage(): void {
-		this.mensajeObservable$ = this._clientService.MensajeSubject;
+		// this.mensajeObservable$ = this._clientService.MensajeSubject;
 		this.suscripcionMensaje = this.mensajeObservable$.subscribe(
 			(nuevoMensaje) => {
 				this.mensajeDelSocket = nuevoMensaje;

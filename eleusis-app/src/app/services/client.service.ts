@@ -46,14 +46,14 @@ export class ClientService {
 	public SetServer(url: string): void {
 		try {
 			this.subject = webSocket({ url });
-		} catch (error) {}
+		} catch (error) { }
 	}
 
 	/**
 	 * Se escucha constantemente al servidor.
 	 */
 	public Listen(): void {
-		if (!this.socketSubscription) {
+		if (this.socketSubscription === null || this.socketSubscription === undefined) {
 			this.socketSubscription = this.subject.subscribe(
 				(msg) => this.InterpretarRequest(msg),
 				(err) => this.InterpretarError(err),
@@ -102,7 +102,6 @@ export class ClientService {
 			this.newResponseSubject$.next(mensaje);
 		} else if (props.option === 9) {
 			// Servidor manda Punteo
-			console.log(mensaje);
 			this.newResponseSubject$.next(mensaje);
 		}
 	}

@@ -8,6 +8,7 @@ import { GameService } from 'src/app/services/game.service';
 import { PlayerService } from 'src/app/services/player.service';
 import { DialogComponent } from '../dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
 	selector: 'app-home',
@@ -33,18 +34,21 @@ export class HomeComponent implements OnInit, OnDestroy {
 		nameControl: this.nameControl,
 	});
 
+	public connected = false;
+
 	constructor(
 		private _router: Router,
 		private clientService: ClientService,
 		private gameService: GameService,
 		private playerService: PlayerService,
 		public dialog: MatDialog
-	) {}
+	) { }
 
 	public ConnectToServer(url: string): void {
 		this.clientService.SetServer(url);
 		this.clientService.Listen();
 		this.SubscribeToResponse();
+		this.connected = true;
 	}
 
 	/**
@@ -54,7 +58,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 		this.newResponseObservable = this.clientService.NewResponseSubject;
 		this.newResponseSubscription = this.newResponseObservable.subscribe(
 			(newResponse) => {
-				console.log(newResponse);
 				// El socket dio algun error
 				if (newResponse.option === 0) {
 					// Mostrar dialogo con el respectivo error
@@ -76,11 +79,16 @@ export class HomeComponent implements OnInit, OnDestroy {
 				}
 			},
 			(error) => {
-				this.ShowErrorDialog({
-					title: 'CONNECTION ERROR',
-					content: `Error while trying to connect to the server: ${error}`,
+				const dialogRef = this.dialog.open(DialogComponent, {
+					data: {
+						content: `Error while trying to connect to the server: ${error} We're gonna refresh the page.`,
+						title: 'CONNECTION ERROR',
+					},
 				});
-				this.clientService = new ClientService();
+
+				dialogRef.afterClosed().subscribe(() => {
+					window.location.reload();
+				});
 			}
 		);
 	}
@@ -137,9 +145,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 		this.clientService.Conectar(this.codeControl.value, this.nameControl.value);
 	}
 
-	ngOnInit(): void {
-		this.SubscribeToResponse();
-	}
+	ngOnInit(): void { }
 
 	ngOnDestroy(): void {
 		this.newResponseSubscription.unsubscribe();

@@ -133,12 +133,12 @@ export class GameService {
 
   }
 
-  public DeclareWinner(winner: boolean): void {
+  public DeclareWinner(winnerId: number): void {
 
     let dialogTitle: string;
     let dialogContent: string;
 
-    if (winner) {
+    if (winnerId === this.currentPlayer.Id) {
       dialogTitle = 'WINNER WINNER CHICKEN DINNER';
       dialogContent = `You won with a total score of: ${this.currentPlayer.Score}`;
 
@@ -152,8 +152,7 @@ export class GameService {
       player.isDealer = false;
     });
 
-    const max: Player = this.table.Players.reduce((prev, current) => (prev.Score > current.Score) ? prev : current);
-    this.table.WinnerName = max.Name;
+    this.table.WinnerName = this.players.find(player => player.Id === this.table.PlayerTurnId).Name;
     this.table.MatchStarted = false;
     this.table.DealerId = -1;
 
@@ -207,8 +206,6 @@ export class GameService {
 
       // Actualizar el objeto tipo tabla
       if (newResponse.option === 1 && newResponse.Players) {
-        console.log(newResponse);
-
         this.table.Players = newResponse.Players;
 
         // El juego ha comenzado. Asignar cartas a jugadores.
@@ -308,7 +305,7 @@ export class GameService {
         this.currentPlayer.Score += newResponse.puntos;
 
         if (newResponse.Dios < 0) {
-          this.DeclareWinner(newResponse.ganador);
+          this.DeclareWinner(newResponse.idGanador);
 
         } else {
 

@@ -62,7 +62,6 @@ export class LobbyComponent implements OnInit, OnDestroy {
       enableColorRule: this.enableColorRule,
     });
 
-    console.log(this.myPlayer);
     this.gameService.SubscribeToSocketResponse();
   }
 
@@ -128,7 +127,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
   }
 
   public BackToHome(): void {
-    this.router.navigateByUrl('/');
+    window.location.replace(window.location.origin);
   }
 
   ngOnInit(): void {
