@@ -483,6 +483,7 @@ function EnviarPunteo(sala) {
   const idNuevoDios = GetNuevoDios(sala);
   const idTurno = GetNuevoTurno(sala);
   salas[sala].Dios = idNuevoDios;
+  salas[sala].Turno = idTurno;
   for (let index = 0; index < salas[sala].Sockets.length; index++) {
     salas[sala].Sockets[index].send(
       JSON.stringify({
