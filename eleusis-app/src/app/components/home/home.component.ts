@@ -40,9 +40,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 		private gameService: GameService,
 		private playerService: PlayerService,
 		public dialog: MatDialog,
-	) {
-		this.clientService.Listen();
-	}
+	) { }
 
 	public ConnectToServer(url: string): void {
 		this.clientService.SetServer(url);
@@ -72,13 +70,15 @@ export class HomeComponent implements OnInit, OnDestroy {
 				this.gameService.CreateNewTable(this.newRoomRequested, newResponse);
 				this.JoinRoom(newResponse.sala);
 
-			} else {
+			}
+		},
+			(error) => {
 				this.ShowErrorDialog({
 					title: 'CONNECTION ERROR',
-					content: 'Error while trying to connect to the server',
+					content: `Error while trying to connect to the server: ${error}`,
 				});
 			}
-		});
+		);
 	}
 
 	/**
@@ -88,9 +88,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 	private JoinRoom(roomCode: number): void {
 		this._router.navigate([roomCode]).catch(error => {
 			console.error('Error trying to create a new room:', error);
-		}).finally(() => {
-			// TODO: Desactivar spinner
-		})
+		});
 	}
 
 	/**

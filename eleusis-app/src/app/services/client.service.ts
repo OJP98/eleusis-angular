@@ -17,9 +17,9 @@ export class ClientService {
 	private newResponseSubject$ = new Subject<any>();
 
 	constructor() {
-		this.subject = webSocket({
-			url: 'ws://localhost:8080',
-		});
+		// this.subject = webSocket({
+		// 	url: 'ws://localhost:8080',
+		// });
 	}
 	/*
 	ngOninit(): void {
@@ -107,6 +107,8 @@ export class ClientService {
 
 	public InterpretarError(error) {
 		this.newResponseSubject$.error(error);
+		this.subject = null;
+		this.socketSubscription = null;
 	}
 
 	public get MensajeSubject(): Observable<JSON> {
