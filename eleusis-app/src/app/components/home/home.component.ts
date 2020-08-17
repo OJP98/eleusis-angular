@@ -15,7 +15,6 @@ import { MatDialog } from '@angular/material/dialog';
 	styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-
 	private newResponseObservable: Observable<any>;
 	private newResponseSubscription: Subscription;
 	private newRoomRequested = false;
@@ -39,8 +38,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 		private clientService: ClientService,
 		private gameService: GameService,
 		private playerService: PlayerService,
-		public dialog: MatDialog,
-	) { }
+		public dialog: MatDialog
+	) {}
 
 	public ConnectToServer(url: string): void {
 		this.clientService.SetServer(url);
@@ -53,30 +52,35 @@ export class HomeComponent implements OnInit, OnDestroy {
 	 */
 	private SubscribeToResponse(): void {
 		this.newResponseObservable = this.clientService.NewResponseSubject;
-		this.newResponseSubscription = this.newResponseObservable.subscribe(newResponse => {
+		this.newResponseSubscription = this.newResponseObservable.subscribe(
+			(newResponse) => {
+				console.log(newResponse);
+				// El socket dio algun error
+				if (newResponse.option === 0) {
+					// Mostrar dialogo con el respectivo error
+					this.ShowErrorDialog({
+						title: 'SERVER ERROR',
+						content: newResponse.mensaje,
+					});
 
-			console.log(newResponse);
-			// El socket dio algun error
-			if (newResponse.option === 0) {
-				// Mostrar dialogo con el respectivo error
-				this.ShowErrorDialog({
-					title: 'SERVER ERROR',
-					content: newResponse.mensaje,
-				});
-
-				// Unirse, crear una nueva sala
-			} else if (newResponse.option === 1) {
-				this.playerService.SetNewLobbyData(newResponse.sala, newResponse, this.newRoomRequested, this.nameControl.value);
-				this.gameService.CreateNewTable(this.newRoomRequested, newResponse);
-				this.JoinRoom(newResponse.sala);
-
-			}
-		},
+					// Unirse, crear una nueva sala
+				} else if (newResponse.option === 1) {
+					this.playerService.SetNewLobbyData(
+						newResponse.sala,
+						newResponse,
+						this.newRoomRequested,
+						this.nameControl.value
+					);
+					this.gameService.CreateNewTable(this.newRoomRequested, newResponse);
+					this.JoinRoom(newResponse.sala);
+				}
+			},
 			(error) => {
 				this.ShowErrorDialog({
 					title: 'CONNECTION ERROR',
 					content: `Error while trying to connect to the server: ${error}`,
 				});
+				this.clientService = new ClientService();
 			}
 		);
 	}
@@ -86,7 +90,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 	 * @param roomCode code of the room/lobby
 	 */
 	private JoinRoom(roomCode: number): void {
-		this._router.navigate([roomCode]).catch(error => {
+		this._router.navigate([roomCode]).catch((error) => {
 			console.error('Error trying to create a new room:', error);
 		});
 	}
@@ -99,9 +103,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 		this.dialog.open(DialogComponent, {
 			data: {
 				content: dialogData.content,
-				title: dialogData.title
-			}
-		})
+				title: dialogData.title,
+			},
+		});
 	}
 
 	public ShowInstructions(): void {
@@ -111,8 +115,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 		this.dialog.open(DialogComponent, {
 			data: {
 				content,
-				title
-			}
+				title,
+			},
 		});
 	}
 

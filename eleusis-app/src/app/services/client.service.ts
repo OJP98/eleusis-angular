@@ -44,7 +44,9 @@ export class ClientService {
 	}
 
 	public SetServer(url: string): void {
-		this.subject = webSocket({ url });
+		try {
+			this.subject = webSocket({ url });
+		} catch (error) {}
 	}
 
 	/**
