@@ -87,7 +87,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 				});
 
 				dialogRef.afterClosed().subscribe(() => {
-					window.location.reload();
+					window.location.replace(window.location.origin);
 				});
 			}
 		);
