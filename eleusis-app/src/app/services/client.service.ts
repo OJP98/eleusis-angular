@@ -68,6 +68,9 @@ export class ClientService {
 	public InterpretarRequest(mensaje: JSON): void {
 		const props: any = mensaje;
 
+		console.log(mensaje);
+
+
 		if (props.option === 0) {
 			// Servidor manda Error
 			this.newResponseSubject$.next(mensaje);

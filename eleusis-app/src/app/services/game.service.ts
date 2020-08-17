@@ -133,7 +133,7 @@ export class GameService {
 
   }
 
-  public DeclareWinner(winnerId: number): void {
+  public DeclareWinner(tablePlayers: Player[], winnerId: number): void {
 
     let dialogTitle: string;
     let dialogContent: string;
@@ -147,15 +147,16 @@ export class GameService {
       dialogContent = `Your final score: ${this.currentPlayer.Score}`;
     }
 
+    this.OpenDialog(dialogTitle, dialogContent);
+
     // Actualizar el estado de jugadores en la mesa
     this.table.Players.forEach(player => {
       player.isDealer = false;
     });
 
-    this.table.WinnerName = this.table.Players.find(player => player.Id === winnerId).Name;
-    this.table.MatchStarted = false;
+    this.table.WinnerName = tablePlayers.find(player => player.Id === winnerId).Name;
     this.table.DealerId = -1;
-
+    this.table.MatchStarted = false;
   }
 
   public get PlayerMoving(): Player {
@@ -304,8 +305,8 @@ export class GameService {
 
         this.currentPlayer.Score += newResponse.puntos;
 
-        if (newResponse.Dios < 0) {
-          this.DeclareWinner(newResponse.idGanador);
+        if (newResponse.Dios === -1) {
+          this.DeclareWinner(newResponse.Players, newResponse.idGanador);
 
         } else {
 
@@ -318,7 +319,7 @@ export class GameService {
             dialogTitle = 'ROUND OVER';
           }
 
-          dialogContent = `Your current score is: ${newResponse.puntos}`
+          dialogContent = `Your current score is: ${this.currentPlayer.Score}`
 
           this.OpenDialog(dialogTitle, dialogContent);
           this.PrepareNewRound(newResponse.Dios, newResponse.Players, newResponse.turno);

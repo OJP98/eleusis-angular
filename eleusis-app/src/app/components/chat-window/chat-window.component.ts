@@ -30,24 +30,24 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
   private ManageMessageSuscription(): void {
     this.messagesObservable$ = this.clientService.ColaDeMensajesSubject;
     this.messageSuscription = this.messagesObservable$.subscribe(newMessage => {
-      this.messageList.push(newMessage);
+      this.messageList.unshift(newMessage);
     });
   }
 
   public SendMessage(message: string): void {
 
-		if (this.inputField.replace(/\s/g, '').length) {
-			// Crear objeto tipo mensaje
+    if (this.inputField.replace(/\s/g, '').length) {
+      // Crear objeto tipo mensaje
       const newMessage: Message = {
-				Name: this.player.Name,
+        Name: this.player.Name,
         PlayerId: this.player.Id,
         Message: message,
       }
-			// Enviar mensaje con client service
-			this.clientService.EnviarMensaje(newMessage, this.playerService.LobbyId);
+      // Enviar mensaje con client service
+      this.clientService.EnviarMensaje(newMessage, this.playerService.LobbyId);
 
       // Pushear mensaje a la lista
-      this.messageList.push(newMessage);
+      this.messageList.unshift(newMessage);
       this.inputField = '';
     }
   }

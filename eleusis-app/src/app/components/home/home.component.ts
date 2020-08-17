@@ -74,6 +74,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 						this.newRoomRequested,
 						this.nameControl.value
 					);
+					this.playerService.SetNewLobbyData(newResponse.sala, newResponse, this.newRoomRequested, this.nameControl.value);
 					this.gameService.CreateNewTable(this.newRoomRequested, newResponse);
 					this.JoinRoom(newResponse.sala);
 				}
