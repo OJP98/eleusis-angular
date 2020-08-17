@@ -461,6 +461,13 @@ function GetNuevoTurno(sala) {
   else return 0;
 }
 
+function GetGanadorAcumulado(sala) {
+  const maxPuntos = Math.max.apply(null, salas[sala].PuntosAcumulados);
+  for (let index = 0; index < salas[sala].PuntosAcumulados.length; index++) {
+    if (maxPuntos === salas[sala].PuntosAcumulados[index]) return index;
+  }
+}
+
 function EnviarPunteo(sala) {
   CalcularPuntos(sala);
   console.log('entra a Enviar Punteo');
@@ -493,6 +500,7 @@ function EnviarPunteo(sala) {
         Dios: idNuevoDios,
         Players: salas[sala].Players,
         turno: idTurno,
+        idGanador: GetGanadorAcumulado(sala),
       })
     );
   }
