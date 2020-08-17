@@ -152,7 +152,7 @@ export class GameService {
       player.isDealer = false;
     });
 
-    this.table.WinnerName = this.players.find(player => player.Id === this.table.PlayerTurnId).Name;
+    this.table.WinnerName = this.table.Players.find(player => player.Id === winnerId).Name;
     this.table.MatchStarted = false;
     this.table.DealerId = -1;
 
