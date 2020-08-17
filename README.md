@@ -21,7 +21,8 @@ Eleusis game made with Angular as Frontend and Javascript for backend with **Web
 2. Running the server.
   * Go into the [server](https://github.com/OJP98/eleusis-angular/tree/master/server) folder.
   * Run `npm install` to install the server dependencies.
-  * Run `node index.js`. This will make your server constantly listen on *<ws://localhost:8080>*.
+  * Run `node index.js`. This will make your server constantly listen on *<ws://localhost:8080>*. If you want to run the server on another port you can specify it `node index.js [port]`
+  
 
 3. Enter the *Server URL* details on the input and proceed to connect to the server.
 
