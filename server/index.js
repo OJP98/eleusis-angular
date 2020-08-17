@@ -455,6 +455,12 @@ function GetNuevoDios(sala) {
   } else return -1;
 }
 
+function GetNuevoTurno(sala) {
+  const nuevoTurno = salas[sala].Dios + 1;
+  if (nuevoTurno < salas[sala].Sockets.length) return nuevoTurno;
+  else return 0;
+}
+
 function EnviarPunteo(sala) {
   CalcularPuntos(sala);
   console.log('entra a Enviar Punteo');
@@ -475,6 +481,7 @@ function EnviarPunteo(sala) {
   );
 
   const idNuevoDios = GetNuevoDios(sala);
+  const idTurno = GetNuevoTurno(sala);
   salas[sala].Dios = idNuevoDios;
   for (let index = 0; index < salas[sala].Sockets.length; index++) {
     salas[sala].Sockets[index].send(
@@ -484,6 +491,7 @@ function EnviarPunteo(sala) {
         ganador: salas[sala].Puntos[index] === maxPuntos,
         Dios: idNuevoDios,
         Players: salas[sala].Players,
+        turno: idTurno,
       })
     );
   }
