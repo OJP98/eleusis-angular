@@ -1,5 +1,12 @@
+// print process.argv
+
 var server = require('ws').Server;
-var s = new server({ port: 8080 });
+
+try {
+  var s = new server({ port: process.argv[2] });
+} catch (error) {
+  var s = new server({ port: 8080 });
+}
 
 /*
 Inicia clase Carta
