@@ -749,7 +749,7 @@ function NuevaRonda(sala) {
   }
   console.log(salas[sala]);
   //RepartirCartas(sala, salas[sala].Sockets[1]);
-
+  /*
   salas[sala].Sockets.forEach(function each(clientLoop) {
     clientLoop.send(
       JSON.stringify({
@@ -762,6 +762,7 @@ function NuevaRonda(sala) {
       })
     );
   });
+  */
 }
 
 function interpreteacionRequest(request, client) {
