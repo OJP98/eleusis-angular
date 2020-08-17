@@ -479,14 +479,6 @@ function EnviarPunteo(sala) {
 
   salas[sala].Puntos[DiosId] = maxPuntos;
 
-  salas[sala].Sockets[DiosId].send(
-    JSON.stringify({
-      option: 9,
-      puntos: maxPuntos,
-      ganador: true,
-    })
-  );
-
   const idNuevoDios = GetNuevoDios(sala);
   const idTurno = GetNuevoTurno(sala);
   salas[sala].Dios = idNuevoDios;
